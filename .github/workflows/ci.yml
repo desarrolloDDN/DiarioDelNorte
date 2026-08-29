@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  php:
+    name: phpcs + phpstan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: mbstring
+          coverage: none
+          tools: composer:v2
+      - name: composer install
+        run: composer install --no-interaction --prefer-dist
+      - name: composer run check
+        run: composer run check
+
+  assets:
+    name: build de assets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: npm build
+        run: npm run build
+      - name: comprobar que dist/ quedo generado
+        run: |
+          test -f theme/assets/dist/app.css
+          test -f theme/assets/dist/app.js
+
+  version-consistency:
+    name: coherencia de version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: style.css == ddn-suite.php == package.json
+        run: |
+          THEME=$(grep -m1 -oP 'Version:\s*\K[0-9.]+' theme/style.css)
+          SUITE=$(grep -m1 -oP 'Version:\s*\K[0-9.]+' plugin/ddn-suite/ddn-suite.php)
+          PKG=$(node -p "require('./package.json').version")
+          echo "theme=$THEME suite=$SUITE package.json=$PKG"
+          test "$THEME" = "$SUITE"
+          test "$THEME" = "$PKG"
