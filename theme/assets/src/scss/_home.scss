@@ -13,7 +13,7 @@
 .hero-slider {
   position: relative;
   aspect-ratio: 3 / 2;
-  min-height: 380px;
+  min-height: 420px;
   background: var(--ink-deep);
   overflow: hidden;
 }
@@ -100,12 +100,13 @@
   border-left: 1px solid var(--rule);
   padding-left: 1.75rem;
 }
+.hero-feature { display: flex; flex-direction: column; }
+.hero-feature__media { display: block; margin-bottom: 0.8rem; }
 .hero-feature__media img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   background: var(--sand);
-  margin-bottom: 0.8rem;
 }
 .hero-feature__title { font-size: var(--step-1); line-height: 1.15; }
 .hero-feature__excerpt {
@@ -117,16 +118,30 @@
 
 // Columna derecha: Caribe + Nación (titular, luego imagen)
 .hero-col--side { gap: 1.4rem; }
+.hero-side-item { display: flex; flex-direction: column; }
 .hero-side-item + .hero-side-item {
   border-top: 1px solid var(--rule);
   padding-top: 1.4rem;
 }
 .hero-side-item__title { font-size: 1.06rem; line-height: 1.18; margin-bottom: 0.6rem; }
+.hero-side-item__media { display: block; }
 .hero-side-item__media img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
   background: var(--sand);
+}
+
+// --- Las tres columnas de apertura, misma altura (la del carrusel) ---
+@media (min-width: 1001px) {
+  .home-hero__grid { align-items: stretch; }
+  .hero-slider { aspect-ratio: auto; }
+  .hero-col--feature .hero-feature,
+  .hero-col--side .hero-side-item { flex: 1 1 0; min-height: 0; }
+  .hero-feature__media,
+  .hero-side-item__media { flex: 1 1 0; min-height: 0; }
+  .hero-feature__media img,
+  .hero-side-item__media img { height: 100%; aspect-ratio: auto; }
 }
 
 figcaption {
