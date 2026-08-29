@@ -22,8 +22,9 @@
   --link: #bf0202;
   --link-hover: #8c0000;
 
-  --maxw-site: 1200px;
-  --maxw-read: 40rem;
+  --maxw-site: 1200px;  // ancho del contenido en escritorio (exacto)
+  --maxw-read: 40rem;   // columna de lectura del artículo
+  --gutter: clamp(1rem, 4vw, 2rem);
 
   --display: "Sunlight Dreams", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --sans: "Libre Franklin", "Helvetica Neue", Arial, system-ui, sans-serif;

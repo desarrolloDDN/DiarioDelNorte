@@ -1,9 +1,9 @@
 // Nota individual y contenido enriquecido.
 
 .article {
-  max-width: var(--maxw-read);
-  margin: 0 auto;
-  padding: 2.5rem clamp(0.9rem, 3vw, 2rem) 1rem;
+  max-width: calc(var(--maxw-read) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 2.5rem var(--gutter) 1rem;
 }
 .article__breadcrumb { margin-bottom: 1.5rem; display: flex; gap: 0.5ch; flex-wrap: wrap; }
 .article__header .kicker { font-size: 0.8rem; }

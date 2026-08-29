@@ -11,7 +11,7 @@
 @use "footer";
 
 // Estilos de bloques de WordPress usados en páginas.
-.alignwide { max-width: min(1080px, 92vw); margin-inline: auto; }
+.alignwide { max-width: min(var(--maxw-site), 92vw); margin-inline: auto; }
 .alignfull { max-width: 100vw; margin-inline: calc(50% - 50vw); }
 .wp-block-image img { height: auto; }
 .wp-block-pullquote,
