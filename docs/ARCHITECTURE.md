@@ -48,7 +48,21 @@ se duplican esos archivos.
 | `Ads/Admin/CampaignsPage` | Alta/edición/borrado de campañas + impresiones/clics/CTR. Slug sin las palabras «ad»/«campaign» (bloqueadores). |
 | `Calendar/CalendarRepository` | Noticias por día de un mes (publicadas, programadas, borradores). |
 | `Calendar/Admin/CalendarPage` | Retícula mensual en wp-admin con enlace a editar cada nota. |
-| `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad). |
+| `Analytics/PageviewRecorder` | Cuenta páginas vistas de noticias en cubos por hora (`ddn_pageviews`); sin PII, excluye editores y bots; poda diaria (WP-Cron). |
+| `Analytics/PageviewRepository` | Filtro `ddn/most_read` → IDs de las noticias más vistas en 24 h. |
+| `PrintEdition/EditionPostType` | Tipo de contenido `ddn_edition`: portada (imagen destacada) + PDF por fecha. |
+| `PrintEdition/EditionRepository` | Filtro `ddn/print_edition` → la edición vigente (portada + URL del PDF). |
+| `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad + Edición impresa). |
+
+### Contratos tema ↔ plugin (filtros)
+
+| Filtro | Lo emite | Lo consume | Devuelve |
+|---|---|---|---|
+| `ddn/ad_zone` (acción) | tema (plantillas) | `Ads/ZoneController` | — (imprime el anuncio) |
+| `ddn/most_read` | `front-page.php` | `Analytics/PageviewRepository` | `int[]` IDs |
+| `ddn/print_edition` | `front-page.php` | `PrintEdition/EditionRepository` | `array{cover_id,pdf_url,date,edit_link}` o `null` |
+| `ddn/home_sections` | `front-page.php` | — (personalizable) | `string[]` slugs |
+| `ddn/newsletter_action` | `front-page.php` | — (integración externa) | `string` URL |
 
 ## Versionado
 

@@ -37,6 +37,11 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
   sin PII, excluye personal y bots) y filtro `ddn/most_read` que alimenta el «Lo
   más leído» del tema con las noticias reales de las últimas 24 h. Limpieza diaria
   vía WP-Cron.
+- `ddn-suite`: **módulo «Edición impresa»** (tipo de contenido propio bajo el menú
+  DDN Suite): una entrada por fecha con portada (imagen destacada) y PDF (subida
+  desde la biblioteca de medios, solo `application/pdf`). El tema toma la edición
+  vigente por el filtro `ddn/print_edition`; si el plugin no está activo usa los
+  campos del Personalizador.
 - Tema: campos de autor (**foto de perfil** con selector de medios + **cargo para la
   firma**); la foto sustituye a Gravatar. Banda de **Opinión** en portada con tarjetas
   de columnista.

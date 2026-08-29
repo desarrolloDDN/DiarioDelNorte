@@ -392,8 +392,16 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 
 			<?php
 			// --- Edición impresa ---
-			$ddn_cover = (int) get_theme_mod( 'ddn_print_cover', 0 );
-			$ddn_pdf   = (string) get_theme_mod( 'ddn_print_pdf', '' );
+			// El plugin DDN Suite provee la edición del día vía este filtro;
+			// si no está activo, se usan los campos del Personalizador.
+			$ddn_edition = apply_filters( 'ddn/print_edition', null );
+			if ( is_array( $ddn_edition ) ) {
+				$ddn_cover = (int) ( $ddn_edition['cover_id'] ?? 0 );
+				$ddn_pdf   = (string) ( $ddn_edition['pdf_url'] ?? '' );
+			} else {
+				$ddn_cover = (int) get_theme_mod( 'ddn_print_cover', 0 );
+				$ddn_pdf   = (string) get_theme_mod( 'ddn_print_pdf', '' );
+			}
 			?>
 			<section class="aside-block aside-print">
 				<div class="aside-block__head"><?php esc_html_e( 'Edición impresa', 'diario-del-norte' ); ?></div>

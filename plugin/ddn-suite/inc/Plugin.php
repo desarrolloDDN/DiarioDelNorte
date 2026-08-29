@@ -22,6 +22,8 @@ use DiarioDelNorte\Suite\Ads\ZoneController;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
 use DiarioDelNorte\Suite\Calendar\CalendarRepository;
 use DiarioDelNorte\Suite\Install\Installer;
+use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
+use DiarioDelNorte\Suite\PrintEdition\EditionRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,6 +52,9 @@ final class Plugin {
 
 		( new PageviewRecorder() )->register();
 		( new PageviewRepository() )->register();
+
+		( new EditionPostType() )->register();
+		( new EditionRepository() )->register();
 
 		if ( is_admin() ) {
 			$calendar_page  = new CalendarPage( new CalendarRepository() );
