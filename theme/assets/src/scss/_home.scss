@@ -1,29 +1,133 @@
-// Portada: retícula de apertura, rail y bandas de sección.
+// Portada: sección de apertura, tira de servicio y bandas de sección.
 
-.lead-grid {
+// --- Sección de apertura (1/2 – 1/4 – 1/4) ---
+.home-hero { padding-top: 1.5rem; }
+.home-hero__grid {
   display: grid;
-  grid-template-columns: 2fr 1.15fr 1fr;
-  gap: 0 2rem;
-  padding-top: 1.5rem;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1.75rem;
 }
-.lead-grid > * { min-width: 0; }
-.col-divider { border-left: 1px solid var(--rule); padding-left: 2rem; }
+.home-hero__grid > * { min-width: 0; }
 
-// --- Nota principal ---
-.story-lead .kicker { margin-bottom: 0.7rem; }
-.story-lead h2 {
-  font-size: clamp(1.75rem, 1.15rem + 1.8vw, 2.6rem);
-  margin-bottom: 0.6rem;
+// Carrusel de destacados
+.hero-slider {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  min-height: 380px;
+  background: var(--ink-deep);
+  overflow: hidden;
 }
-.story-lead .standfirst {
-  font-size: var(--step-1);
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+}
+.hero-slide.is-active { opacity: 1; visibility: visible; }
+.hero-slide__link { display: block; width: 100%; height: 100%; color: #fff; }
+.hero-slide__link:hover { color: #fff; }
+.hero-slide__img,
+.hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+.hero-slide__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 12, 9, 0.92) 0%, rgba(15, 12, 9, 0.55) 38%, rgba(15, 12, 9, 0) 68%);
+}
+.hero-slide__tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.7rem;
+}
+.hero-slide__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.6rem 1.6rem 2rem;
+}
+.hero-slide__title {
+  font-family: var(--display);
+  color: #fff;
+  font-size: clamp(1.35rem, 1rem + 1.5vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+}
+.hero-slide__standfirst {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.96rem;
+  line-height: 1.4;
+  margin: 0.55rem 0 0.6rem;
+}
+.hero-slide__meta {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+.hero-slider__dots {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 0.45rem;
+  z-index: 2;
+}
+.hero-slider__dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.hero-slider__dot.is-active { background: #fff; }
+
+// Columna central: nota de Judiciales
+.hero-col { display: flex; flex-direction: column; }
+.hero-col--feature,
+.hero-col--side {
+  border-left: 1px solid var(--rule);
+  padding-left: 1.75rem;
+}
+.hero-feature__media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--sand);
+  margin-bottom: 0.8rem;
+}
+.hero-feature__title { font-size: var(--step-1); line-height: 1.15; }
+.hero-feature__excerpt {
+  margin: 0.6rem 0 0;
   color: var(--ink-soft);
-  line-height: 1.34;
-  font-weight: 300;
-  margin: 0.7rem 0 0.9rem;
+  font-size: 0.96rem;
+  line-height: 1.45;
 }
-.story-lead figure { margin: 0.4rem 0 0; }
-.story-lead img { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; background: var(--sand); }
+
+// Columna derecha: Caribe + Nación (titular, luego imagen)
+.hero-col--side { gap: 1.4rem; }
+.hero-side-item + .hero-side-item {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.4rem;
+}
+.hero-side-item__title { font-size: 1.06rem; line-height: 1.18; margin-bottom: 0.6rem; }
+.hero-side-item__media img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: var(--sand);
+}
 
 figcaption {
   font-family: var(--sans);
@@ -33,20 +137,17 @@ figcaption {
   line-height: 1.4;
 }
 
-// --- Secundarias ---
-.stack { display: flex; flex-direction: column; }
-.stack > article {
-  padding: 1.15rem 0;
-  border-top: 1px solid var(--rule);
+// --- Tira de servicio: última hora / lo más leído / edición impresa ---
+.home-rail {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 3px solid var(--rule-strong);
 }
-.stack > article:first-child { padding-top: 0; border-top: 0; }
-.stack h3 { font-size: var(--step-1); }
-.stack .kicker--ink { margin-bottom: 0.4rem; font-size: 0.72rem; }
-.stack p { margin: 0.4rem 0 0; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.4; }
-.stack img { aspect-ratio: 3 / 2; object-fit: cover; width: 100%; margin-bottom: 0.6rem; background: var(--sand); }
+.home-rail > section { min-width: 0; }
 
-// --- Rail ---
-.rail > section { margin-bottom: 2rem; }
 .rail__head {
   font-family: var(--sans);
   font-size: var(--step--1);
@@ -66,7 +167,8 @@ figcaption {
 }
 .rail__head--live::before {
   content: "";
-  width: 8px; height: 8px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--red);
   animation: ddn-pulse 2s ease-out infinite;
@@ -108,8 +210,7 @@ figcaption {
 .ranked a:hover { color: var(--link-hover); }
 
 .impresa {
-  display: grid;
-  grid-template-columns: 64px 1fr;
+  display: flex;
   gap: 0.9rem;
   align-items: center;
   border: 1px solid var(--rule);
@@ -117,7 +218,15 @@ figcaption {
   padding: 1rem;
   color: var(--ink);
 }
-.impresa img { aspect-ratio: 3 / 4; object-fit: cover; background: var(--sand); border: 1px solid var(--rule); }
+.impresa img {
+  width: 58px;
+  flex-shrink: 0;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--sand);
+  border: 1px solid var(--rule);
+}
+.impresa__body { display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
 .impresa .meta { display: block; }
 
 // --- Bandas de sección ---
@@ -163,7 +272,8 @@ figcaption {
 .opinion-card { display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
 .opinion-card__by { display: flex; align-items: center; gap: 0.7rem; }
 .opinion-card__by img {
-  width: 44px; height: 44px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   background: var(--sand);
@@ -181,19 +291,21 @@ figcaption {
 .opinion-card h3 { font-size: var(--step-1); }
 .opinion-card p { margin: 0; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.4; }
 
-@media (max-width: 900px) {
-  .opinion-row { grid-template-columns: 1fr; }
-}
-
+// --- Responsive ---
 @media (max-width: 1000px) {
-  .lead-grid { grid-template-columns: 1fr 1fr; }
-  .lead-grid .rail { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  .rail > section { margin-bottom: 0; }
-  .col-divider { border-left: 0; padding-left: 0; }
+  .home-hero__grid { grid-template-columns: 1fr 1fr; }
+  .hero-slider { grid-column: 1 / -1; aspect-ratio: 21 / 9; min-height: 320px; }
+  .hero-col--feature,
+  .hero-col--side { border-left: 0; padding-left: 0; }
+  .opinion-row { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 720px) {
-  .lead-grid,
+@media (max-width: 760px) {
+  .home-hero__grid,
+  .home-rail,
   .card-row,
-  .lead-grid .rail { grid-template-columns: 1fr; gap: 1.5rem; }
-  .stack { border-top: 3px solid var(--rule-strong); padding-top: 1.5rem; }
+  .opinion-row { grid-template-columns: 1fr; gap: 1.75rem; }
+  .hero-slider { min-height: 300px; aspect-ratio: 4 / 3; }
+}
+@media (max-width: 480px) {
+  .card-row { grid-template-columns: 1fr; }
 }

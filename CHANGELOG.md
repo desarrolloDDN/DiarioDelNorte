@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+### Cambiado
+- **Portada, sección de apertura** rehecha a tres columnas (1/2 – 1/4 – 1/4):
+  carrusel de 6 noticias con la etiqueta «Destacado» (autorrotación 6 s, pausa
+  al pasar el ratón / enfocar, respeta `prefers-reduced-motion`, puntos de
+  navegación); columna central con una nota de «Judiciales» (imagen, titular,
+  extracto); columna derecha con una de «Caribe» y una de «Nación» (titular e
+  imagen). La tira de última hora / lo más leído / edición impresa pasa a una
+  fila propia bajo la apertura.
+
 ### Añadido
 - Esqueleto del repositorio: tema `diario-del-norte` + plugin `ddn-suite`.
 - Sistema de diseño (identidad): paleta Rojo Norte `#BF0202`, sin modo oscuro,

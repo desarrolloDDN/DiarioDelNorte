@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-29T06:01:18+00:00\n"
+"POT-Creation-Date: 2026-08-29T14:09:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: diario-del-norte\n"
@@ -64,28 +64,46 @@ msgstr ""
 msgid "Enlaces del pie"
 msgstr ""
 
+#: front-page.php:104
+msgid "carrusel"
+msgstr ""
+
+#: front-page.php:104
+msgid "Noticias destacadas"
+msgstr ""
+
 #: front-page.php:123
+msgid "Destacado"
+msgstr ""
+
+#. translators: %d: número de la noticia.
+#: front-page.php:149
+#, php-format
+msgid "Ir a la noticia %d"
+msgstr ""
+
+#: front-page.php:201
 msgid "Última hora"
 msgstr ""
 
-#: front-page.php:150
+#: front-page.php:228
 msgid "Lo más leído"
 msgstr ""
 
-#: front-page.php:191
+#: front-page.php:269
 #: inc/Customizer/SiteOptions.php:46
 msgid "Edición impresa"
 msgstr ""
 
-#: front-page.php:195
+#: front-page.php:273
 msgid "Portada de la edición impresa"
 msgstr ""
 
-#: front-page.php:201
+#: front-page.php:283
 msgid "Leer en PDF"
 msgstr ""
 
-#: front-page.php:235
+#: front-page.php:314
 msgid "Ver toda la sección"
 msgstr ""
 
@@ -145,7 +163,7 @@ msgstr ""
 msgid "WhatsApp (URL)"
 msgstr ""
 
-#: inc/Sections/DefaultSectionsInstaller.php:93
+#: inc/Sections/DefaultSectionsInstaller.php:130
 msgid "Más"
 msgstr ""
 
