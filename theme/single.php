@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
+use DiarioDelNorte\Users\AuthorProfile;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,7 +51,10 @@ while ( have_posts() ) :
 						printf( esc_html__( 'Por %s', 'diario-del-norte' ), esc_html( get_the_author() ) );
 						?>
 					</b>
-					<span><?php echo esc_html( get_the_author_meta( 'description' ) ? wp_trim_words( get_the_author_meta( 'description' ), 6, '' ) : __( 'Redacción', 'diario-del-norte' ) ); ?></span>
+					<?php
+					$ddn_role = AuthorProfile::role( (int) get_the_author_meta( 'ID' ) );
+					?>
+					<span><?php echo esc_html( '' !== $ddn_role ? $ddn_role : __( 'Redacción', 'diario-del-norte' ) ); ?></span>
 				</div>
 				<div class="byline__when">
 					<?php

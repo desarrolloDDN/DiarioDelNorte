@@ -227,18 +227,19 @@ $ddn_secondary = new WP_Query(
 		if ( ! $ddn_band->have_posts() ) {
 			continue;
 		}
+		$ddn_is_opinion = in_array( $ddn_slug, array( 'opinion', 'editorial' ), true );
 		?>
-		<section class="section-band">
+		<section class="section-band<?php echo $ddn_is_opinion ? ' section-band--tint' : ''; ?>">
 			<div class="section-band__head">
 				<h2><?php echo esc_html( $ddn_term->name ); ?></h2>
 				<a href="<?php echo esc_url( get_category_link( $ddn_term ) ); ?>"><?php esc_html_e( 'Ver toda la sección', 'diario-del-norte' ); ?> &rarr;</a>
 			</div>
-			<div class="card-row">
+			<div class="<?php echo $ddn_is_opinion ? 'opinion-row' : 'card-row'; ?>">
 				<?php
 				while ( $ddn_band->have_posts() ) :
 					$ddn_band->the_post();
 					$ddn_used[] = get_the_ID();
-					get_template_part( 'template-parts/entry-card' );
+					get_template_part( 'template-parts/' . ( $ddn_is_opinion ? 'opinion-card' : 'entry-card' ) );
 				endwhile;
 				wp_reset_postdata();
 				?>

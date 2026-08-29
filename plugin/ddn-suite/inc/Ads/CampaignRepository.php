@@ -68,16 +68,18 @@ final class CampaignRepository {
 		$table = Db::table( Db::CAMPAIGNS );
 
 		$fields = array(
-			'name'       => sanitize_text_field( (string) ( $data['name'] ?? '' ) ),
-			'advertiser' => sanitize_text_field( (string) ( $data['advertiser'] ?? '' ) ),
-			'zone'       => sanitize_text_field( (string) ( $data['zone'] ?? '' ) ),
-			'type'       => sanitize_text_field( (string) ( $data['type'] ?? 'image' ) ),
-			'active'     => ! empty( $data['active'] ) ? 1 : 0,
-			'priority'   => (int) ( $data['priority'] ?? 10 ),
-			'creative'   => wp_kses_post( (string) ( $data['creative'] ?? '' ) ),
-			'target_url' => esc_url_raw( (string) ( $data['target_url'] ?? '' ) ),
-			'starts_at'  => $this->date_or_null( $data['starts_at'] ?? null ),
-			'ends_at'    => $this->date_or_null( $data['ends_at'] ?? null ),
+			'name'           => sanitize_text_field( (string) ( $data['name'] ?? '' ) ),
+			'advertiser'     => sanitize_text_field( (string) ( $data['advertiser'] ?? '' ) ),
+			'zone'           => sanitize_text_field( (string) ( $data['zone'] ?? '' ) ),
+			'type'           => sanitize_text_field( (string) ( $data['type'] ?? 'image' ) ),
+			'active'         => ! empty( $data['active'] ) ? 1 : 0,
+			'priority'       => (int) ( $data['priority'] ?? 10 ),
+			'weight'         => max( 1, (int) ( $data['weight'] ?? 1 ) ),
+			'category_slugs' => $this->clean_slugs( (string) ( $data['category_slugs'] ?? '' ) ),
+			'creative'       => wp_kses_post( (string) ( $data['creative'] ?? '' ) ),
+			'target_url'     => esc_url_raw( (string) ( $data['target_url'] ?? '' ) ),
+			'starts_at'      => $this->date_or_null( $data['starts_at'] ?? null ),
+			'ends_at'        => $this->date_or_null( $data['ends_at'] ?? null ),
 		);
 
 		if ( $id > 0 ) {
@@ -100,6 +102,12 @@ final class CampaignRepository {
 		$wpdb->delete( Db::table( Db::CAMPAIGNS ), array( 'id' => $id ) );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->delete( Db::table( Db::EVENTS ), array( 'campaign_id' => $id ) );
+	}
+
+	private function clean_slugs( string $csv ): string {
+		$slugs = array_filter( array_map( 'sanitize_title', array_map( 'trim', explode( ',', $csv ) ) ) );
+
+		return implode( ',', array_unique( $slugs ) );
 	}
 
 	private function date_or_null( mixed $value ): ?string {

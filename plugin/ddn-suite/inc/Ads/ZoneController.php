@@ -18,8 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class ZoneController {
 
+	/** @var array<string,string> Cache por petición: zona => HTML ya resuelto. */
+	private array $resolved = array();
+
 	public function __construct(
 		private readonly CampaignRepository $campaigns,
+		private readonly CampaignSelector $selector,
 		private readonly AdRenderer $renderer,
 		private readonly StatsRepository $stats,
 	) {}
@@ -70,18 +74,43 @@ final class ZoneController {
 	}
 
 	private function html_for( AdZone $zone ): string {
-		$running = $this->campaigns->running_in( $zone );
-		if ( empty( $running ) ) {
-			return '';
+		if ( isset( $this->resolved[ $zone->value ] ) ) {
+			return $this->resolved[ $zone->value ];
 		}
 
-		$campaign = $running[0];
-		$html     = $this->renderer->render( $campaign );
+		$campaign = $this->selector->pick(
+			$this->campaigns->running_in( $zone ),
+			$this->context_categories()
+		);
 
-		if ( '' !== $html && ! is_admin() ) {
+		$html = null !== $campaign ? $this->renderer->render( $campaign ) : '';
+
+		if ( null !== $campaign && '' !== $html && ! is_admin() ) {
 			$this->stats->record( $campaign->id, 'impression' );
 		}
 
+		$this->resolved[ $zone->value ] = $html;
+
 		return $html;
+	}
+
+	/** @return list<string> Slugs de categoría de la vista actual. */
+	private function context_categories(): array {
+		if ( is_category() ) {
+			$term = get_queried_object();
+
+			return $term instanceof \WP_Term ? array( $term->slug ) : array();
+		}
+
+		if ( is_singular( 'post' ) ) {
+			return array_values(
+				array_map(
+					static fn ( \WP_Term $t ): string => $t->slug,
+					(array) get_the_category()
+				)
+			);
+		}
+
+		return array();
 	}
 }

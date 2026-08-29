@@ -1,0 +1,278 @@
+# Copyright (C) 2026 Sistema Cardenal S.A.S.
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Diario del Norte 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/desarrolloDDN/DiarioDelNorte/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-29T06:01:18+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: diario-del-norte\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Diario del Norte"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/desarrolloDDN/DiarioDelNorte"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Tema editorial de Diario del Norte — Periódico de la Región Caribe. Presentación de contenidos periodísticos: portada por bloques, jerarquía de plantillas, navegación con submenú y sistema de diseño propio (Rojo Norte #BF0202, titulares en «Sunlight Dreams», sin modo oscuro). El gestor de publicidad y el calendario editorial los aporta el plugin «DDN Suite»."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Sistema Cardenal S.A.S."
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://diariodelnorte.net"
+msgstr ""
+
+#: 404.php:17
+msgid "Página no encontrada"
+msgstr ""
+
+#: 404.php:18
+msgid "El enlace puede estar roto o la nota fue movida. Prueba a buscar lo que necesitas."
+msgstr ""
+
+#: 404.php:21
+msgid "Lo más reciente"
+msgstr ""
+
+#: archive.php:41
+#: index.php:31
+msgid "Navegación de entradas"
+msgstr ""
+
+#: archive.php:46
+msgid "No hay entradas en esta sección todavía."
+msgstr ""
+
+#: footer.php:55
+msgid "Enlaces del pie"
+msgstr ""
+
+#: front-page.php:123
+msgid "Última hora"
+msgstr ""
+
+#: front-page.php:150
+msgid "Lo más leído"
+msgstr ""
+
+#: front-page.php:191
+#: inc/Customizer/SiteOptions.php:46
+msgid "Edición impresa"
+msgstr ""
+
+#: front-page.php:195
+msgid "Portada de la edición impresa"
+msgstr ""
+
+#: front-page.php:201
+msgid "Leer en PDF"
+msgstr ""
+
+#: front-page.php:235
+msgid "Ver toda la sección"
+msgstr ""
+
+#: header.php:28
+msgid "Saltar al contenido"
+msgstr ""
+
+#: header.php:56
+msgid "Secciones"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:30
+msgid "Pie de página y contacto"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:35
+msgid "Texto legal / copyright"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:36
+msgid "Dirección y teléfono"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:37
+msgid "Correo de redacción"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:57
+msgid "Portada de la edición de hoy"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:62
+msgid "Enlace al PDF"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:63
+msgid "Texto bajo la portada"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:71
+msgid "Facebook (URL)"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:72
+msgid "X / Twitter (URL)"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:73
+msgid "Instagram (URL)"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:74
+msgid "YouTube (URL)"
+msgstr ""
+
+#: inc/Customizer/SiteOptions.php:75
+msgid "WhatsApp (URL)"
+msgstr ""
+
+#: inc/Sections/DefaultSectionsInstaller.php:93
+msgid "Más"
+msgstr ""
+
+#: inc/Support/Format.php:33
+msgid "Ahora mismo"
+msgstr ""
+
+#. translators: %d: minutos.
+#: inc/Support/Format.php:38
+#, php-format
+msgid "Hace %d minuto"
+msgid_plural "Hace %d minutos"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: horas.
+#: inc/Support/Format.php:43
+#, php-format
+msgid "Hace %d hora"
+msgid_plural "Hace %d horas"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/Support/Format.php:46
+msgid "Ayer"
+msgstr ""
+
+#. translators: %d: días.
+#: inc/Support/Format.php:51
+#, php-format
+msgid "Hace %d día"
+msgid_plural "Hace %d días"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/Theme.php:77
+msgid "Menú principal (barra de secciones)"
+msgstr ""
+
+#: inc/Theme.php:78
+msgid "Menú de pie de página"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:62
+msgid "Perfil en Diario del Norte"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:65
+msgid "Cargo para la firma"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:68
+msgid "Ej.: Directora, Columnista, Redacción Riohacha. Aparece bajo el nombre en la nota."
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:72
+msgid "Foto de perfil"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:78
+msgid "Elegir foto"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:79
+msgid "Quitar"
+msgstr ""
+
+#: inc/Users/AuthorProfile.php:81
+msgid "Sustituye a Gravatar en la firma y las tarjetas de opinión."
+msgstr ""
+
+#: index.php:36
+msgid "Todavía no hay publicaciones."
+msgstr ""
+
+#. translators: %s: términos buscados.
+#: search.php:21
+#, php-format
+msgid "Resultados para «%s»"
+msgstr ""
+
+#: search.php:38
+msgid "No se encontró nada. Prueba con otras palabras."
+msgstr ""
+
+#: searchform.php:17
+msgid "Buscar:"
+msgstr ""
+
+#: searchform.php:18
+msgid "Buscar en Diario del Norte…"
+msgstr ""
+
+#: searchform.php:19
+msgid "Buscar"
+msgstr ""
+
+#: single.php:27
+msgid "Portada"
+msgstr ""
+
+#. translators: %s: nombre del autor.
+#: single.php:51
+#, php-format
+msgid "Por %s"
+msgstr ""
+
+#: single.php:57
+msgid "Redacción"
+msgstr ""
+
+#: single.php:63
+msgid "Actualizado"
+msgstr ""
+
+#. translators: %d: minutos de lectura.
+#: single.php:67
+#, php-format
+msgid "%d min de lectura"
+msgid_plural "%d min de lectura"
+msgstr[0] ""
+msgstr[1] ""
+
+#: single.php:127
+msgid "Le puede interesar"
+msgstr ""
+
+#: template-parts/opinion-card.php:25
+msgid "Columnista"
+msgstr ""

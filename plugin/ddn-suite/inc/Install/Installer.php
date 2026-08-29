@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '1';
+	private const DB_VERSION = '2';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -51,6 +51,8 @@ final class Installer {
 				type VARCHAR(20) NOT NULL DEFAULT 'image',
 				active TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
 				priority SMALLINT NOT NULL DEFAULT 10,
+				weight SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+				category_slugs TEXT NOT NULL DEFAULT '',
 				creative LONGTEXT NOT NULL,
 				target_url TEXT NOT NULL,
 				starts_at DATETIME NULL DEFAULT NULL,

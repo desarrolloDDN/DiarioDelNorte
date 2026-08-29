@@ -1,0 +1,232 @@
+# Copyright (C) 2026 Sistema Cardenal S.A.S.
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: DDN Suite 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/desarrolloDDN/DiarioDelNorte/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-29T06:01:18+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ddn-suite\n"
+
+#. Plugin Name of the plugin
+#: ddn-suite.php
+#: inc/Admin/Menu.php:34
+#: inc/Admin/Menu.php:35
+msgid "DDN Suite"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ddn-suite.php
+msgid "https://github.com/desarrolloDDN/DiarioDelNorte"
+msgstr ""
+
+#. Description of the plugin
+#: ddn-suite.php
+msgid "Gestor de publicidad y calendario de noticias publicadas para Diario del Norte. Complementa al tema; el tema solo marca las zonas de anuncio."
+msgstr ""
+
+#. Author of the plugin
+#: ddn-suite.php
+msgid "Sistema Cardenal S.A.S."
+msgstr ""
+
+#. Author URI of the plugin
+#: ddn-suite.php
+msgid "https://diariodelnorte.net"
+msgstr ""
+
+#: inc/Admin/Menu.php:45
+#: inc/Calendar/Admin/CalendarPage.php:52
+msgid "Calendario editorial"
+msgstr ""
+
+#: inc/Admin/Menu.php:46
+msgid "Calendario"
+msgstr ""
+
+#: inc/Admin/Menu.php:54
+#: inc/Admin/Menu.php:55
+msgid "Publicidad"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:39
+msgid "Acción no permitida."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:56
+#: inc/Calendar/Admin/CalendarPage.php:35
+msgid "Sin permisos suficientes."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:63
+msgid "Publicidad — espacios y campañas"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:66
+msgid "Guardado."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:69
+msgid "Editar campaña"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:69
+msgid "Nueva campaña"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:77
+#: inc/Ads/Admin/CampaignsPage.php:154
+msgid "Nombre"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:81
+msgid "Anunciante"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:85
+#: inc/Ads/Admin/CampaignsPage.php:155
+msgid "Zona"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:95
+msgid "Formato"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:105
+msgid "Creatividad"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:108
+msgid "Imagen: URL del archivo. HTML/red: pega aquí el código."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:112
+msgid "URL de destino"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:116
+msgid "Vigencia"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:124
+msgid "Categorías"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:127
+msgid "Slugs separados por comas (p. ej. la-guajira, judiciales). En blanco = todas."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:131
+msgid "Prioridad, peso y estado"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:133
+msgid "Prioridad"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:137
+msgid "Peso"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:141
+#: inc/Ads/Admin/CampaignsPage.php:173
+msgid "Activa"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:142
+msgid "Compite primero la prioridad más baja; entre las que empatan, sorteo ponderado por peso."
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:147
+msgid "Guardar cambios"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:147
+msgid "Crear campaña"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:150
+msgid "Campañas"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:156
+msgid "Estado"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:157
+msgid "Impresiones"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:158
+msgid "Clics"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:159
+msgid "CTR"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:173
+msgid "Pausada"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:178
+msgid "Editar"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:180
+msgid "¿Borrar esta campaña?"
+msgstr ""
+
+#: inc/Ads/Admin/CampaignsPage.php:184
+msgid "Borrar"
+msgstr ""
+
+#: inc/Ads/AdRenderer.php:33
+msgid "Espacio publicitario"
+msgstr ""
+
+#: inc/Ads/AdZone.php:28
+msgid "Cabecera (bajo el logotipo)"
+msgstr ""
+
+#: inc/Ads/AdZone.php:29
+msgid "Portada (tras la retícula de apertura)"
+msgstr ""
+
+#: inc/Ads/AdZone.php:30
+msgid "Inicio del artículo"
+msgstr ""
+
+#: inc/Ads/AdZone.php:31
+msgid "Dentro del artículo (tras el 3.er párrafo)"
+msgstr ""
+
+#: inc/Ads/AdZone.php:32
+msgid "Final del artículo"
+msgstr ""
+
+#: inc/Ads/CampaignType.php:25
+msgid "Imagen enlazada"
+msgstr ""
+
+#: inc/Ads/CampaignType.php:26
+msgid "HTML propio"
+msgstr ""
+
+#: inc/Ads/CampaignType.php:27
+msgid "AdSense / red"
+msgstr ""
+
+#: inc/Calendar/Admin/CalendarPage.php:67
+msgid "Mes anterior"
+msgstr ""
+
+#: inc/Calendar/Admin/CalendarPage.php:81
+msgid "Mes siguiente"
+msgstr ""

@@ -13,6 +13,7 @@ namespace DiarioDelNorte;
 
 use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller;
+use DiarioDelNorte\Users\AuthorProfile;
 use WP_Screen;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,6 +36,7 @@ final class Theme {
 
 		( new Assets() )->register();
 		( new SiteOptions() )->register();
+		( new AuthorProfile() )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
 		// el editor de bloques.

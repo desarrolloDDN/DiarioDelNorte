@@ -13,6 +13,7 @@ use DiarioDelNorte\Suite\Admin\Menu;
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
 use DiarioDelNorte\Suite\Ads\AdRenderer;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
+use DiarioDelNorte\Suite\Ads\CampaignSelector;
 use DiarioDelNorte\Suite\Ads\ClickController;
 use DiarioDelNorte\Suite\Ads\StatsRepository;
 use DiarioDelNorte\Suite\Ads\ZoneController;
@@ -40,8 +41,9 @@ final class Plugin {
 		$campaigns = new CampaignRepository();
 		$stats     = new StatsRepository();
 		$renderer  = new AdRenderer();
+		$selector  = new CampaignSelector();
 
-		( new ZoneController( $campaigns, $renderer, $stats ) )->register();
+		( new ZoneController( $campaigns, $selector, $renderer, $stats ) )->register();
 		( new ClickController( $campaigns, $stats ) )->register();
 
 		if ( is_admin() ) {

@@ -1,14 +1,6 @@
 // Tokens de diseño de Diario del Norte.
 // Tema único, claro: todos los colores se declaran explícitamente, sin
-// prefers-color-scheme ni conmutador.
-
-@font-face {
-  font-family: "Sunlight Dreams";
-  src: url("../../fonts/sunlight-dreams.woff2") format("woff2"),
-       url("../../fonts/sunlight-dreams.otf") format("opentype");
-  font-weight: 400 900;
-  font-display: swap;
-}
+// prefers-color-scheme ni conmutador. Las @font-face viven en _fonts.scss.
 
 :root {
   // Neutros cálidos (papel prensa)

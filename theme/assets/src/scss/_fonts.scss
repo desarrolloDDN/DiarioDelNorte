@@ -1,0 +1,30 @@
+// Fuentes autoalojadas del tema.
+//
+// Titulares: «Sunlight Dreams» (archivo propio de la editora, un peso).
+// Resto: Libre Franklin — fuente variable (eje de peso), subconjunto
+// latino descargado de Google Fonts. Regenerar Libre Franklin con
+// scratchpad/selfhost_franklin.py si cambia el subconjunto.
+
+@font-face {
+  font-family: "Sunlight Dreams";
+  src: url("../../fonts/sunlight-dreams.woff2") format("woff2"),
+       url("../../fonts/sunlight-dreams.otf") format("opentype");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("../../fonts/libre-franklin.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Libre Franklin";
+  src: url("../../fonts/libre-franklin-italic.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: italic;
+  font-display: swap;
+}

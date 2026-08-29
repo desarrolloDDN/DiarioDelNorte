@@ -23,7 +23,9 @@
 | Assets (Vite) | `inc/Assets.php`; fuentes/estilos en `assets/src/`, compilado en `assets/dist/` |
 | Secciones + menú | `inc/Sections/DefaultSectionsInstaller.php` (19 categorías + submenú «Más») |
 | Personalizador | `inc/Customizer/SiteOptions.php` (pie, contacto, redes, edición impresa) |
+| Perfil de autor | `inc/Users/AuthorProfile.php` (foto + cargo para la firma; filtra `get_avatar_data`) |
 | Helpers de plantilla | `inc/Support/Format.php`, `inc/Support/Ads.php` |
+| Fuentes | Autoalojadas en `assets/fonts/`, declaradas en `assets/src/scss/_fonts.scss`. Sin Google Fonts. |
 | Plantillas | `front-page.php`, `single.php`, `archive.php`, `search.php`, `page.php`, `404.php`, `index.php` |
 | Parciales | `template-parts/entry-*.php` |
 
@@ -40,7 +42,7 @@ se duplican esos archivos.
 | `Install/Installer.php` | Crea `wp_ddn_ad_campaigns` y `wp_ddn_ad_events` (dbDelta), versión en `ddn_suite_db_version`. |
 | `Ads/AdZone`, `Ads/CampaignType` | Enums; `AdZone` debe coincidir con `DiarioDelNorte\Support\Ads::ZONES` del tema. |
 | `Ads/CampaignRepository`, `Ads/StatsRepository` | Acceso a datos (consultas preparadas con `%i`). |
-| `Ads/CampaignSelector` *(pendiente)*, `Ads/AdRenderer` | Selección y render de la creatividad (puro). |
+| `Ads/CampaignSelector`, `Ads/AdRenderer` | Selección (prioridad → sorteo ponderado por peso, filtrado por categoría) y render de la creatividad. Puros. |
 | `Ads/ZoneController` | Puente `ddn/ad_zone` + inserción tras el 3.er párrafo vía `the_content`; registra impresión. |
 | `Ads/ClickController` | `/ddn-anuncio/clic/{id}` → redirección resuelta en el servidor por ID (sin open-redirect). |
 | `Ads/Admin/CampaignsPage` | Alta/edición/borrado de campañas + impresiones/clics/CTR. Slug sin las palabras «ad»/«campaign» (bloqueadores). |
@@ -56,7 +58,6 @@ comparten número. El job `version-consistency` de CI lo verifica.
 ## Pendiente para v0.1
 
 - Verificación end-to-end contra un WordPress real.
-- `CampaignSelector` (rotación / segmentación por categoría) y reporte PDF.
-- Autoalojar Libre Franklin (ahora vía Google Fonts).
-- Archivo `.pot` de traducciones.
-- Meta box de «foto de autor» y campo de rol para la firma.
+- Reporte de campañas en PDF y panel de estadísticas por rango de fechas.
+- Traducción `es_CO` (`.po`/`.mo`) a partir del `.pot`.
+- Patrones de bloque para páginas.

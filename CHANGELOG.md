@@ -11,6 +11,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
   titulares «Sunlight Dreams» (autoalojada) y Libre Franklin para el resto.
 - Instalador de las 19 secciones y el menú principal con submenú «Más».
 - Jerarquía de plantillas: portada, artículo, archivo, búsqueda, página, 404.
-- `ddn-suite`: estructura base del gestor de publicidad y del calendario editorial.
+- `ddn-suite`: gestor de publicidad (campañas con vigencia, **prioridad y peso**,
+  **segmentación por categoría**, rotación por sorteo ponderado — `CampaignSelector`),
+  tracking de impresiones/clics, redirección de clic server-side; calendario editorial.
+- Tema: campos de autor (**foto de perfil** con selector de medios + **cargo para la
+  firma**); la foto sustituye a Gravatar. Banda de **Opinión** en portada con tarjetas
+  de columnista.
+- Fuentes **totalmente autoalojadas**: Libre Franklin (variable, subconjunto latino)
+  y «Sunlight Dreams»; sin ninguna petición a Google Fonts. Precarga de las dos
+  fuentes críticas.
+- Archivos `.pot` de traducción (`tools/make-pot.sh`).
 - Herramientas: `phpcs` (WordPress-Extra), `phpstan`, Vite, CI de GitHub Actions,
   `tools/build/package.sh`.

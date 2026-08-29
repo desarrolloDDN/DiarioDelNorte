@@ -149,6 +149,42 @@ figcaption {
 }
 .card-row article { min-width: 0; }
 
+// --- Banda de Opinión ---
+.section-band--tint {
+  background: var(--sand);
+  border-top-color: var(--red);
+  padding-inline: 1.5rem;
+}
+.opinion-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.opinion-card { display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
+.opinion-card__by { display: flex; align-items: center; gap: 0.7rem; }
+.opinion-card__by img {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--sand);
+  filter: grayscale(1);
+}
+.opinion-card__by b { font-family: var(--sans); font-size: 0.9rem; letter-spacing: 0.02em; }
+.opinion-card__by span {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.opinion-card h3 { font-size: var(--step-1); }
+.opinion-card p { margin: 0; color: var(--ink-soft); font-size: 0.96rem; line-height: 1.4; }
+
+@media (max-width: 900px) {
+  .opinion-row { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 1000px) {
   .lead-grid { grid-template-columns: 1fr 1fr; }
   .lead-grid .rail { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }

@@ -121,10 +121,25 @@ final class CampaignsPage {
 						</td>
 					</tr>
 					<tr>
-						<th><?php esc_html_e( 'Prioridad y estado', 'ddn-suite' ); ?></th>
+						<th><label for="ddn-cats"><?php esc_html_e( 'Categorías', 'ddn-suite' ); ?></label></th>
 						<td>
-							<input type="number" name="priority" min="1" max="100" value="<?php echo (int) ( $editing->priority ?? 10 ); ?>" style="width:5em">
+							<input class="regular-text" id="ddn-cats" name="category_slugs" value="<?php echo esc_attr( implode( ', ', $editing->category_slugs ?? array() ) ); ?>">
+							<p class="description"><?php esc_html_e( 'Slugs separados por comas (p. ej. la-guajira, judiciales). En blanco = todas.', 'ddn-suite' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'Prioridad, peso y estado', 'ddn-suite' ); ?></th>
+						<td>
+							<label><?php esc_html_e( 'Prioridad', 'ddn-suite' ); ?>
+								<input type="number" name="priority" min="1" max="100" value="<?php echo (int) ( $editing->priority ?? 10 ); ?>" style="width:5em">
+							</label>
+							&nbsp;
+							<label><?php esc_html_e( 'Peso', 'ddn-suite' ); ?>
+								<input type="number" name="weight" min="1" max="100" value="<?php echo (int) ( $editing->weight ?? 1 ); ?>" style="width:5em">
+							</label>
+							&nbsp;
 							<label><input type="checkbox" name="active" value="1" <?php checked( $editing->active ?? true ); ?>> <?php esc_html_e( 'Activa', 'ddn-suite' ); ?></label>
+							<p class="description"><?php esc_html_e( 'Compite primero la prioridad más baja; entre las que empatan, sorteo ponderado por peso.', 'ddn-suite' ); ?></p>
 						</td>
 					</tr>
 				</table>
