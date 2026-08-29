@@ -11,6 +11,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Sections\DefaultSectionsInstaller;
 use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
 
@@ -211,7 +212,7 @@ $ddn_secondary = new WP_Query(
 	<?php
 	$ddn_bands = apply_filters( 'ddn/home_sections', array( 'la-guajira', 'judiciales', 'opinion' ) );
 	foreach ( (array) $ddn_bands as $ddn_slug ) :
-		$ddn_term = get_term_by( 'slug', $ddn_slug, 'category' );
+		$ddn_term = DefaultSectionsInstaller::category( (string) $ddn_slug );
 		if ( ! $ddn_term ) {
 			continue;
 		}
