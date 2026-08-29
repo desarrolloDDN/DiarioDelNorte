@@ -1,0 +1,25 @@
+# Dependencias
+/vendor/
+**/node_modules/
+
+# Artefactos de empaquetado
+/tools/build/dist/
+
+# Cachés de herramientas
+.phpunit.result.cache
+.phpcs.cache
+/.phpcs.cache
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+
+# Entorno local
+/.env
+/.env.*
+!/.env.example
+
+# Vite
+theme/assets/dist/.vite/

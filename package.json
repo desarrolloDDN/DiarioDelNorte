@@ -1,0 +1,11 @@
+{
+  "name": "diario-del-norte",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Orquesta la compilación de assets del tema Diario del Norte.",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build": "npm --prefix theme install --no-fund --no-audit && npm --prefix theme run build",
+    "dev": "npm --prefix theme run dev"
+  }
+}

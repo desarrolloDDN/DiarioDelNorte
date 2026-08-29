@@ -1,0 +1,20 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 5
+	phpVersion: 80100
+	paths:
+		- theme/inc
+		- theme/functions.php
+		- plugin/ddn-suite
+	excludePaths:
+		- */node_modules/*
+		- */assets/dist/*
+	bootstrapFiles:
+		- tools/phpstan-bootstrap.php
+	scanDirectories:
+		- theme/inc
+	dynamicConstantNames:
+		- DDN_THEME_VERSION
+		- DDN_SUITE_VERSION

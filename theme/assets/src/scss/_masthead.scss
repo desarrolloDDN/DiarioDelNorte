@@ -1,0 +1,115 @@
+// Cabezote y barra de secciones.
+
+.masthead {
+  border-top: 3px solid var(--rule-strong);
+  padding-top: 0.5rem;
+}
+
+.masthead__topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.5rem;
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.masthead__topline > span:first-child::first-letter { text-transform: uppercase; }
+
+.nameplate {
+  text-align: center;
+  padding: 1.6rem 0 1.4rem;
+}
+.nameplate__link { display: inline-block; }
+.nameplate__logo,
+.custom-logo {
+  display: block;
+  margin: 0 auto;
+  width: min(486px, 84vw);
+  height: auto;
+}
+
+.nameplate__rule {
+  border: 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 3px double var(--rule-strong);
+  height: 4px;
+  margin: 0;
+}
+
+// --- Navegación principal ---
+.mainnav {
+  background: var(--ink-deep);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.mainnav__inner {
+  max-width: var(--maxw-site);
+  margin: 0 auto;
+  padding-inline: clamp(0.9rem, 3vw, 2rem);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mainnav__inner::-webkit-scrollbar { display: none; }
+
+.mainnav__menu {
+  display: flex;
+  align-items: stretch;
+  gap: 0.1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mainnav__menu a {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 0.85rem 0.7rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
+}
+.mainnav__menu a:hover { color: #fff; border-bottom-color: var(--red); }
+.mainnav__menu .current-menu-item > a,
+.mainnav__menu .current-cat > a { color: #fff; border-bottom-color: #fff; }
+
+// Submenú «Más»
+.mainnav__menu .menu-item--more { position: relative; }
+.mainnav__menu .menu-item--more > a { color: #fff; gap: 0.4ch; }
+.mainnav__menu .menu-item--more > a::after { content: "\25be"; font-size: 0.7em; }
+.mainnav__menu .menu-item--more:hover > a,
+.mainnav__menu .menu-item--more:focus-within > a { border-bottom-color: var(--red); }
+
+.mainnav__menu .sub-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 210px;
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0;
+  background: var(--ink-deep);
+  border-top: 3px solid var(--red);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+  display: none;
+  z-index: 50;
+}
+.mainnav__menu .menu-item--more:hover .sub-menu,
+.mainnav__menu .menu-item--more:focus-within .sub-menu,
+.mainnav__menu .menu-item--more.is-open .sub-menu { display: block; }
+.mainnav__menu .sub-menu a {
+  display: block;
+  padding: 0.6rem 1.1rem;
+  border-bottom: 0;
+}
+.mainnav__menu .sub-menu a:hover { background: rgba(255, 255, 255, 0.08); border-bottom: 0; }

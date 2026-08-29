@@ -1,0 +1,153 @@
+// Reset ligero, tipografía base y componentes atómicos.
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); }
+
+::selection { background: var(--red); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: 0.012em;
+  text-wrap: balance;
+  margin: 0;
+  color: var(--headline);
+}
+
+p { margin: 0 0 1rem; }
+
+.wrap {
+  max-width: var(--maxw-site);
+  margin: 0 auto;
+  padding-inline: clamp(0.9rem, 3vw, 2rem);
+}
+
+// --- Accesibilidad ---
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: #fff;
+}
+.skip-link:focus { left: 1rem; top: 1rem; color: #fff; }
+
+// --- Átomos ---
+.kicker,
+.kicker--ink {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--step--1);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5ch;
+}
+.kicker::before,
+.kicker--ink::before {
+  content: "";
+  width: 0.72ch;
+  height: 0.72ch;
+  background: currentColor;
+  display: inline-block;
+  transform: translateY(1px);
+}
+.kicker--ink { color: var(--ink); }
+.kicker--ink::before { background: var(--red); }
+
+.dateline {
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--slate);
+  font-weight: 500;
+}
+
+.meta {
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  color: var(--slate);
+}
+
+.headline-link { color: var(--headline); display: block; }
+.headline-link:hover {
+  color: var(--headline);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.btn {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  background: var(--red);
+  color: #fff;
+  border: 1px solid var(--red);
+}
+.btn:hover { background: var(--ink-deep); border-color: var(--ink-deep); color: #fff; }
+.btn--sm { padding: 0.42rem 0.8rem; font-size: 0.72rem; }
+.btn--ghost { background: transparent; color: var(--red); }
+.btn--ghost:hover { background: var(--red); color: #fff; }
+
+.notice-empty {
+  padding: 3rem 0;
+  color: var(--slate);
+  font-size: var(--step-1);
+}
+
+// --- Publicidad (contenedor que imprime DDN Suite) ---
+.ddn-ad {
+  margin: 1.6rem auto;
+  text-align: center;
+}
+.ddn-ad__label {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--slate);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.ddn-ad--in-article { max-width: 30rem; }

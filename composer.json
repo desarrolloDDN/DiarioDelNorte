@@ -1,0 +1,33 @@
+{
+    "name": "desarrollo-ddn/diario-del-norte",
+    "description": "Tema editorial y suite (publicidad + calendario editorial) de Diario del Norte para WordPress.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://github.com/desarrolloDDN/DiarioDelNorte",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.10",
+        "wp-coding-standards/wpcs": "^3.1",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "phpstan/phpstan": "^1.12",
+        "szepeviktor/phpstan-wordpress": "^1.3"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "lint": "phpcs -q",
+        "lint:fix": "phpcbf",
+        "stan": "phpstan analyse --memory-limit=1G",
+        "check": [
+            "@lint",
+            "@stan"
+        ]
+    }
+}

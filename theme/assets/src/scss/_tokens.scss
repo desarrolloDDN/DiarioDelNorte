@@ -1,0 +1,45 @@
+// Tokens de diseño de Diario del Norte.
+// Tema único, claro: todos los colores se declaran explícitamente, sin
+// prefers-color-scheme ni conmutador.
+
+@font-face {
+  font-family: "Sunlight Dreams";
+  src: url("../../fonts/sunlight-dreams.woff2") format("woff2"),
+       url("../../fonts/sunlight-dreams.otf") format("opentype");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+:root {
+  // Neutros cálidos (papel prensa)
+  --paper: #fbfaf8;
+  --surface: #ffffff;
+  --sand: #f1ece2;
+  --ink: #1b1815;
+  --ink-soft: #423c37;
+  --headline: #3d372f; // titulares: gris cálido, aligera Sunlight Dreams
+  --slate: #6a635b;
+  --rule: #ddd7cc;
+  --rule-strong: #1b1815;
+
+  // Marca
+  --red: #bf0202;
+  --red-deep: #8c0000;
+  --ink-deep: #17130f; // navegación y pie
+
+  --link: #bf0202;
+  --link-hover: #8c0000;
+
+  --maxw-site: 1200px;
+  --maxw-read: 40rem;
+
+  --display: "Sunlight Dreams", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --sans: "Libre Franklin", "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  --step--1: 0.812rem;
+  --step-0: 1rem;
+  --step-1: 1.333rem;
+  --step-2: 1.777rem;
+  --step-3: 2.369rem;
+  --step-4: clamp(2rem, 1.4rem + 2vw, 3rem);
+}

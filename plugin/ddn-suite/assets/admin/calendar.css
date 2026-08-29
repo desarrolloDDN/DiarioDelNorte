@@ -1,0 +1,68 @@
+/* Calendario editorial en wp-admin. */
+
+.ddn-calendar__nav {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin: 1rem 0;
+}
+
+.ddn-calendar__grid {
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+.ddn-calendar__grid th {
+	text-align: left;
+	padding: 6px 8px;
+	background: #f6f7f7;
+}
+
+.ddn-calendar__day {
+	vertical-align: top;
+	height: 150px;
+	max-height: 190px;
+	overflow-y: auto;
+	padding: 4px 6px;
+	border: 1px solid #dcdcde;
+	position: relative;
+}
+
+.ddn-calendar__day.is-empty { background: #f0f0f1; }
+.ddn-calendar__day.is-today { outline: 2px solid #bf0202; outline-offset: -2px; }
+
+.ddn-calendar__date {
+	font-weight: 700;
+	display: inline-block;
+}
+
+.ddn-calendar__count {
+	position: absolute;
+	top: 4px;
+	right: 6px;
+	font-size: 11px;
+	color: #646970;
+}
+
+.ddn-calendar__day ul {
+	margin: 4px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 12px;
+	line-height: 1.3;
+}
+
+.ddn-calendar__day li {
+	padding: 2px 0;
+	border-top: 1px solid #f0f0f1;
+}
+
+.ddn-calendar__time {
+	color: #646970;
+	font-variant-numeric: tabular-nums;
+	margin-right: 4px;
+}
+
+.ddn-calendar__day li.status-future a { color: #996800; }
+.ddn-calendar__day li.status-draft a,
+.ddn-calendar__day li.status-pending a { color: #646970; font-style: italic; }

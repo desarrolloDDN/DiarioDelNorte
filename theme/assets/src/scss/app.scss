@@ -1,0 +1,17 @@
+// Hoja de estilos del tema Diario del Norte.
+// Se compila con Vite hacia assets/dist/app.css.
+
+@use "tokens";
+@use "base";
+@use "masthead";
+@use "home";
+@use "article";
+@use "lists";
+@use "footer";
+
+// Estilos de bloques de WordPress usados en páginas.
+.alignwide { max-width: min(1080px, 92vw); margin-inline: auto; }
+.alignfull { max-width: 100vw; margin-inline: calc(50% - 50vw); }
+.wp-block-image img { height: auto; }
+.wp-block-pullquote,
+.wp-block-quote { border-left: 3px solid var(--red); padding-left: 1.4rem; font-family: var(--display); }

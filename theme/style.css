@@ -1,0 +1,20 @@
+/*
+Theme Name: Diario del Norte
+Theme URI: https://github.com/desarrolloDDN/DiarioDelNorte
+Author: Sistema Cardenal S.A.S.
+Author URI: https://diariodelnorte.net
+Description: Tema editorial de Diario del Norte — Periódico de la Región Caribe. Presentación de contenidos periodísticos: portada por bloques, jerarquía de plantillas, navegación con submenú y sistema de diseño propio (Rojo Norte #BF0202, titulares en «Sunlight Dreams», sin modo oscuro). El gestor de publicidad y el calendario editorial los aporta el plugin «DDN Suite».
+Version: 0.1.0
+Requires at least: 6.5
+Tested up to: 6.7
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: diario-del-norte
+Domain Path: /languages
+Tags: news, blog, custom-menu, featured-images, translation-ready, full-width-template
+
+Este archivo solo contiene la cabecera que WordPress exige. Los estilos
+reales se compilan con Vite desde assets/src/scss/app.scss hacia
+assets/dist/app.css y se encolan en DiarioDelNorte\Assets.
+*/

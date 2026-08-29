@@ -1,0 +1,58 @@
+// Pie de página.
+
+.site-footer {
+  background: var(--ink-deep);
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 3.5rem;
+  padding: 3rem 0 2rem;
+  font-family: var(--sans);
+}
+.site-footer__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 2rem;
+}
+.site-footer a { color: rgba(255, 255, 255, 0.72); }
+.site-footer a:hover { color: #fff; }
+
+.site-footer__name {
+  font-family: var(--display);
+  font-size: var(--step-2);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.4rem;
+}
+.site-footer__brand p { font-size: 0.86rem; line-height: 1.5; max-width: 42ch; margin: 0.2rem 0; }
+
+.site-footer__social {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-size: 0.82rem;
+}
+
+.site-footer__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.86rem;
+}
+.site-footer__menu li { padding: 0.28rem 0; }
+.site-footer__nav h4,
+.site-footer__nav .site-footer__menu { max-width: 100%; }
+
+.site-footer__legal {
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 720px) {
+  .site-footer__grid { grid-template-columns: 1fr; }
+}
