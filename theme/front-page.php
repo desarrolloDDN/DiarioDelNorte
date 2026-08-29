@@ -2,12 +2,14 @@
 /**
  * Portada del diario.
  *
- * Sección de apertura a tres columnas (1/2 – 1/4 – 1/4):
- *   - izquierda: carrusel de 6 noticias con la etiqueta «Destacado»;
- *   - centro:    una nota de «Judiciales» (imagen, titular, extracto);
- *   - derecha:   una de «Caribe» y una de «Nación» (titular e imagen).
- * Debajo: publicidad, tira de servicio (última hora / lo más leído /
- * edición impresa) y bandas de sección.
+ * 1. Apertura a tres columnas (1/2 – 1/4 – 1/4): carrusel de «Destacado»,
+ *    una nota de Judiciales, y una de Caribe + una de Nación.
+ * 2. Publicidad (zona `home`).
+ * 3. Cuerpo a dos columnas:
+ *    - principal: La Guajira, Judiciales (carrusel), Opinión (carrusel) y
+ *      «Más noticias» (todo lo que no salió antes);
+ *    - lateral: Editorial, Edición impresa, Lo más leído (24 h, vía
+ *      `ddn/most_read` del plugin) y boletín.
  *
  * @package DiarioDelNorte
  */
@@ -196,38 +198,229 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 
 	<?php Ads::zone( 'home' ); ?>
 
-	<div class="home-rail">
-		<section>
-			<div class="rail__head rail__head--live"><?php esc_html_e( 'Última hora', 'diario-del-norte' ); ?></div>
-			<ul class="live-list">
-				<?php
-				$ddn_live = new WP_Query(
+	<div class="home-layout">
+		<div class="home-main">
+
+			<?php
+			// === La Guajira: 3 destacadas + 4 en lista =====================
+			$ddn_gj   = DefaultSectionsInstaller::category( 'la-guajira' );
+			$ddn_gj_q = $ddn_pick( $ddn_gj, 7, $ddn_used );
+			if ( $ddn_gj_q->have_posts() ) :
+				?>
+				<section class="home-section">
+					<?php
+					get_template_part(
+						'template-parts/home/section-head',
+						null,
+						array(
+							'title' => $ddn_gj instanceof WP_Term ? $ddn_gj->name : __( 'La Guajira', 'diario-del-norte' ),
+							'url'   => $ddn_gj instanceof WP_Term ? get_category_link( $ddn_gj ) : '',
+						)
+					);
+					?>
+					<div class="home-lead-row">
+						<?php
+						$ddn_n = 0;
+						while ( $ddn_gj_q->have_posts() && $ddn_n < 3 ) :
+							$ddn_gj_q->the_post();
+							$ddn_used[] = get_the_ID();
+							get_template_part( 'template-parts/home/card' );
+							++$ddn_n;
+						endwhile;
+						?>
+					</div>
+					<?php if ( $ddn_gj_q->have_posts() ) : ?>
+						<div class="home-list-2col">
+							<?php
+							while ( $ddn_gj_q->have_posts() ) :
+								$ddn_gj_q->the_post();
+								$ddn_used[] = get_the_ID();
+								get_template_part( 'template-parts/home/card-row' );
+							endwhile;
+							?>
+						</div>
+					<?php endif; ?>
+					<?php wp_reset_postdata(); ?>
+				</section>
+			<?php endif; ?>
+
+			<?php
+			// === Judiciales: carrusel de tarjetas =========================
+			$ddn_jd   = DefaultSectionsInstaller::category( 'judiciales' );
+			$ddn_jd_q = $ddn_pick( $ddn_jd, 8, $ddn_used );
+			if ( $ddn_jd_q->have_posts() ) :
+				?>
+				<section class="home-section">
+					<?php
+					get_template_part(
+						'template-parts/home/section-head',
+						null,
+						array(
+							'title' => $ddn_jd instanceof WP_Term ? $ddn_jd->name : __( 'Judiciales', 'diario-del-norte' ),
+							'url'   => $ddn_jd instanceof WP_Term ? get_category_link( $ddn_jd ) : '',
+						)
+					);
+					?>
+					<div class="card-slider" data-card-slider>
+						<div class="card-slider__track">
+							<?php
+							while ( $ddn_jd_q->have_posts() ) :
+								$ddn_jd_q->the_post();
+								$ddn_used[] = get_the_ID();
+								get_template_part( 'template-parts/home/card', null, array( 'badge' => true ) );
+							endwhile;
+							wp_reset_postdata();
+							?>
+						</div>
+						<button type="button" class="card-slider__nav card-slider__nav--prev" aria-label="<?php esc_attr_e( 'Anterior', 'diario-del-norte' ); ?>" hidden>&lsaquo;</button>
+						<button type="button" class="card-slider__nav card-slider__nav--next" aria-label="<?php esc_attr_e( 'Siguiente', 'diario-del-norte' ); ?>">&rsaquo;</button>
+					</div>
+				</section>
+			<?php endif; ?>
+
+			<?php
+			// === Opinión: carrusel de columnistas ========================
+			$ddn_op   = DefaultSectionsInstaller::category( 'opinion' );
+			$ddn_op_q = $ddn_op instanceof WP_Term
+				? new WP_Query(
 					array(
-						'posts_per_page'      => 5,
+						'category__in'        => array( $ddn_op->term_id ),
 						'post__not_in'        => $ddn_used,
+						'posts_per_page'      => 8,
+						'ignore_sticky_posts' => true,
+						'no_found_rows'       => true,
+					)
+				)
+				: null;
+			if ( $ddn_op_q instanceof WP_Query && $ddn_op_q->have_posts() ) :
+				?>
+				<section class="home-section">
+					<?php
+					get_template_part(
+						'template-parts/home/section-head',
+						null,
+						array(
+							'title' => $ddn_op->name,
+							'url'   => get_category_link( $ddn_op ),
+						)
+					);
+					?>
+					<div class="card-slider card-slider--opinion" data-card-slider>
+						<div class="card-slider__track">
+							<?php
+							while ( $ddn_op_q->have_posts() ) :
+								$ddn_op_q->the_post();
+								$ddn_used[] = get_the_ID();
+								get_template_part( 'template-parts/opinion-card' );
+							endwhile;
+							wp_reset_postdata();
+							?>
+						</div>
+						<button type="button" class="card-slider__nav card-slider__nav--prev" aria-label="<?php esc_attr_e( 'Anterior', 'diario-del-norte' ); ?>" hidden>&lsaquo;</button>
+						<button type="button" class="card-slider__nav card-slider__nav--next" aria-label="<?php esc_attr_e( 'Siguiente', 'diario-del-norte' ); ?>">&rsaquo;</button>
+					</div>
+				</section>
+			<?php endif; ?>
+
+			<?php
+			// === Más noticias: todo lo que no salió antes ================
+			$ddn_mn = new WP_Query(
+				array(
+					'post__not_in'        => $ddn_used,
+					'posts_per_page'      => 8,
+					'ignore_sticky_posts' => true,
+					'no_found_rows'       => true,
+				)
+			);
+			if ( $ddn_mn->have_posts() ) :
+				?>
+				<section class="home-section">
+					<?php
+					get_template_part(
+						'template-parts/home/section-head',
+						null,
+						array(
+							'title' => __( 'Más noticias', 'diario-del-norte' ),
+							'url'   => '',
+						)
+					);
+					?>
+					<div class="home-list-4col">
+						<?php
+						while ( $ddn_mn->have_posts() ) :
+							$ddn_mn->the_post();
+							get_template_part( 'template-parts/home/card-row', null, array( 'label' => true ) );
+						endwhile;
+						wp_reset_postdata();
+						?>
+					</div>
+				</section>
+			<?php endif; ?>
+
+		</div><!-- .home-main -->
+
+		<aside class="home-aside">
+
+			<?php
+			// --- Editorial ---
+			$ddn_ed = DefaultSectionsInstaller::category( 'editorial' );
+			if ( $ddn_ed instanceof WP_Term ) :
+				$ddn_ed_q = new WP_Query(
+					array(
+						'category__in'        => array( $ddn_ed->term_id ),
+						'posts_per_page'      => 1,
 						'ignore_sticky_posts' => true,
 						'no_found_rows'       => true,
 					)
 				);
-				while ( $ddn_live->have_posts() ) :
-					$ddn_live->the_post();
-					$ddn_used[] = get_the_ID();
+				if ( $ddn_ed_q->have_posts() ) :
+					$ddn_ed_q->the_post();
 					?>
-					<li>
-						<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date( 'H:i' ) ); ?></time>
-						<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-					</li>
+					<section class="aside-block aside-editorial">
+						<div class="aside-block__head"><?php echo esc_html( $ddn_ed->name ); ?></div>
+						<h3 class="aside-editorial__title"><a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+						<?php if ( get_the_excerpt() ) : ?>
+							<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 32, '…' ) ); ?></p>
+						<?php endif; ?>
+						<a class="aside-editorial__link" href="<?php echo esc_url( get_category_link( $ddn_ed ) ); ?>"><?php esc_html_e( 'Más editoriales', 'diario-del-norte' ); ?> &rarr;</a>
+					</section>
 					<?php
-				endwhile;
-				wp_reset_postdata();
-				?>
-			</ul>
-		</section>
+					wp_reset_postdata();
+				endif;
+			endif;
+			?>
 
-		<section>
-			<div class="rail__head"><?php esc_html_e( 'Lo más leído', 'diario-del-norte' ); ?></div>
-			<ol class="ranked">
-				<?php
+			<?php
+			// --- Edición impresa ---
+			$ddn_cover = (int) get_theme_mod( 'ddn_print_cover', 0 );
+			$ddn_pdf   = (string) get_theme_mod( 'ddn_print_pdf', '' );
+			?>
+			<section class="aside-block aside-print">
+				<div class="aside-block__head"><?php esc_html_e( 'Edición impresa', 'diario-del-norte' ); ?></div>
+				<?php if ( $ddn_cover ) : ?>
+					<div class="aside-print__cover"><?php echo wp_get_attachment_image( $ddn_cover, 'medium_large', false, array( 'alt' => __( 'Portada de la edición impresa de hoy', 'diario-del-norte' ) ) ); ?></div>
+				<?php else : ?>
+					<div class="aside-print__cover aside-print__cover--empty"><span><?php esc_html_e( 'Portada no disponible', 'diario-del-norte' ); ?></span></div>
+				<?php endif; ?>
+				<?php if ( '' !== $ddn_pdf ) : ?>
+					<a class="btn aside-print__btn" href="<?php echo esc_url( $ddn_pdf ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Ver edición digital', 'diario-del-norte' ); ?></a>
+				<?php endif; ?>
+			</section>
+
+			<?php
+			// --- Lo más leído (últimas 24 h; el plugin DDN Suite lo provee) ---
+			$ddn_read_ids = array_values( array_filter( array_map( 'intval', (array) apply_filters( 'ddn/most_read', array(), 5 ) ) ) );
+			if ( array() !== $ddn_read_ids ) {
+				$ddn_read = new WP_Query(
+					array(
+						'post__in'            => $ddn_read_ids,
+						'orderby'             => 'post__in',
+						'posts_per_page'      => 5,
+						'ignore_sticky_posts' => true,
+						'no_found_rows'       => true,
+					)
+				);
+			} else {
 				$ddn_read = new WP_Query(
 					array(
 						'posts_per_page'      => 5,
@@ -237,96 +430,45 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 						),
 						'ignore_sticky_posts' => true,
 						'no_found_rows'       => true,
-						'date_query'          => array( array( 'after' => '30 days ago' ) ),
 					)
 				);
-				if ( ! $ddn_read->have_posts() ) {
-					$ddn_read = new WP_Query(
-						array(
-							'posts_per_page'      => 5,
-							'ignore_sticky_posts' => true,
-							'no_found_rows'       => true,
-						)
-					);
-				}
-				while ( $ddn_read->have_posts() ) :
-					$ddn_read->the_post();
-					?>
-					<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-					<?php
-				endwhile;
-				wp_reset_postdata();
+			}
+			if ( $ddn_read->have_posts() ) :
 				?>
-			</ol>
-		</section>
-
-		<?php
-		$ddn_cover = (int) get_theme_mod( 'ddn_print_cover', 0 );
-		$ddn_pdf   = (string) get_theme_mod( 'ddn_print_pdf', '' );
-		if ( $ddn_cover || $ddn_pdf ) :
-			?>
-			<section>
-				<div class="rail__head"><?php esc_html_e( 'Edición impresa', 'diario-del-norte' ); ?></div>
-				<a class="impresa" href="<?php echo esc_url( '' !== $ddn_pdf ? $ddn_pdf : '#' ); ?>">
-					<?php
-					if ( $ddn_cover ) {
-						echo wp_get_attachment_image( $ddn_cover, 'medium', false, array( 'alt' => __( 'Portada de la edición impresa', 'diario-del-norte' ) ) );
-					}
-					?>
-					<span class="impresa__body">
+				<section class="aside-block aside-read">
+					<div class="aside-block__head"><?php esc_html_e( 'Lo más leído', 'diario-del-norte' ); ?></div>
+					<ol class="ranked ranked--lg">
 						<?php
-						$ddn_label = (string) get_theme_mod( 'ddn_print_label', '' );
-						if ( $ddn_label ) {
-							echo '<span class="meta">' . esc_html( $ddn_label ) . '</span>';
-						}
+						while ( $ddn_read->have_posts() ) :
+							$ddn_read->the_post();
+							?>
+							<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+							<?php
+						endwhile;
+						wp_reset_postdata();
 						?>
-						<span class="btn btn--sm"><?php esc_html_e( 'Leer en PDF', 'diario-del-norte' ); ?></span>
-					</span>
-				</a>
-			</section>
-		<?php endif; ?>
-	</div>
+					</ol>
+				</section>
+			<?php endif; ?>
 
-	<?php
-	$ddn_bands = apply_filters( 'ddn/home_sections', array( 'la-guajira', 'judiciales', 'opinion' ) );
-	foreach ( (array) $ddn_bands as $ddn_slug ) :
-		$ddn_term = DefaultSectionsInstaller::category( (string) $ddn_slug );
-		if ( ! $ddn_term ) {
-			continue;
-		}
-		$ddn_band = new WP_Query(
-			array(
-				'category__in'        => array( $ddn_term->term_id ),
-				'post__not_in'        => $ddn_used,
-				'posts_per_page'      => 4,
-				'ignore_sticky_posts' => true,
-				'no_found_rows'       => true,
-			)
-		);
-		if ( ! $ddn_band->have_posts() ) {
-			continue;
-		}
-		$ddn_is_opinion = in_array( $ddn_slug, array( 'opinion', 'editorial' ), true );
-		?>
-		<section class="section-band<?php echo $ddn_is_opinion ? ' section-band--tint' : ''; ?>">
-			<div class="section-band__head">
-				<h2><?php echo esc_html( $ddn_term->name ); ?></h2>
-				<a href="<?php echo esc_url( get_category_link( $ddn_term ) ); ?>"><?php esc_html_e( 'Ver toda la sección', 'diario-del-norte' ); ?> &rarr;</a>
-			</div>
-			<div class="<?php echo $ddn_is_opinion ? 'opinion-row' : 'card-row'; ?>">
-				<?php
-				while ( $ddn_band->have_posts() ) :
-					$ddn_band->the_post();
-					$ddn_used[] = get_the_ID();
-					get_template_part( 'template-parts/' . ( $ddn_is_opinion ? 'opinion-card' : 'entry-card' ) );
-				endwhile;
-				wp_reset_postdata();
+			<?php
+			// --- Boletín ---
+			$ddn_news_action = (string) apply_filters( 'ddn/newsletter_action', '' );
+			if ( '' !== $ddn_news_action ) :
 				?>
-			</div>
-		</section>
-		<?php
-	endforeach;
-	?>
+				<section class="aside-block aside-news">
+					<div class="aside-block__head"><?php esc_html_e( 'Boletín', 'diario-del-norte' ); ?></div>
+					<p class="aside-news__pitch"><?php esc_html_e( 'Recibe lo más importante de La Guajira y el Caribe en tu correo.', 'diario-del-norte' ); ?></p>
+					<form class="aside-news__form" method="post" action="<?php echo esc_url( $ddn_news_action ); ?>">
+						<label class="screen-reader-text" for="ddn-news-email"><?php esc_html_e( 'Tu correo electrónico', 'diario-del-norte' ); ?></label>
+						<input type="email" id="ddn-news-email" name="email" required placeholder="<?php esc_attr_e( 'Tu correo electrónico', 'diario-del-norte' ); ?>">
+						<button type="submit" class="btn"><?php esc_html_e( 'Suscribirme', 'diario-del-norte' ); ?></button>
+					</form>
+				</section>
+			<?php endif; ?>
+
+		</aside><!-- .home-aside -->
+	</div><!-- .home-layout -->
 </div>
 <?php
 get_footer();

@@ -87,9 +87,32 @@ function initHeroSlider() {
   start();
 }
 
+function initCardSliders() {
+  document.querySelectorAll('[data-card-slider]').forEach((slider) => {
+    const track = slider.querySelector('.card-slider__track');
+    const prev = slider.querySelector('.card-slider__nav--prev');
+    const next = slider.querySelector('.card-slider__nav--next');
+    if (!track || !prev || !next) return;
+
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      prev.hidden = track.scrollLeft <= 2;
+      next.hidden = track.scrollLeft >= max;
+    };
+    const step = () => Math.max(track.clientWidth * 0.85, 240);
+
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+}
+
 function boot() {
   initSubmenu();
   initHeroSlider();
+  initCardSliders();
 }
 
 if (document.readyState === 'loading') {

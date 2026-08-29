@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace DiarioDelNorte\Suite;
 
 use DiarioDelNorte\Suite\Admin\Menu;
+use DiarioDelNorte\Suite\Analytics\PageviewRecorder;
+use DiarioDelNorte\Suite\Analytics\PageviewRepository;
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
 use DiarioDelNorte\Suite\Ads\AdRenderer;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
@@ -45,6 +47,9 @@ final class Plugin {
 
 		( new ZoneController( $campaigns, $selector, $renderer, $stats ) )->register();
 		( new ClickController( $campaigns, $stats ) )->register();
+
+		( new PageviewRecorder() )->register();
+		( new PageviewRepository() )->register();
 
 		if ( is_admin() ) {
 			$calendar_page  = new CalendarPage( new CalendarRepository() );

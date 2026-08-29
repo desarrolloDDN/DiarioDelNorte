@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '2';
+	private const DB_VERSION = '3';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -41,6 +41,7 @@ final class Installer {
 		$charset   = Db::charset_collate();
 		$campaigns = Db::table( Db::CAMPAIGNS );
 		$events    = Db::table( Db::EVENTS );
+		$pageviews = Db::table( Db::PAGEVIEWS );
 
 		dbDelta(
 			"CREATE TABLE {$campaigns} (
@@ -75,6 +76,20 @@ final class Installer {
 				UNIQUE KEY campaign_kind_day (campaign_id, kind, event_day)
 			) {$charset};"
 		);
+
+		dbDelta(
+			"CREATE TABLE {$pageviews} (
+				post_id BIGINT UNSIGNED NOT NULL,
+				bucket DATETIME NOT NULL,
+				hits INT UNSIGNED NOT NULL DEFAULT 0,
+				PRIMARY KEY  (post_id, bucket),
+				KEY bucket (bucket)
+			) {$charset};"
+		);
+
+		if ( ! wp_next_scheduled( 'ddn_suite_prune_pageviews' ) ) {
+			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'ddn_suite_prune_pageviews' );
+		}
 
 		update_option( self::OPTION, self::DB_VERSION, false );
 	}

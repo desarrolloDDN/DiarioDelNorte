@@ -18,6 +18,7 @@ final class Db {
 
 	public const CAMPAIGNS = 'ddn_ad_campaigns';
 	public const EVENTS    = 'ddn_ad_events';
+	public const PAGEVIEWS = 'ddn_pageviews';
 
 	public static function table( string $name ): string {
 		global $wpdb;

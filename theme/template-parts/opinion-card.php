@@ -1,7 +1,7 @@
 <?php
 /**
  * Tarjeta de columna de opinión: foto del autor + nombre + cargo +
- * titular en itálica + entradilla.
+ * titular de la columna.
  *
  * @package DiarioDelNorte
  */
@@ -26,7 +26,4 @@ $ddn_role      = AuthorProfile::role( $ddn_author_id );
 		</div>
 	</div>
 	<h3><a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-	<?php if ( get_the_excerpt() ) : ?>
-		<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 26, '…' ) ); ?></p>
-	<?php endif; ?>
 </article>

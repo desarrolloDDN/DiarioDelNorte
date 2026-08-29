@@ -33,6 +33,13 @@ require_once DDN_SUITE_DIR . 'inc/Autoloader.php';
 Autoloader::register();
 
 register_activation_hook( __FILE__, array( Install\Installer::class, 'activate' ) );
+register_deactivation_hook(
+	__FILE__,
+	static function (): void {
+		wp_clear_scheduled_hook( 'ddn_suite_prune_pageviews' );
+		flush_rewrite_rules();
+	}
+);
 
 add_action(
 	'plugins_loaded',
