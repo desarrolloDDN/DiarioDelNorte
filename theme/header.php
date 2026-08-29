@@ -79,6 +79,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </nav>
 
-<?php Ads::zone( 'header' ); ?>
+<div class="wrap"><?php Ads::zone( 'header' ); ?></div>
 
 <main id="contenido" class="site-main">

@@ -138,16 +138,21 @@ p { margin: 0 0 1rem; }
 
 // --- Publicidad (contenedor que imprime DDN Suite) ---
 .ddn-ad {
-  margin: 1.6rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  margin: 1.6rem auto;
+  max-width: 100%;
 }
+.ddn-ad > * { max-width: 100%; }
+.ddn-ad img { display: block; height: auto; margin-inline: auto; }
 .ddn-ad__label {
   font-family: var(--sans);
   font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--slate);
-  display: block;
   margin-bottom: 0.35rem;
 }
 .ddn-ad--in-article { max-width: 30rem; }
