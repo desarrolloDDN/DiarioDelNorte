@@ -1,8 +1,9 @@
 <?php
 /**
  * Cabecera de la plantilla de la nota: barra roja compacta (icono de
- * menú + sección de la nota · «DIARIO DEL NORTE» · icono de búsqueda),
- * en lugar del cabezote con el logotipo. Va encima de la cinta «Lo último».
+ * menú | sección de la nota | «DIARIO DEL NORTE», y el icono de búsqueda
+ * a la derecha), en lugar del cabezote con el logotipo. Va encima de la
+ * cinta «Lo último».
  *
  * @package DiarioDelNorte
  */

@@ -1,7 +1,7 @@
 // Nota individual y contenido enriquecido.
 //
-// Cabecera, foto y firma a ancho completo del sitio; el cuerpo de lectura
-// en una columna estrecha centrada.
+// Titular, bajada, foto y firma comparten el ancho de la foto principal;
+// el cuerpo de lectura va en una columna más estrecha.
 
 .article {
   --maxw-article: 52rem;
@@ -11,9 +11,9 @@
   padding: 2.5rem var(--gutter) 1rem;
 }
 
-// --- Cabecera ---
+// --- Cabecera --- (mismo ancho que .article__figure)
 .article__header {
-  max-width: var(--maxw-read);
+  max-width: 100%;
 }
 
 .article__header .kicker {
@@ -96,9 +96,9 @@
 }
 .article__figure-caption + .article__figure-credit { opacity: 0.9; }
 
-// --- Firma + compartir ---
+// --- Firma + compartir --- (mismo ancho que .article__figure)
 .article__meta {
-  max-width: var(--maxw-read);
+  max-width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

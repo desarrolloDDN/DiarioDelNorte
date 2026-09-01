@@ -50,7 +50,7 @@
 .ticker__marquee {
   display: flex;
   width: max-content;
-  animation: ddn-ticker 48s linear infinite;
+  animation: ddn-ticker 64s linear infinite;
   will-change: transform;
 }
 .ticker:hover .ticker__marquee,

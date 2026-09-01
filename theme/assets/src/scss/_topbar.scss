@@ -1,6 +1,6 @@
-// Barra roja de la plantilla de la nota: icono de menú + sección ·
-// «DIARIO DEL NORTE» · icono de búsqueda. Sustituye al cabezote con
-// logotipo y va encima de la cinta «Lo último».
+// Barra roja de la plantilla de la nota: icono de menú | sección |
+// «DIARIO DEL NORTE», y el icono de búsqueda a la derecha. Sustituye al
+// cabezote con logotipo y va encima de la cinta «Lo último».
 
 .topbar {
   // Misma medida que el contenido: 1200 px + medianiles.
@@ -16,15 +16,11 @@
 .topbar__inner {
   padding-inline: var(--gutter);
   min-height: 52px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto;
-  grid-template-areas: "menu cat brand spacer search";
+  display: flex;
   align-items: center;
-  column-gap: 0.75rem;
 }
 
 .topbar__icon {
-  grid-area: menu;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -41,32 +37,37 @@
 .topbar__icon:hover,
 .topbar__icon[aria-expanded="true"] { color: rgba(255, 255, 255, 0.72); }
 .topbar__menu { margin-left: -9px; }
-.topbar__search-toggle { grid-area: search; margin-right: -9px; }
+.topbar__search-toggle { margin-left: auto; margin-right: -9px; }
+
+// Separadores «|» antes de la sección y de la marca.
+.topbar__cat::before,
+.topbar__brand::before {
+  content: "|";
+  margin: 0 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 300;
+}
 
 .topbar__cat {
-  grid-area: cat;
-  justify-self: start;
-  min-width: 0;
-  max-width: 100%;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #fff;
-  white-space: nowrap;
+  min-width: 2.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #fff;
 }
 .topbar__cat:hover { color: rgba(255, 255, 255, 0.82); }
 
 .topbar__brand {
-  grid-area: brand;
-  justify-self: center;
+  flex-shrink: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(1.15rem, 0.95rem + 1.1vw, 1.7rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(1rem, 0.88rem + 0.5vw, 1.3rem);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #fff;
   white-space: nowrap;
@@ -150,24 +151,14 @@
   text-underline-offset: 3px;
 }
 
-// En móvil la marca se centra en su fila y la sección baja a una
-// segunda línea, a lo ancho, bajo el icono de menú.
 @media (max-width: 560px) {
-  .topbar__inner {
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas:
-      "menu brand search"
-      "cat  cat   cat";
-    row-gap: 0;
-  }
-  .topbar__cat {
-    padding: 0.35rem 0 0.5rem;
-    margin-top: 0.1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.22);
-    font-size: 0.68rem;
-  }
+  .topbar__cat { font-size: 0.68rem; letter-spacing: 0.07em; }
+  .topbar__cat::before,
+  .topbar__brand::before { margin: 0 0.5rem; }
 }
 
 @media (max-width: 380px) {
-  .topbar__brand { letter-spacing: 0.04em; }
+  .topbar__brand { letter-spacing: 0.03em; }
+  .topbar__cat::before,
+  .topbar__brand::before { margin: 0 0.4rem; }
 }
