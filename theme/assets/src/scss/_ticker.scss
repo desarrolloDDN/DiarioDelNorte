@@ -2,9 +2,12 @@
 // de derecha a izquierda. Se usa en la plantilla de la nota.
 
 .ticker {
+  // Misma medida que el contenido: 1200 px + medianiles.
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  margin-bottom: 1.75rem;
   display: flex;
   align-items: stretch;
-  margin-bottom: 1.75rem;
   border-block: 1px solid var(--rule);
   background: var(--surface);
   font-family: var(--sans);
@@ -15,13 +18,13 @@
   display: flex;
   align-items: center;
   margin: 0;
-  padding: 0.65rem var(--gutter);
+  padding: 0.65rem 1rem 0.65rem var(--gutter);
+  border-right: 1px solid var(--rule);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #fff;
-  background: var(--red);
+  color: var(--red);
 }
 
 .ticker__viewport {
@@ -95,7 +98,7 @@
 
 @media (max-width: 640px) {
   .ticker__label {
-    padding-inline: var(--gutter);
+    padding: 0.6rem 0.8rem 0.6rem var(--gutter);
     font-size: 0.66rem;
   }
   .ticker__item { font-size: 0.78rem; }

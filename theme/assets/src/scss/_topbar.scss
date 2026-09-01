@@ -3,6 +3,9 @@
 // logotipo y va encima de la cinta «Lo último».
 
 .topbar {
+  // Misma medida que el contenido: 1200 px + medianiles.
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -11,8 +14,6 @@
 }
 
 .topbar__inner {
-  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
-  margin-inline: auto;
   padding-inline: var(--gutter);
   min-height: 52px;
   display: grid;
@@ -79,8 +80,6 @@
 }
 .topbar-search[hidden] { display: none; }
 .topbar-search__inner {
-  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
-  margin-inline: auto;
   padding: 0.75rem var(--gutter);
 }
 .topbar-search form,
@@ -123,8 +122,6 @@
 }
 .topbar-drawer[hidden] { display: none; }
 .topbar-drawer__inner {
-  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
-  margin-inline: auto;
   padding: 0.25rem var(--gutter) 1rem;
 }
 
