@@ -25,10 +25,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 - Esqueleto del repositorio: tema `diario-del-norte` + plugin `ddn-suite`.
 - Sistema de diseño (identidad): paleta Rojo Norte `#BF0202`, sin modo oscuro,
   titulares «Sunlight Dreams» (autoalojada) y Libre Franklin para el resto.
-- Instalador del menú principal (19 secciones + submenú «Más»): resuelve
-  cada sección por slug **o por nombre**, así funciona en un sitio ya
-  migrado donde la categoría tenga otro slug (p. ej. `judiciales-2`); al
-  subir de versión reconstruye el menú entero.
+- **Barra de secciones dibujada por el tema** (`Nav\SectionMenu`): 10 visibles
+  + submenú «Más» con 9, resolviendo cada categoría por slug **o por nombre**
+  (funciona con `judiciales-2` y demás slugs migrados). Ya no depende de un menú
+  guardado en la base de datos. Para usar un menú propio de Apariencia → Menús,
+  devolver `true` en el filtro `ddn/use_custom_nav`. El instalador solo siembra
+  las 19 categorías y desasigna el menú «Secciones» autogenerado por versiones
+  anteriores.
 - Jerarquía de plantillas: portada, artículo, archivo, búsqueda, página, 404.
 - `ddn-suite`: gestor de publicidad (campañas con vigencia, **prioridad y peso**,
   **segmentación por categoría**, rotación por sorteo ponderado — `CampaignSelector`),

@@ -55,27 +55,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <nav class="mainnav" aria-label="<?php esc_attr_e( 'Secciones', 'diario-del-norte' ); ?>">
 	<?php
-	wp_nav_menu(
-		array(
-			'theme_location'  => 'primary',
-			'container'       => 'div',
-			'container_class' => 'mainnav__inner',
-			'menu_class'      => 'mainnav__menu',
-			'fallback_cb'     => static function (): void {
-				echo '<div class="mainnav__inner"><ul class="mainnav__menu">';
-				wp_list_categories(
-					array(
-						'title_li' => '',
-						'number'   => 10,
-						'orderby'  => 'count',
-						'order'    => 'DESC',
-					)
-				);
-				echo '</ul></div>';
-			},
-			'depth'           => 2,
-		)
-	);
+	// La barra de secciones la dibuja el tema (10 + submenú «Más»). Para
+	// usar en su lugar un menú de Apariencia → Menús asignado a la
+	// ubicación «Menú principal», devuelve true en el filtro `ddn/use_custom_nav`.
+	if ( apply_filters( 'ddn/use_custom_nav', false ) && has_nav_menu( 'primary' ) ) {
+		wp_nav_menu(
+			array(
+				'theme_location'  => 'primary',
+				'container'       => 'div',
+				'container_class' => 'mainnav__inner',
+				'menu_class'      => 'mainnav__menu',
+				'depth'           => 2,
+			)
+		);
+	} else {
+		DiarioDelNorte\Nav\SectionMenu::render();
+	}
 	?>
 </nav>
 
