@@ -51,6 +51,25 @@ final class Theme {
 
 		add_filter( 'excerpt_more', static fn (): string => '…' );
 		add_filter( 'excerpt_length', static fn (): int => 28 );
+
+		// La plantilla de categoría (category.php) arma varios bloques a
+		// partir de una sola consulta: necesita más entradas por página.
+		add_action( 'pre_get_posts', array( $this, 'category_posts_per_page' ) );
+	}
+
+	/**
+	 * Sube el número de entradas por página en el archivo de categoría para
+	 * alimentar la portada de sección. Aplica a todas las categorías,
+	 * presentes y futuras.
+	 *
+	 * @param \WP_Query $query
+	 */
+	public function category_posts_per_page( \WP_Query $query ): void {
+		if ( is_admin() || ! $query->is_main_query() || ! $query->is_category() ) {
+			return;
+		}
+
+		$query->set( 'posts_per_page', 36 );
 	}
 
 	public function setup(): void {
