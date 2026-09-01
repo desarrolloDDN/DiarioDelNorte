@@ -307,6 +307,24 @@
   .article__share-btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
 }
 
+// En móvil el titular ocupa siempre 2 líneas: el tamaño baja para que
+// quepa el titular completo y, si aun así se pasa, se recorta con «…».
+@media (max-width: 600px) {
+  .article__title {
+    font-size: clamp(1.08rem, 0.85rem + 1vw, 1.35rem);
+    line-height: 1.16;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .article__standfirst {
+    font-size: 0.97rem;
+    line-height: 1.45;
+  }
+}
+
 // --- Páginas y archivos ---
 .layout-page { max-width: var(--maxw-read); margin: 0 auto; padding-block: 2.5rem; }
 .page-head__title { font-size: var(--step-3); margin-bottom: 1rem; }
