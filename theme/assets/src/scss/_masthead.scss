@@ -52,14 +52,11 @@
   max-width: calc(var(--maxw-site) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
-  display: flex;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.mainnav__inner::-webkit-scrollbar { display: none; }
 
 .mainnav__menu {
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
   gap: 0.1rem;
   list-style: none;
@@ -113,3 +110,21 @@
   border-bottom: 0;
 }
 .mainnav__menu .sub-menu a:hover { background: rgba(255, 255, 255, 0.08); border-bottom: 0; }
+
+// En pantallas estrechas el submenú se despliega en línea (sin panel
+// flotante): «Más» se toca y sus secciones aparecen debajo, a lo ancho.
+@media (max-width: 640px) {
+  .mainnav__menu .menu-item--more { position: static; width: 100%; }
+  .mainnav__menu .sub-menu {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+    padding: 0;
+  }
+  .mainnav__menu .menu-item--more:hover .sub-menu,
+  .mainnav__menu .menu-item--more:focus-within .sub-menu { display: none; }
+  .mainnav__menu .menu-item--more.is-open .sub-menu { display: flex; flex-wrap: wrap; }
+}
