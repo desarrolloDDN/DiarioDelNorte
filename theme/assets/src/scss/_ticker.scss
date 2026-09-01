@@ -5,7 +5,7 @@
   // Misma medida que el contenido: 1200 px + medianiles.
   max-width: calc(var(--maxw-site) + 2 * var(--gutter));
   margin-inline: auto;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0;
   display: flex;
   align-items: stretch;
   border-block: 1px solid var(--rule);

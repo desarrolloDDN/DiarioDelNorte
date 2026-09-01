@@ -8,7 +8,7 @@
 
   max-width: calc(var(--maxw-article) + 2 * var(--gutter));
   margin-inline: auto;
-  padding: 2.5rem var(--gutter) 1rem;
+  padding: 1.6rem var(--gutter) 1rem;
 }
 
 // --- Cabecera --- (mismo ancho que .article__figure)
@@ -36,13 +36,12 @@
 
 .article__title {
   font-family: var(--display);
-  font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.1rem);
+  font-size: clamp(1.35rem, 1.02rem + 1.35vw, 1.9rem);
   font-weight: 400;
   line-height: 1.12;
   letter-spacing: 0;
   color: var(--headline);
-  margin: 0.55rem 0 0;
-  text-wrap: balance;
+  margin: 0.5rem 0 0;
 }
 
 .article__standfirst {
