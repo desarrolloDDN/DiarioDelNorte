@@ -3,14 +3,13 @@
  * Nota (entrada) individual.
  *
  * Cabecera, foto y firma a ancho amplio; el cuerpo de lectura en columna
- * estrecha centrada. «Le puede interesar» vuelve a ancho amplio.
+ * estrecha centrada.
  *
  * @package DiarioDelNorte
  */
 
 declare(strict_types=1);
 
-use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
@@ -100,35 +99,6 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</div>
 
-		<?php
-		if ( $ddn_cat ) :
-			$ddn_related = new WP_Query(
-				array(
-					'category__in'        => array( $ddn_cat->term_id ),
-					'post__not_in'        => array_merge( array( get_the_ID() ), InlineRelated::used_ids() ),
-					'posts_per_page'      => 3,
-					'ignore_sticky_posts' => true,
-					'no_found_rows'       => true,
-				)
-			);
-			if ( $ddn_related->have_posts() ) :
-				?>
-				<section class="related">
-					<h2><?php esc_html_e( 'Le puede interesar', 'diario-del-norte' ); ?></h2>
-					<div class="related__row">
-						<?php
-						while ( $ddn_related->have_posts() ) :
-							$ddn_related->the_post();
-							get_template_part( 'template-parts/entry-card' );
-						endwhile;
-						?>
-					</div>
-				</section>
-				<?php
-			endif;
-			wp_reset_postdata();
-		endif;
-		?>
 	</article>
 	<?php
 endwhile;

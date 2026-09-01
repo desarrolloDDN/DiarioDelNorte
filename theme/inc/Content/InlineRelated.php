@@ -1,9 +1,7 @@
 <?php
 /**
  * Bloque «Le puede interesar» intercalado tras el 4.º párrafo de la nota,
- * con dos noticias de la misma sección (categoría principal). Los IDs que
- * usa quedan disponibles en InlineRelated::used_ids() para que la
- * plantilla no repita esas notas en el bloque final.
+ * con dos noticias de la misma sección (categoría principal).
  *
  * @package DiarioDelNorte
  */
@@ -27,17 +25,9 @@ final class InlineRelated {
 	/** Cuántas notas mostrar. */
 	private const COUNT = 2;
 
-	/** @var int[] IDs mostrados en el bloque intercalado de esta petición. */
-	private static array $used_ids = array();
-
 	public function register(): void {
 		// Después del anuncio intercalado del plugin (prioridad 12).
 		add_filter( 'the_content', array( $this, 'inject' ), 13 );
-	}
-
-	/** @return int[] */
-	public static function used_ids(): array {
-		return self::$used_ids;
 	}
 
 	public function inject( string $content ): string {
@@ -62,8 +52,6 @@ final class InlineRelated {
 		if ( ! $related->have_posts() ) {
 			return $content;
 		}
-
-		self::$used_ids = array_map( 'intval', wp_list_pluck( $related->posts, 'ID' ) );
 
 		$block = $this->markup( $related );
 		wp_reset_postdata();

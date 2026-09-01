@@ -1,7 +1,7 @@
 <?php
 /**
  * Tarjeta de entrada: imagen + kicker + titular + fecha relativa.
- * Usada en las cuadrículas de sección y en «Le puede interesar».
+ * Usada en las cuadrículas de sección y archivos.
  *
  * @package DiarioDelNorte
  */

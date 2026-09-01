@@ -296,23 +296,6 @@
 .author-box b { font-family: var(--sans); font-size: 0.95rem; }
 .author-box p { margin: 0.4rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); }
 
-// --- Le puede interesar ---
-.related {
-  margin: 3rem 0 0;
-  border-top: 3px solid var(--rule-strong);
-  padding-top: 1.5rem;
-}
-.related h2 {
-  font-family: var(--sans);
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 1.2rem;
-}
-.related__row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-
 @media (max-width: 700px) {
   .article__meta { justify-content: center; }
   .article__byline { flex-direction: column; text-align: center; gap: 0.6rem; }
@@ -320,7 +303,6 @@
   .article__share { justify-content: center; width: 100%; }
   .article__share-btn { background: var(--ink-deep); border-color: var(--ink-deep); color: #fff; }
   .article__share-btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
-  .related__row { grid-template-columns: 1fr; }
 }
 
 // --- Páginas y archivos ---
