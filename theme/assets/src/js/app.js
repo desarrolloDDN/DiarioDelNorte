@@ -109,10 +109,33 @@ function initCardSliders() {
   });
 }
 
+function initShareCopy() {
+  const btn = document.querySelector('.article__share-copy');
+  if (!btn) return;
+
+  const url = btn.dataset.url || window.location.href;
+
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch (err) {
+      const tmp = document.createElement('input');
+      tmp.value = url;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand('copy');
+      tmp.remove();
+    }
+    btn.classList.add('is-copied');
+    window.setTimeout(() => btn.classList.remove('is-copied'), 1600);
+  });
+}
+
 function boot() {
   initSubmenu();
   initHeroSlider();
   initCardSliders();
+  initShareCopy();
 }
 
 if (document.readyState === 'loading') {

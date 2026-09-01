@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Users;
 
+use DiarioDelNorte\Support\Monogram;
 use WP_User;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -122,15 +123,24 @@ final class AuthorProfile {
 		}
 
 		$photo_id = (int) get_user_meta( $user_id, self::META_PHOTO, true );
-		if ( $photo_id <= 0 ) {
+		if ( $photo_id > 0 ) {
+			$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
+			$url  = wp_get_attachment_image_url( $photo_id, array( $size, $size ) );
+			if ( is_string( $url ) ) {
+				$args['url']          = $url;
+				$args['found_avatar'] = true;
+			}
+
 			return $args;
 		}
 
-		$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
-		$url  = wp_get_attachment_image_url( $photo_id, array( $size, $size ) );
-		if ( is_string( $url ) ) {
-			$args['url']          = $url;
-			$args['found_avatar'] = true;
+		// Sin foto propia: avatar de iniciales en vez de Gravatar.
+		if ( apply_filters( 'ddn/author_monogram', true, $user_id ) ) {
+			$user = get_userdata( $user_id );
+			if ( $user instanceof WP_User ) {
+				$args['url']          = Monogram::data_uri( $user->display_name );
+				$args['found_avatar'] = true;
+			}
 		}
 
 		return $args;

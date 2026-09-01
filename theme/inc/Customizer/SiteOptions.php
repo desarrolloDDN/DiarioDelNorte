@@ -35,6 +35,7 @@ final class SiteOptions {
 		$this->text( $wp_customize, 'ddn_legal', __( 'Texto legal / copyright', 'diario-del-norte' ), '© ' . gmdate( 'Y' ) . ' Sistema Cardenal S.A.S. Todos los derechos reservados.' );
 		$this->text( $wp_customize, 'ddn_address', __( 'Dirección y teléfono', 'diario-del-norte' ), 'Riohacha, La Guajira, Colombia' );
 		$this->text( $wp_customize, 'ddn_email', __( 'Correo de redacción', 'diario-del-norte' ), 'redaccion@diariodelnorte.net', 'sanitize_email' );
+		$this->text( $wp_customize, 'ddn_dateline_city', __( 'Ciudad por defecto en las firmas', 'diario-del-norte' ), 'Riohacha' );
 
 		foreach ( $this->networks() as $key => $label ) {
 			$this->text( $wp_customize, "ddn_social_{$key}", $label, '', 'esc_url_raw' );

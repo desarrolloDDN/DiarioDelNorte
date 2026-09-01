@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte;
 
+use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller;
 use DiarioDelNorte\Users\AuthorProfile;
@@ -37,6 +38,7 @@ final class Theme {
 		( new Assets() )->register();
 		( new SiteOptions() )->register();
 		( new AuthorProfile() )->register();
+		( new DatelineField() )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
 		// el editor de bloques.
