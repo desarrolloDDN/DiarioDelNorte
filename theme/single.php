@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+get_template_part( 'template-parts/latest-ticker' );
+
 while ( have_posts() ) :
 	the_post();
 	$ddn_cat = Format::primary_category();

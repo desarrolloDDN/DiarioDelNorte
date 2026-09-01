@@ -1,0 +1,108 @@
+// Cinta «Lo último» — titulares recientes en desplazamiento continuo
+// de derecha a izquierda. Se usa en la plantilla de la nota.
+
+.ticker {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 1.75rem;
+  border-block: 1px solid var(--rule);
+  background: var(--surface);
+  font-family: var(--sans);
+}
+
+.ticker__label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0.65rem var(--gutter);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--red);
+}
+
+.ticker__viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+// Antifaz para que los titulares se desvanezcan en los bordes.
+.ticker__viewport::before,
+.ticker__viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  z-index: 1;
+  pointer-events: none;
+}
+.ticker__viewport::before { left: 0; background: linear-gradient(to right, var(--surface), transparent); }
+.ticker__viewport::after { right: 0; background: linear-gradient(to left, var(--surface), transparent); }
+
+.ticker__marquee {
+  display: flex;
+  width: max-content;
+  animation: ddn-ticker 48s linear infinite;
+  will-change: transform;
+}
+.ticker:hover .ticker__marquee,
+.ticker__marquee:focus-within {
+  animation-play-state: paused;
+}
+
+.ticker__group {
+  display: flex;
+  align-items: center;
+  gap: 2.75rem;
+  margin: 0;
+  padding: 0 1.375rem;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.ticker__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  line-height: 2.6;
+}
+.ticker__item a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ticker__item a:hover {
+  color: var(--red);
+}
+.ticker__item time {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+@keyframes ddn-ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+  .ticker__label {
+    padding-inline: var(--gutter);
+    font-size: 0.66rem;
+  }
+  .ticker__item { font-size: 0.78rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__viewport { overflow-x: auto; }
+  .ticker__marquee { animation: none; }
+  .ticker__group[aria-hidden="true"] { display: none; }
+}
