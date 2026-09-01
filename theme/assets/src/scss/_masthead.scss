@@ -111,20 +111,44 @@
 }
 .mainnav__menu .sub-menu a:hover { background: rgba(255, 255, 255, 0.08); border-bottom: 0; }
 
-// En pantallas estrechas el submenú se despliega en línea (sin panel
-// flotante): «Más» se toca y sus secciones aparecen debajo, a lo ancho.
-@media (max-width: 640px) {
-  .mainnav__menu .menu-item--more { position: static; width: 100%; }
+// En móvil la barra es una sola fila que se desplaza en horizontal:
+// las 19 secciones (incluidas las de «Más») quedan en línea, sin
+// desplegable ni bloque de varias filas.
+@media (max-width: 760px) {
+  .mainnav__inner { padding-inline: 0; }
+  .mainnav__menu {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding-inline: var(--gutter);
+    // Se difumina solo el borde derecho para insinuar que hay más.
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.25rem), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.25rem), transparent);
+  }
+  .mainnav__menu::-webkit-scrollbar { display: none; }
+  .mainnav__menu > .menu-item { flex: 0 0 auto; scroll-snap-align: start; }
+  .mainnav__menu a { font-size: 0.74rem; padding: 0.8rem 0.55rem; }
+
+  // «Más» deja de ser desplegable: sus secciones entran en la misma fila.
+  .mainnav__menu .menu-item--more { position: static; display: contents; }
+  .mainnav__menu .menu-item--more > a { display: none; }
   .mainnav__menu .sub-menu {
+    display: contents;
     position: static;
-    width: 100%;
-    min-width: 0;
-    background: transparent;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: none;
+    border: 0;
     box-shadow: none;
+    min-width: 0;
     padding: 0;
   }
-  .mainnav__menu .menu-item--more:hover .sub-menu,
-  .mainnav__menu .menu-item--more:focus-within .sub-menu { display: none; }
-  .mainnav__menu .menu-item--more.is-open .sub-menu { display: flex; flex-wrap: wrap; }
+  .mainnav__menu .sub-menu li { flex: 0 0 auto; scroll-snap-align: start; }
+  .mainnav__menu .sub-menu a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8rem 0.55rem;
+    border-bottom: 3px solid transparent;
+  }
+  .mainnav__menu .sub-menu a:hover { background: none; border-bottom-color: var(--red); }
 }

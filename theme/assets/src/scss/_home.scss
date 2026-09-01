@@ -12,6 +12,7 @@
 // Carrusel de destacados
 .hero-slider {
   position: relative;
+  max-width: 100%;
   aspect-ratio: 3 / 2;
   min-height: 420px;
   background: var(--ink-deep);
@@ -429,7 +430,9 @@ figcaption {
 }
 @media (max-width: 1000px) {
   .home-hero__grid { grid-template-columns: 1fr 1fr; }
-  .hero-slider { grid-column: 1 / -1; aspect-ratio: 21 / 9; min-height: 320px; }
+  // aspect-ratio SIN min-height: juntos hacen que la caja crezca de ancho
+  // y se salga de la retícula.
+  .hero-slider { grid-column: 1 / -1; aspect-ratio: 16 / 9; min-height: 0; }
   .hero-col--feature,
   .hero-col--side { border-left: 0; padding-left: 0; }
   .card-slider__track > * { flex-basis: calc((100% - 3rem) / 3); }
@@ -444,7 +447,27 @@ figcaption {
   .home-list-4col { grid-template-columns: 1fr; }
   .home-list-4col .h-row { flex-direction: row; }
   .home-list-4col .h-row__media { width: 110px; }
-  .card-slider__track > * { flex-basis: 74%; }
+  .card-slider__track > * { flex-basis: 78%; }
   .card-slider__nav { display: none; }
-  .hero-slider { min-height: 300px; aspect-ratio: 4 / 3; }
+
+  .hero-slider { aspect-ratio: 4 / 5; min-height: 0; }
+  .hero-slide__body { padding: 1.1rem 1.1rem 1.3rem; }
+  .hero-slide__title {
+    font-size: 1.2rem;
+    line-height: 1.22;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+  .hero-slide__standfirst {
+    font-size: 0.9rem;
+    margin: 0.4rem 0 0.5rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
 }
