@@ -1,8 +1,9 @@
 <?php
 /**
  * Encolado de estilos y scripts compilados por Vite. Las fuentes
- * («Sunlight Dreams» y Libre Franklin) van autoalojadas dentro de
- * app.css vía @font-face; no hay ninguna petición a un host externo.
+ * (DM Serif Display, Libre Baskerville y Source Sans 3) van autoalojadas
+ * y referenciadas desde app.css vía @font-face; no hay ninguna petición
+ * a un host externo.
  *
  * @package DiarioDelNorte
  */
@@ -22,9 +23,9 @@ final class Assets {
 		add_action( 'wp_head', array( $this, 'preload_fonts' ), 2 );
 	}
 
-	/** Precarga las dos fuentes críticas para el primer pintado. */
+	/** Precarga las fuentes críticas para el primer pintado (cuerpo y titular). */
 	public function preload_fonts(): void {
-		foreach ( array( 'sunlight-dreams.woff2', 'libre-franklin.woff2' ) as $file ) {
+		foreach ( array( 'source-sans-3.woff2', 'dm-serif-display.woff2' ) as $file ) {
 			printf(
 				'<link rel="preload" as="font" type="font/woff2" href="%s" crossorigin>' . "\n",
 				esc_url( DDN_THEME_URI . 'assets/dist/fonts/' . $file )

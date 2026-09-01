@@ -9,7 +9,7 @@
   --sand: #f1ece2;
   --ink: #1b1815;
   --ink-soft: #423c37;
-  --headline: #3d372f; // titulares: gris cálido, aligera Sunlight Dreams
+  --headline: #26221e; // titulares
   --slate: #6a635b;
   --rule: #ddd7cc;
   --rule-strong: #1b1815;
@@ -26,8 +26,12 @@
   --maxw-read: 40rem;   // columna de lectura del artículo
   --gutter: clamp(1rem, 4vw, 2rem);
 
-  --display: "Sunlight Dreams", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --sans: "Libre Franklin", "Helvetica Neue", Arial, system-ui, sans-serif;
+  // Titulares principales.
+  --display: "DM Serif Display", "Playfair Display", Georgia, "Times New Roman", serif;
+  // Subtítulos, bajadas y encabezados de sección.
+  --serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  // Cuerpo de las noticias, navegación y metadatos.
+  --sans: "Source Sans 3", "Helvetica Neue", Arial, system-ui, sans-serif;
 
   --step--1: 0.812rem;
   --step-0: 1rem;

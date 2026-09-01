@@ -56,10 +56,11 @@
 }
 .hero-slide__title {
   font-family: var(--display);
+  font-weight: 400;
   color: #fff;
   font-size: clamp(1.35rem, 1rem + 1.5vw, 2.1rem);
-  line-height: 1.12;
-  letter-spacing: 0.01em;
+  line-height: 1.16;
+  letter-spacing: 0.005em;
 }
 .hero-slide__standfirst {
   color: rgba(255, 255, 255, 0.86);
@@ -175,7 +176,9 @@ figcaption {
   margin-bottom: 1.4rem;
 }
 .home-section__title {
-  font-size: var(--step-2);
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: var(--step-1);
   color: var(--ink);
   border-bottom: 3px solid var(--red);
   padding-bottom: 0.35rem;
@@ -397,6 +400,7 @@ figcaption {
 .ranked li::before {
   content: counter(r);
   font-family: var(--display);
+  font-weight: 400;
   font-size: var(--step-1);
   color: var(--red);
   line-height: 1;
