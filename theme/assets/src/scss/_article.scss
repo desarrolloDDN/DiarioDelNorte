@@ -42,6 +42,9 @@
   letter-spacing: 0;
   color: var(--headline);
   margin: 0.5rem 0 0;
+  // El titular llena cada línea hasta el borde de la foto (anula el
+  // text-wrap:balance global de h1–h4).
+  text-wrap: wrap;
 }
 
 .article__standfirst {
