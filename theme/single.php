@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\InlineRelated;
+use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
 
@@ -44,9 +46,19 @@ while ( have_posts() ) :
 				<?php the_post_thumbnail( 'ddn-lead' ); ?>
 				<?php
 				$ddn_caption = get_the_post_thumbnail_caption();
-				if ( $ddn_caption ) {
-					echo '<figcaption>' . esc_html( $ddn_caption ) . '</figcaption>';
-				}
+				$ddn_credit  = PhotoCredit::formatted( get_the_ID() );
+				if ( $ddn_caption || '' !== $ddn_credit ) :
+					?>
+					<figcaption>
+						<?php if ( $ddn_caption ) : ?>
+							<span class="article__figure-caption"><?php echo esc_html( $ddn_caption ); ?></span>
+						<?php endif; ?>
+						<?php if ( '' !== $ddn_credit ) : ?>
+							<span class="article__figure-credit"><?php echo esc_html( $ddn_credit ); ?></span>
+						<?php endif; ?>
+					</figcaption>
+					<?php
+				endif;
 				?>
 			</figure>
 		<?php endif; ?>
@@ -93,7 +105,7 @@ while ( have_posts() ) :
 			$ddn_related = new WP_Query(
 				array(
 					'category__in'        => array( $ddn_cat->term_id ),
-					'post__not_in'        => array( get_the_ID() ),
+					'post__not_in'        => array_merge( array( get_the_ID() ), InlineRelated::used_ids() ),
 					'posts_per_page'      => 3,
 					'ignore_sticky_posts' => true,
 					'no_found_rows'       => true,

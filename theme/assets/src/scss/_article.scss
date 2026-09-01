@@ -38,7 +38,7 @@
   font-family: var(--display);
   font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.1rem);
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.12;
   letter-spacing: 0;
   color: var(--headline);
   margin: 0.55rem 0 0;
@@ -51,8 +51,8 @@
   font-style: normal;
   font-weight: 400;
   color: var(--ink-soft);
-  line-height: 1.6;
-  margin: 0.85rem 0 0;
+  line-height: 1.4;
+  margin: 0.8rem 0 0;
   text-wrap: pretty;
 }
 
@@ -71,7 +71,7 @@
   font-family: var(--sans);
   font-size: 0.8rem;
   color: var(--slate);
-  line-height: 1.4;
+  line-height: 1.45;
   margin-top: 0.9rem;
   padding-top: 0.6rem;
 }
@@ -84,6 +84,17 @@
   height: 2px;
   background: var(--red);
 }
+.article__figure-caption { display: block; }
+.article__figure-credit {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+.article__figure-caption + .article__figure-credit { opacity: 0.9; }
 
 // --- Firma + compartir ---
 .article__meta {
@@ -202,6 +213,65 @@
 .wp-caption-text,
 .wp-element-caption { font-family: var(--sans); font-size: 0.78rem; color: var(--slate); margin-top: 0.4rem; }
 .wp-caption img { max-width: 100% !important; height: auto; }
+
+// --- Bloque «Le puede interesar» intercalado en el cuerpo ---
+// Va inyectado dentro de .prose (the_content), así que hay que anular
+// los estilos de lista/enlace de .prose.
+.inline-related {
+  margin: 2.25rem 0;
+  padding: 1.4rem 1.5rem;
+  background: var(--sand);
+}
+.inline-related__label {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 1rem;
+}
+.inline-related ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.inline-related li { margin: 0; }
+.inline-related a {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+.inline-related a:hover { color: var(--red); }
+.inline-related a:hover .inline-related__title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.inline-related__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+}
+.inline-related__icon svg { width: 18px; height: 18px; display: block; }
+.inline-related__title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.32;
+  color: inherit;
+}
 
 .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2.5rem 0; }
 .tags a {
