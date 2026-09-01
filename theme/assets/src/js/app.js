@@ -131,8 +131,49 @@ function initShareCopy() {
   });
 }
 
+function initTopbar() {
+  const bar = document.querySelector('.topbar');
+  if (!bar) return;
+
+  const panels = [
+    ['[data-drawer-toggle]', 'topbar-drawer'],
+    ['[data-search-toggle]', 'topbar-search'],
+  ]
+    .map(([btnSel, panelId]) => ({
+      btn: bar.querySelector(btnSel),
+      panel: document.getElementById(panelId),
+    }))
+    .filter((p) => p.btn && p.panel);
+
+  const setOpen = (pair, open) => {
+    pair.panel.hidden = !open;
+    pair.btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      const field = pair.panel.querySelector('input');
+      if (field) field.focus({ preventScroll: true });
+    }
+  };
+  const closeAll = () => panels.forEach((p) => setOpen(p, false));
+
+  panels.forEach((pair) => {
+    pair.btn.addEventListener('click', () => {
+      const willOpen = pair.panel.hidden;
+      closeAll();
+      if (willOpen) setOpen(pair, true);
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
+  });
+  document.addEventListener('click', (e) => {
+    if (!bar.contains(e.target)) closeAll();
+  });
+}
+
 function boot() {
   initSubmenu();
+  initTopbar();
   initHeroSlider();
   initCardSliders();
   initShareCopy();

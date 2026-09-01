@@ -1,0 +1,176 @@
+// Barra roja de la plantilla de la nota: icono de menú + sección ·
+// «DIARIO DEL NORTE» · icono de búsqueda. Sustituye al cabezote con
+// logotipo y va encima de la cinta «Lo último».
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--red);
+  color: #fff;
+}
+
+.topbar__inner {
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  grid-template-areas: "menu cat brand spacer search";
+  align-items: center;
+  column-gap: 0.75rem;
+}
+
+.topbar__icon {
+  grid-area: menu;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+.topbar__icon svg { width: 22px; height: 22px; display: block; }
+.topbar__icon:hover,
+.topbar__icon[aria-expanded="true"] { color: rgba(255, 255, 255, 0.72); }
+.topbar__menu { margin-left: -9px; }
+.topbar__search-toggle { grid-area: search; margin-right: -9px; }
+
+.topbar__cat {
+  grid-area: cat;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar__cat:hover { color: rgba(255, 255, 255, 0.82); }
+
+.topbar__brand {
+  grid-area: brand;
+  justify-self: center;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: clamp(1rem, 0.86rem + 0.9vw, 1.45rem);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  line-height: 1;
+}
+.topbar__brand:hover { color: #fff; }
+
+// --- Búsqueda desplegable ---
+.topbar-search {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+.topbar-search[hidden] { display: none; }
+.topbar-search__inner {
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0.75rem var(--gutter);
+}
+.topbar-search form,
+.topbar-search .search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+}
+.topbar-search .search-field,
+.topbar-search input[type="search"] {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  border: 0;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--ink);
+}
+.topbar-search .search-submit,
+.topbar-search button {
+  flex-shrink: 0;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.topbar-search .search-submit:hover,
+.topbar-search button:hover { background: #fff; color: var(--red); }
+
+// --- Panel de secciones ---
+.topbar-drawer {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+.topbar-drawer[hidden] { display: none; }
+.topbar-drawer__inner {
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0.25rem var(--gutter) 1rem;
+}
+
+.drawer-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.drawer-nav__item a {
+  display: block;
+  padding: 0.7rem 0.2rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: padding-left 0.12s ease;
+}
+.drawer-nav__item a:hover { color: #fff; padding-left: 0.6rem; }
+.drawer-nav__item a.is-current {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+// En móvil la marca se centra en su fila y la sección baja a una
+// segunda línea, a lo ancho, bajo el icono de menú.
+@media (max-width: 560px) {
+  .topbar__inner {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "menu brand search"
+      "cat  cat   cat";
+    row-gap: 0;
+  }
+  .topbar__cat {
+    padding: 0.35rem 0 0.5rem;
+    margin-top: 0.1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .topbar__brand { letter-spacing: 0.04em; }
+}

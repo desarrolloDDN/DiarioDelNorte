@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-get_header();
+get_header( 'entrada' );
 
 get_template_part( 'template-parts/latest-ticker' );
 

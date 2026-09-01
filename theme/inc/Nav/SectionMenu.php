@@ -53,6 +53,27 @@ final class SectionMenu {
 		echo '</ul></div>';
 	}
 
+	/**
+	 * Lista vertical y plana de las 19 secciones (visibles + «Más»), para
+	 * el panel que despliega el icono de menú en la plantilla de la nota.
+	 */
+	public static function render_list(): void {
+		echo '<ul class="drawer-nav__list">';
+		foreach ( Sections::VISIBLE + Sections::MORE as $slug => $name ) {
+			$term    = Sections::category( $slug );
+			$url     = $term ? get_category_link( $term ) : home_url( '/' . $slug . '/' );
+			$current = self::is_current( $slug );
+
+			printf(
+				'<li class="drawer-nav__item"><a href="%s"%s>%s</a></li>',
+				esc_url( $url ),
+				$current ? ' aria-current="page" class="is-current"' : '',
+				esc_html( $name )
+			);
+		}
+		echo '</ul>';
+	}
+
 	private static function item( string $slug, string $name ): void {
 		$term    = Sections::category( $slug );
 		$url     = $term ? get_category_link( $term ) : home_url( '/' . $slug . '/' );
