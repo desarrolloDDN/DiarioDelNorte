@@ -62,10 +62,10 @@
 .topbar__brand {
   grid-area: brand;
   justify-self: center;
-  font-family: var(--sans);
-  font-weight: 800;
-  font-size: clamp(1rem, 0.86rem + 0.9vw, 1.45rem);
-  letter-spacing: 0.09em;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.15rem, 0.95rem + 1.1vw, 1.7rem);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #fff;
   white-space: nowrap;
