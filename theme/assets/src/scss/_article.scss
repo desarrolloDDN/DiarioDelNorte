@@ -55,7 +55,8 @@
   color: var(--ink-soft);
   line-height: 1.4;
   margin: 0.8rem 0 0;
-  text-wrap: pretty;
+  // Llena cada línea hasta el borde (mismo ancho que el titular y la foto).
+  text-wrap: wrap;
 }
 
 // --- Foto principal ---
@@ -307,20 +308,15 @@
   .article__share-btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
 }
 
-// En móvil el titular ocupa siempre 2 líneas: el tamaño baja para que
-// quepa el titular completo y, si aun así se pasa, se recorta con «…».
+// En móvil el titular baja de tamaño para caber en 2–3 líneas (sin
+// recortes) a todo el ancho de la foto; la bajada lo acompaña.
 @media (max-width: 600px) {
   .article__title {
-    font-size: clamp(1.08rem, 0.85rem + 1vw, 1.35rem);
+    font-size: clamp(1.12rem, 0.9rem + 1vw, 1.45rem);
     line-height: 1.16;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
   }
   .article__standfirst {
-    font-size: 0.97rem;
+    font-size: 0.98rem;
     line-height: 1.45;
   }
 }
