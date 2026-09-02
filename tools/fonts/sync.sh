@@ -4,7 +4,9 @@
 # a theme/assets/fonts/. Ejecutar tras `npm --prefix theme install`
 # cuando cambie alguna versión de fuente.
 #
-#   Titulares .... Newsreader     (variable, redonda + itálica)
+#   Titulares .... Majerit Headline Medium (archivo propio; NO se
+#                  sincroniza aquí, se copia a mano a assets/fonts/).
+#                  Newsreader queda de reserva (sí se sincroniza).
 #   Cuerpo ....... Libre Franklin  (variable, redonda + itálica)
 
 set -euo pipefail

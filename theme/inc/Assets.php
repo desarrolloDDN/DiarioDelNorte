@@ -1,8 +1,8 @@
 <?php
 /**
  * Encolado de estilos y scripts compilados por Vite. Las fuentes
- * (Newsreader y Libre Franklin) van autoalojadas y referenciadas desde
- * app.css vía @font-face; no hay ninguna petición
+ * (Majerit Headline y Libre Franklin) van autoalojadas y referenciadas
+ * desde app.css vía @font-face; no hay ninguna petición
  * a un host externo.
  *
  * @package DiarioDelNorte
@@ -25,7 +25,7 @@ final class Assets {
 
 	/** Precarga las fuentes críticas para el primer pintado (cuerpo y titular). */
 	public function preload_fonts(): void {
-		foreach ( array( 'libre-franklin.woff2', 'newsreader.woff2' ) as $file ) {
+		foreach ( array( 'libre-franklin.woff2', 'majerit-headline.woff2' ) as $file ) {
 			printf(
 				'<link rel="preload" as="font" type="font/woff2" href="%s" crossorigin>' . "\n",
 				esc_url( DDN_THEME_URI . 'assets/dist/fonts/' . $file )

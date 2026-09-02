@@ -2,14 +2,24 @@
 // assets/fonts/ y empaquetadas por Vite en assets/dist/fonts/). Ninguna
 // petición a un host externo.
 //
-//   Titulares ................. Newsreader (variable, serif editorial).
-//     Sustituto libre de «Tiempos Headline»: la versión de prueba de
-//     Tiempos no trae tildes ni «¿¡», imprescindibles en español.
-//   Cuerpo y demás textos ..... Libre Franklin (variable, eje de peso).
+//   Titulares ..... Majerit Headline Medium (archivo propio de la
+//                   editora; Roman, un peso). Reserva: Newsreader.
+//   Cuerpo ........ Libre Franklin (variable, eje de peso).
 //
-// Archivos copiados de los paquetes @fontsource/* con tools/fonts/sync.sh.
+// Newsreader y Libre Franklin se copian de @fontsource/* con
+// tools/fonts/sync.sh. Majerit se coloca a mano en assets/fonts/.
 
-// --- Newsreader (variable) — titulares ---
+// --- Majerit Headline (un peso) — titulares ---
+@font-face {
+  font-family: "Majerit Headline";
+  src: url("../../fonts/majerit-headline.woff2") format("woff2"),
+       url("../../fonts/majerit-headline.woff") format("woff");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// --- Newsreader (variable) — reserva de titulares ---
 @font-face {
   font-family: "Newsreader";
   src: url("../../fonts/newsreader.woff2") format("woff2");
