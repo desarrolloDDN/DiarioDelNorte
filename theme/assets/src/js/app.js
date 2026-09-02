@@ -50,7 +50,7 @@ function initHeroSlider() {
   if (!slider) return;
 
   const slides = Array.from(slider.querySelectorAll('.hero-slide'));
-  const dots = Array.from(slider.querySelectorAll('.hero-slider__dot'));
+  const dots = Array.from(slider.querySelectorAll('.hero-slider__thumb'));
   if (slides.length < 2) return;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

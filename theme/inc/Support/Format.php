@@ -54,6 +54,36 @@ final class Format {
 		return (string) get_the_date( 'j M', $post );
 	}
 
+	/**
+	 * Antigüedad de la entrada para la portada: «Hace 30 minutos» /
+	 * «Hace 3 horas» mientras no pase de 24 h; a partir de ahí, la fecha
+	 * de publicación completa («1 de septiembre de 2026»).
+	 */
+	public static function published_label( int|WP_Post|null $post = null ): string {
+		$timestamp = (int) get_post_time( 'U', true, $post );
+		if ( $timestamp <= 0 ) {
+			return '';
+		}
+
+		$diff = time() - $timestamp;
+
+		if ( $diff < MINUTE_IN_SECONDS ) {
+			return __( 'Ahora mismo', 'diario-del-norte' );
+		}
+		if ( $diff < HOUR_IN_SECONDS ) {
+			$m = (int) round( $diff / MINUTE_IN_SECONDS );
+			/* translators: %d: minutos. */
+			return sprintf( _n( 'Hace %d minuto', 'Hace %d minutos', $m, 'diario-del-norte' ), $m );
+		}
+		if ( $diff < DAY_IN_SECONDS ) {
+			$h = (int) round( $diff / HOUR_IN_SECONDS );
+			/* translators: %d: horas. */
+			return sprintf( _n( 'Hace %d hora', 'Hace %d horas', $h, 'diario-del-norte' ), $h );
+		}
+
+		return (string) get_the_date( 'j \d\e F \d\e Y', $post );
+	}
+
 	/** Minutos de lectura estimados a partir del contenido de la entrada. */
 	public static function reading_minutes( int|WP_Post|null $post = null ): int {
 		$content = (string) get_post_field( 'post_content', $post ?? get_the_ID() );

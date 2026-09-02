@@ -1,55 +1,68 @@
 // Portada: sección de apertura, tira de servicio y bandas de sección.
 
-// --- Sección de apertura (1/2 – 1/4 – 1/4) ---
+// --- Sección de apertura (3/5 – 1/5 – 1/5) ---
 .home-hero { padding-top: 1.5rem; }
 .home-hero__grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr;
   gap: 1.75rem;
 }
 .home-hero__grid > * { min-width: 0; }
 
-// Carrusel de destacados — foto arriba; titular y resumen debajo, sobre
-// fondo blanco y separados entre sí por un filete. Las diapositivas se
-// apilan en la misma celda de grid (fundido + altura = la más alta).
-.hero-slider {
-  max-width: 100%;
+// Carrusel de destacados — imagen a sangre con degradado negro; la
+// categoría (roja), el titular y la antigüedad van encima, abajo a la
+// izquierda. Debajo, una tira de miniaturas hace de navegación. Las
+// diapositivas se apilan en la misma celda de grid (fundido).
+.hero-slider { max-width: 100%; }
+.hero-slider__stage {
+  position: relative;
   display: grid;
-  grid-template-rows: 1fr auto;
 }
 .hero-slide {
   grid-column: 1;
   grid-row: 1;
+  position: relative;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease;
 }
 .hero-slide.is-active { opacity: 1; visibility: visible; }
 .hero-slide__link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  color: var(--ink);
-}
-.hero-slide__link:hover { color: var(--ink); }
-.hero-slide__link:hover .hero-slide__title { color: var(--red); }
-
-.hero-slide__media {
-  position: relative;
   display: block;
+  position: relative;
+  color: #fff;
 }
+.hero-slide__link:hover { color: #fff; }
+
 .hero-slide__img,
-.hero-slide__media img {
+.hero-slide__link img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   background: var(--sand);
 }
-.hero-slide__tag {
+.hero-slide__shade {
   position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.55) 28%,
+    rgba(0, 0, 0, 0.16) 58%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+}
+
+.hero-slide__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.5rem 1.75rem 1.6rem;
+}
+.hero-slide__tag {
+  display: inline-block;
   background: var(--red);
   color: #fff;
   font-family: var(--sans);
@@ -58,57 +71,61 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0.4rem 0.7rem;
-}
-
-.hero-slide__body {
-  display: block;
-  padding-top: 1.05rem;
+  margin-bottom: 0.8rem;
 }
 .hero-slide__title {
   font-family: var(--display);
   font-weight: 600;
-  color: var(--headline);
-  font-size: clamp(1.3rem, 1rem + 1.35vw, 1.95rem);
-  line-height: 1.16;
+  color: #fff;
+  font-size: clamp(1.15rem, 0.82rem + 1.2vw, 1.7rem);
+  line-height: 1.18;
   margin: 0;
-}
-.hero-slide__standfirst {
-  display: block;
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--rule);
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
 }
 .hero-slide__meta {
   display: block;
-  margin-top: 0.8rem;
+  margin-top: 0.7rem;
   font-family: var(--sans);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--slate);
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.hero-slider__dots {
-  grid-column: 1;
-  grid-row: 2;
-  justify-self: center;
-  display: flex;
-  gap: 0.5rem;
-  padding-top: 1rem;
+.hero-slider__thumbs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
 }
-.hero-slider__dot {
-  width: 8px;
-  height: 8px;
+.hero-slider__thumb {
+  position: relative;
   padding: 0;
-  border: 1px solid var(--rule-strong);
-  background: transparent;
-  border-radius: 50%;
+  border: 0;
+  background: var(--sand);
   cursor: pointer;
+  overflow: hidden;
 }
-.hero-slider__dot.is-active { background: var(--rule-strong); }
+.hero-slider__thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+.hero-slider__thumb:hover img { opacity: 0.82; }
+.hero-slider__thumb.is-active img { opacity: 1; }
+.hero-slider__thumb.is-active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #fff;
+}
 
 // Columna central: nota de Judiciales
 .hero-col { display: flex; flex-direction: column; }
@@ -463,10 +480,11 @@ figcaption {
   .card-slider__nav { display: none; }
 
   .hero-slide__img,
-  .hero-slide__media img { aspect-ratio: 16 / 10; }
-  .hero-slide__body { padding-top: 0.9rem; }
+  .hero-slide__link img { aspect-ratio: 4 / 3; }
+  .hero-slide__body { padding: 1.1rem 1.15rem 1.2rem; }
+  .hero-slide__tag { margin-bottom: 0.55rem; }
   .hero-slide__title {
-    font-size: 1.2rem;
+    font-size: 1.18rem;
     line-height: 1.22;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -474,14 +492,13 @@ figcaption {
     line-clamp: 3;
     overflow: hidden;
   }
-  .hero-slide__standfirst {
-    font-size: 0.9rem;
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
+
+  // La tira de miniaturas se desplaza en horizontal: 6 no caben.
+  .hero-slider__thumbs {
+    grid-auto-columns: 30%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
+  .hero-slider__thumbs::-webkit-scrollbar { display: none; }
 }

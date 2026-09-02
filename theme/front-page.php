@@ -2,8 +2,9 @@
 /**
  * Portada del diario.
  *
- * 1. Apertura a tres columnas (1/2 – 1/4 – 1/4): carrusel de «Destacado»,
- *    una nota de Judiciales, y una de Caribe + una de Nación.
+ * 1. Apertura a tres columnas (3/5 – 1/5 – 1/5): carrusel de «Destacado»
+ *    (imagen a sangre + degradado + tira de miniaturas), una nota de
+ *    Judiciales, y una de Caribe + una de Nación.
  * 2. Publicidad (zona `home`).
  * 3. Cuerpo a dos columnas:
  *    - principal: La Guajira, Judiciales (carrusel), Opinión (carrusel) y
@@ -104,15 +105,15 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 		<div class="home-hero__grid">
 
 			<div class="hero-slider" data-hero-slider aria-roledescription="<?php esc_attr_e( 'carrusel', 'diario-del-norte' ); ?>" aria-label="<?php esc_attr_e( 'Noticias destacadas', 'diario-del-norte' ); ?>">
-				<?php
-				$ddn_i = 0;
-				while ( $ddn_hero->have_posts() ) :
-					$ddn_hero->the_post();
-					$ddn_cat = Format::primary_category();
-					?>
-					<article class="hero-slide<?php echo 0 === $ddn_i ? ' is-active' : ''; ?>"<?php echo 0 === $ddn_i ? '' : ' aria-hidden="true"'; ?>>
-						<a class="hero-slide__link" href="<?php the_permalink(); ?>">
-							<span class="hero-slide__media">
+				<div class="hero-slider__stage">
+					<?php
+					$ddn_i = 0;
+					while ( $ddn_hero->have_posts() ) :
+						$ddn_hero->the_post();
+						$ddn_cat = Format::primary_category();
+						?>
+						<article class="hero-slide<?php echo 0 === $ddn_i ? ' is-active' : ''; ?>"<?php echo 0 === $ddn_i ? '' : ' aria-hidden="true"'; ?>>
+							<a class="hero-slide__link" href="<?php the_permalink(); ?>">
 								<?php
 								the_post_thumbnail(
 									'ddn-lead',
@@ -122,37 +123,52 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 									)
 								);
 								?>
-								<span class="hero-slide__tag"><?php echo esc_html( $ddn_featured instanceof WP_Term ? $ddn_featured->name : __( 'Destacado', 'diario-del-norte' ) ); ?></span>
-							</span>
-							<span class="hero-slide__body">
-								<h2 class="hero-slide__title"><?php the_title(); ?></h2>
-								<?php if ( get_the_excerpt() ) : ?>
-									<span class="hero-slide__standfirst"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 26, '…' ) ); ?></span>
-								<?php endif; ?>
-								<span class="hero-slide__meta">
-									<?php
-									if ( $ddn_cat ) {
-										echo esc_html( $ddn_cat->name ) . ' · ';
-									}
-									echo esc_html( Format::time_ago() );
-									?>
+								<span class="hero-slide__shade" aria-hidden="true"></span>
+								<span class="hero-slide__body">
+									<?php if ( $ddn_cat ) : ?>
+										<span class="hero-slide__tag"><?php echo esc_html( $ddn_cat->name ); ?></span>
+									<?php endif; ?>
+									<h2 class="hero-slide__title"><?php the_title(); ?></h2>
+									<span class="hero-slide__meta"><?php echo esc_html( Format::published_label() ); ?></span>
 								</span>
-							</span>
-						</a>
-					</article>
-					<?php
-					++$ddn_i;
-				endwhile;
-				wp_reset_postdata();
-				?>
+							</a>
+						</article>
+						<?php
+						++$ddn_i;
+					endwhile;
+					?>
+				</div>
 
 				<?php if ( $ddn_i > 1 ) : ?>
-					<div class="hero-slider__dots">
-						<?php for ( $ddn_d = 0; $ddn_d < $ddn_i; $ddn_d++ ) : ?>
-							<button type="button" class="hero-slider__dot<?php echo 0 === $ddn_d ? ' is-active' : ''; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: número de la noticia. */ __( 'Ir a la noticia %d', 'diario-del-norte' ), $ddn_d + 1 ) ); ?>"></button>
-						<?php endfor; ?>
+					<div class="hero-slider__thumbs">
+						<?php
+						$ddn_hero->rewind_posts();
+						$ddn_t = 0;
+						while ( $ddn_hero->have_posts() ) :
+							$ddn_hero->the_post();
+							?>
+							<button
+								type="button"
+								class="hero-slider__thumb<?php echo 0 === $ddn_t ? ' is-active' : ''; ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: %s: título de la noticia. */ __( 'Ver: %s', 'diario-del-norte' ), get_the_title() ) ); ?>"
+							>
+								<?php
+								the_post_thumbnail(
+									'ddn-thumb',
+									array(
+										'loading' => 'lazy',
+										'alt'     => '',
+									)
+								);
+								?>
+							</button>
+							<?php
+							++$ddn_t;
+						endwhile;
+						?>
 					</div>
 				<?php endif; ?>
+				<?php wp_reset_postdata(); ?>
 			</div>
 
 			<div class="hero-col hero-col--feature">
