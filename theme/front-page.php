@@ -112,21 +112,22 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 					?>
 					<article class="hero-slide<?php echo 0 === $ddn_i ? ' is-active' : ''; ?>"<?php echo 0 === $ddn_i ? '' : ' aria-hidden="true"'; ?>>
 						<a class="hero-slide__link" href="<?php the_permalink(); ?>">
-							<?php
-							the_post_thumbnail(
-								'ddn-lead',
-								array(
-									'class'   => 'hero-slide__img',
-									'loading' => 0 === $ddn_i ? 'eager' : 'lazy',
-								)
-							);
-							?>
-							<span class="hero-slide__shade" aria-hidden="true"></span>
-							<span class="hero-slide__tag"><?php echo esc_html( $ddn_featured instanceof WP_Term ? $ddn_featured->name : __( 'Destacado', 'diario-del-norte' ) ); ?></span>
-							<div class="hero-slide__body">
+							<span class="hero-slide__media">
+								<?php
+								the_post_thumbnail(
+									'ddn-lead',
+									array(
+										'class'   => 'hero-slide__img',
+										'loading' => 0 === $ddn_i ? 'eager' : 'lazy',
+									)
+								);
+								?>
+								<span class="hero-slide__tag"><?php echo esc_html( $ddn_featured instanceof WP_Term ? $ddn_featured->name : __( 'Destacado', 'diario-del-norte' ) ); ?></span>
+							</span>
+							<span class="hero-slide__body">
 								<h2 class="hero-slide__title"><?php the_title(); ?></h2>
 								<?php if ( get_the_excerpt() ) : ?>
-									<p class="hero-slide__standfirst"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 26, '…' ) ); ?></p>
+									<span class="hero-slide__standfirst"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 26, '…' ) ); ?></span>
 								<?php endif; ?>
 								<span class="hero-slide__meta">
 									<?php
@@ -136,7 +137,7 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 									echo esc_html( Format::time_ago() );
 									?>
 								</span>
-							</div>
+							</span>
 						</a>
 					</article>
 					<?php

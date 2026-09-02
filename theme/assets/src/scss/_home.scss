@@ -9,92 +9,106 @@
 }
 .home-hero__grid > * { min-width: 0; }
 
-// Carrusel de destacados
+// Carrusel de destacados — foto arriba; titular y resumen debajo, sobre
+// fondo blanco y separados entre sí por un filete. Las diapositivas se
+// apilan en la misma celda de grid (fundido + altura = la más alta).
 .hero-slider {
-  position: relative;
   max-width: 100%;
-  aspect-ratio: 3 / 2;
-  min-height: 420px;
-  background: var(--ink-deep);
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 .hero-slide {
-  position: absolute;
-  inset: 0;
+  grid-column: 1;
+  grid-row: 1;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 .hero-slide.is-active { opacity: 1; visibility: visible; }
-.hero-slide__link { display: block; width: 100%; height: 100%; color: #fff; }
-.hero-slide__link:hover { color: #fff; }
+.hero-slide__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: var(--ink);
+}
+.hero-slide__link:hover { color: var(--ink); }
+.hero-slide__link:hover .hero-slide__title { color: var(--red); }
+
+.hero-slide__media {
+  position: relative;
+  display: block;
+}
 .hero-slide__img,
-.hero-slide img { width: 100%; height: 100%; object-fit: cover; }
-.hero-slide__shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(15, 12, 9, 0.92) 0%, rgba(15, 12, 9, 0.55) 38%, rgba(15, 12, 9, 0) 68%);
+.hero-slide__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--sand);
 }
 .hero-slide__tag {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 0.9rem;
+  left: 0.9rem;
   background: var(--red);
   color: #fff;
   font-family: var(--sans);
   font-weight: 700;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0.4rem 0.7rem;
 }
+
 .hero-slide__body {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  // El titular queda alineado con el borde izquierdo de la foto.
-  padding: 1.6rem 1.6rem 2rem 0;
+  display: block;
+  padding-top: 1.05rem;
 }
 .hero-slide__title {
   font-family: var(--display);
   font-weight: 600;
-  color: #fff;
-  font-size: clamp(1.35rem, 1rem + 1.5vw, 2.1rem);
+  color: var(--headline);
+  font-size: clamp(1.3rem, 1rem + 1.35vw, 1.95rem);
   line-height: 1.16;
-  letter-spacing: 0.005em;
+  margin: 0;
 }
 .hero-slide__standfirst {
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 0.96rem;
-  line-height: 1.4;
-  margin: 0.55rem 0 0.6rem;
+  display: block;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 .hero-slide__meta {
+  display: block;
+  margin-top: 0.8rem;
   font-family: var(--sans);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--slate);
 }
+
 .hero-slider__dots {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
   display: flex;
-  gap: 0.45rem;
-  z-index: 2;
+  gap: 0.5rem;
+  padding-top: 1rem;
 }
 .hero-slider__dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--rule-strong);
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
 }
-.hero-slider__dot.is-active { background: #fff; }
+.hero-slider__dot.is-active { background: var(--rule-strong); }
 
 // Columna central: nota de Judiciales
 .hero-col { display: flex; flex-direction: column; }
@@ -138,7 +152,6 @@
 // --- Las tres columnas de apertura, misma altura (la del carrusel) ---
 @media (min-width: 1001px) {
   .home-hero__grid { align-items: stretch; }
-  .hero-slider { aspect-ratio: auto; }
   .hero-col--feature .hero-feature,
   .hero-col--side .hero-side-item { flex: 1 1 0; min-height: 0; }
   .hero-feature__media,
@@ -431,9 +444,7 @@ figcaption {
 }
 @media (max-width: 1000px) {
   .home-hero__grid { grid-template-columns: 1fr 1fr; }
-  // aspect-ratio SIN min-height: juntos hacen que la caja crezca de ancho
-  // y se salga de la retícula.
-  .hero-slider { grid-column: 1 / -1; aspect-ratio: 16 / 9; min-height: 0; }
+  .hero-slider { grid-column: 1 / -1; }
   .hero-col--feature,
   .hero-col--side { border-left: 0; padding-left: 0; }
   .card-slider__track > * { flex-basis: calc((100% - 3rem) / 3); }
@@ -451,8 +462,9 @@ figcaption {
   .card-slider__track > * { flex-basis: 78%; }
   .card-slider__nav { display: none; }
 
-  .hero-slider { aspect-ratio: 4 / 5; min-height: 0; }
-  .hero-slide__body { padding: 1.1rem 1.1rem 1.3rem 0; }
+  .hero-slide__img,
+  .hero-slide__media img { aspect-ratio: 16 / 10; }
+  .hero-slide__body { padding-top: 0.9rem; }
   .hero-slide__title {
     font-size: 1.2rem;
     line-height: 1.22;
@@ -464,7 +476,8 @@ figcaption {
   }
   .hero-slide__standfirst {
     font-size: 0.9rem;
-    margin: 0.4rem 0 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
