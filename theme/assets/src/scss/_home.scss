@@ -53,11 +53,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 1.6rem 1.6rem 2rem;
+  // El titular queda alineado con el borde izquierdo de la foto.
+  padding: 1.6rem 1.6rem 2rem 0;
 }
 .hero-slide__title {
   font-family: var(--display);
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
   font-size: clamp(1.35rem, 1rem + 1.5vw, 2.1rem);
   line-height: 1.16;
@@ -451,7 +452,7 @@ figcaption {
   .card-slider__nav { display: none; }
 
   .hero-slider { aspect-ratio: 4 / 5; min-height: 0; }
-  .hero-slide__body { padding: 1.1rem 1.1rem 1.3rem; }
+  .hero-slide__body { padding: 1.1rem 1.1rem 1.3rem 0; }
   .hero-slide__title {
     font-size: 1.2rem;
     line-height: 1.22;

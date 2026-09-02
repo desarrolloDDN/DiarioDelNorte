@@ -72,7 +72,7 @@
 }
 .cat-feature__title {
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: 600;
   font-size: var(--step-3);
   line-height: 1.14;
   color: var(--headline);
@@ -167,7 +167,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 1.4rem 1.6rem 1.6rem;
+  // El titular queda alineado con el borde izquierdo de la foto.
+  padding: 1.4rem 1.6rem 1.6rem 0;
 }
 .cat-overlay__kicker {
   display: block;
@@ -182,7 +183,7 @@
 .cat-overlay__title {
   display: block;
   font-family: var(--display);
-  font-weight: 400;
+  font-weight: 600;
   font-size: clamp(1.15rem, 0.9rem + 1vw, 1.6rem);
   line-height: 1.16;
 }
