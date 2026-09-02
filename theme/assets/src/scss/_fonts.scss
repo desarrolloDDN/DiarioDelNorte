@@ -2,63 +2,41 @@
 // assets/fonts/ y empaquetadas por Vite en assets/dist/fonts/). Ninguna
 // petición a un host externo.
 //
-//   Titulares principales ....... DM Serif Display (un peso: 400 + itálica)
-//   Subtítulos y secciones ...... Libre Baskerville (400 / 400i / 700)
-//   Cuerpo, navegación, datos ... Source Sans 3 (variable, eje de peso)
+//   Titulares ................. Newsreader (variable, serif editorial).
+//     Sustituto libre de «Tiempos Headline»: la versión de prueba de
+//     Tiempos no trae tildes ni «¿¡», imprescindibles en español.
+//   Cuerpo y demás textos ..... Libre Franklin (variable, eje de peso).
 //
 // Archivos copiados de los paquetes @fontsource/* con tools/fonts/sync.sh.
 
-// --- DM Serif Display ---
+// --- Newsreader (variable) — titulares ---
 @font-face {
-  font-family: "DM Serif Display";
-  src: url("../../fonts/dm-serif-display.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Newsreader";
+  src: url("../../fonts/newsreader.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "DM Serif Display";
-  src: url("../../fonts/dm-serif-display-italic.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Newsreader";
+  src: url("../../fonts/newsreader-italic.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: italic;
   font-display: swap;
 }
 
-// --- Libre Baskerville ---
+// --- Libre Franklin (variable) — cuerpo ---
 @font-face {
-  font-family: "Libre Baskerville";
-  src: url("../../fonts/libre-baskerville.woff2") format("woff2");
-  font-weight: 400;
+  font-family: "Libre Franklin";
+  src: url("../../fonts/libre-franklin.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Libre Baskerville";
-  src: url("../../fonts/libre-baskerville-italic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Libre Baskerville";
-  src: url("../../fonts/libre-baskerville-700.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-// --- Source Sans 3 (variable) ---
-@font-face {
-  font-family: "Source Sans 3";
-  src: url("../../fonts/source-sans-3.woff2") format("woff2");
-  font-weight: 200 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Source Sans 3";
-  src: url("../../fonts/source-sans-3-italic.woff2") format("woff2");
-  font-weight: 200 900;
+  font-family: "Libre Franklin";
+  src: url("../../fonts/libre-franklin-italic.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: italic;
   font-display: swap;
 }

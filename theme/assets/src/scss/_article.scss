@@ -37,7 +37,7 @@
 .article__title {
   font-family: var(--display);
   font-size: clamp(1.35rem, 1.02rem + 1.35vw, 1.9rem);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.12;
   letter-spacing: 0;
   color: var(--headline);
@@ -48,7 +48,7 @@
 }
 
 .article__standfirst {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 1.06rem;
   font-style: normal;
   font-weight: 400;

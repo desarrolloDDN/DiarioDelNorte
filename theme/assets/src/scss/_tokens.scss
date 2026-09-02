@@ -3,21 +3,21 @@
 // prefers-color-scheme ni conmutador. Las @font-face viven en _fonts.scss.
 
 :root {
-  // Neutros cálidos (papel prensa)
-  --paper: #fbfaf8;
+  // Fondo blanco en toda la web; los paneles usan un gris casi blanco.
+  --paper: #ffffff;
   --surface: #ffffff;
-  --sand: #f1ece2;
-  --ink: #1b1815;
-  --ink-soft: #423c37;
-  --headline: #26221e; // titulares
-  --slate: #6a635b;
-  --rule: #ddd7cc;
-  --rule-strong: #1b1815;
+  --sand: #f4f4f5;
+  --ink: #1a1a1a;
+  --ink-soft: #40403f;
+  --headline: #111111; // titulares
+  --slate: #666666;
+  --rule: #e4e4e4;
+  --rule-strong: #1a1a1a;
 
   // Marca
   --red: #bf0202;
   --red-deep: #8c0000;
-  --ink-deep: #17130f; // navegación y pie
+  --ink-deep: #141414; // barra de secciones oscura
 
   --link: #bf0202;
   --link-hover: #8c0000;
@@ -26,12 +26,13 @@
   --maxw-read: 40rem;   // columna de lectura del artículo
   --gutter: clamp(1rem, 4vw, 2rem);
 
-  // Titulares principales.
-  --display: "DM Serif Display", "Playfair Display", Georgia, "Times New Roman", serif;
-  // Subtítulos, bajadas y encabezados de sección.
-  --serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
-  // Cuerpo de las noticias, navegación y metadatos.
-  --sans: "Source Sans 3", "Helvetica Neue", Arial, system-ui, sans-serif;
+  // Titulares (serif editorial). «Tiempos Headline» va primero para
+  // recogerlo si algún día se instala la licencia completa.
+  --display: "Tiempos Headline", "Newsreader", Georgia, "Times New Roman", serif;
+  // Alias: los encabezados de sección y subtítulos usan la misma serif.
+  --serif: var(--display);
+  // Cuerpo de las noticias, navegación, metadatos y todo lo demás.
+  --sans: "Libre Franklin", "Helvetica Neue", Arial, system-ui, sans-serif;
 
   --step--1: 0.812rem;
   --step-0: 1rem;
