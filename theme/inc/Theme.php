@@ -99,8 +99,9 @@ final class Theme {
 
 		register_nav_menus(
 			array(
-				'primary' => __( 'Menú principal (barra de secciones)', 'diario-del-norte' ),
-				'footer'  => __( 'Menú de pie de página', 'diario-del-norte' ),
+				'primary'      => __( 'Menú principal (barra de secciones)', 'diario-del-norte' ),
+				'footer'       => __( 'Menú de secciones del pie', 'diario-del-norte' ),
+				'footer-legal' => __( 'Enlaces legales del pie (términos, cookies, datos…)', 'diario-del-norte' ),
 			)
 		);
 

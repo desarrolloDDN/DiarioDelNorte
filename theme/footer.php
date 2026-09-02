@@ -1,7 +1,7 @@
 <?php
 /**
  * Pie de página del sitio: identidad, redes sociales, aviso legal, menú
- * de secciones y datos de contacto.
+ * de secciones, enlaces legales y datos de contacto.
  *
  * @package DiarioDelNorte
  */
@@ -38,15 +38,35 @@ $ddn_social = array(
 	),
 );
 
-$ddn_legal        = (string) get_theme_mod( 'ddn_legal', '' );
-$ddn_address      = (string) get_theme_mod( 'ddn_address', '' );
+$ddn_legal_default = sprintf(
+	/* translators: %s: nombre de la empresa editora. */
+	__( '© %s Sistema Cardenal S.A.S. Todos los derechos reservados. Prohibida la reproducción total o parcial de los contenidos sin autorización previa, expresa y por escrito.', 'diario-del-norte' ),
+	wp_date( 'Y' )
+);
+
+$ddn_legal        = (string) get_theme_mod( 'ddn_legal', $ddn_legal_default );
+$ddn_address      = (string) get_theme_mod( 'ddn_address', 'Riohacha, La Guajira, Colombia' );
 $ddn_phone        = (string) get_theme_mod( 'ddn_phone', '' );
 $ddn_wa           = (string) get_theme_mod( 'ddn_whatsapp', '' );
-$ddn_email        = (string) get_theme_mod( 'ddn_email', '' );
-$ddn_terms        = (string) get_theme_mod( 'ddn_terms_url', '' );
+$ddn_email        = (string) get_theme_mod( 'ddn_email', 'redaccion@diariodelnorte.net' );
 $ddn_contact      = (string) get_theme_mod( 'ddn_contact_url', '' );
-$ddn_credit       = (string) get_theme_mod( 'ddn_footer_credit', '' );
+$ddn_credit       = (string) get_theme_mod( 'ddn_footer_credit', __( 'Diseñado por Delvis Ibáñez Sevilla', 'diario-del-norte' ) );
+$ddn_credit_url   = (string) get_theme_mod( 'ddn_footer_credit_url', 'https://wa.me/573028033129' );
 $ddn_contact_href = '' !== $ddn_contact ? $ddn_contact : ( '' !== $ddn_email ? 'mailto:' . $ddn_email : '' );
+
+/**
+ * Enlaces legales del pie. Sirven de reserva del menú «footer-legal»:
+ * si no hay uno asignado en Apariencia → Menús, se muestran estos.
+ *
+ * @var array<string,string> $ddn_legal_links slug => etiqueta
+ */
+$ddn_legal_links = array(
+	'terminos-y-condiciones'                    => __( 'Términos y Condiciones', 'diario-del-norte' ),
+	'derechos-de-autor-y-propiedad-intelectual' => __( 'Derechos de Autor y Propiedad Intelectual', 'diario-del-norte' ),
+	'politica-de-uso-de-cookies'                => __( 'Política de uso de cookies', 'diario-del-norte' ),
+	'politica-de-tratamiento-de-datos'          => __( 'Política de Tratamiento de Datos', 'diario-del-norte' ),
+	'directrices-editoriales'                   => __( 'Directrices Editoriales', 'diario-del-norte' ),
+);
 
 /** Datos de contacto, separados por « | ». */
 $ddn_contact_bits = array_filter(
@@ -137,11 +157,32 @@ $ddn_contact_bits = array_filter(
 			?>
 		</nav>
 
-		<div class="site-footer__bar">
-			<?php if ( '' !== $ddn_terms ) : ?>
-				<a class="site-footer__terms" href="<?php echo esc_url( $ddn_terms ); ?>"><?php esc_html_e( 'Términos y condiciones', 'diario-del-norte' ); ?></a>
-			<?php endif; ?>
+		<nav class="site-footer__legal-nav" aria-label="<?php esc_attr_e( 'Información legal', 'diario-del-norte' ); ?>">
+			<?php
+			if ( has_nav_menu( 'footer-legal' ) ) {
+				wp_nav_menu(
+					array(
+						'theme_location' => 'footer-legal',
+						'container'      => false,
+						'menu_class'     => 'site-footer__legal-links',
+						'depth'          => 1,
+					)
+				);
+			} else {
+				echo '<ul class="site-footer__legal-links">';
+				foreach ( $ddn_legal_links as $ddn_slug => $ddn_label ) {
+					printf(
+						'<li><a href="%s">%s</a></li>',
+						esc_url( home_url( '/' . $ddn_slug . '/' ) ),
+						esc_html( $ddn_label )
+					);
+				}
+				echo '</ul>';
+			}
+			?>
+		</nav>
 
+		<div class="site-footer__bar">
 			<?php if ( '' !== $ddn_contact_href ) : ?>
 				<a class="btn site-footer__contact-btn" href="<?php echo esc_url( $ddn_contact_href ); ?>"><?php esc_html_e( 'Contáctenos', 'diario-del-norte' ); ?></a>
 			<?php endif; ?>
@@ -152,7 +193,12 @@ $ddn_contact_bits = array_filter(
 		</div>
 
 		<?php if ( '' !== $ddn_credit ) : ?>
-			<p class="site-footer__credit"><?php echo esc_html( $ddn_credit ); ?></p>
+			<p class="site-footer__credit">
+				<?php echo esc_html( $ddn_credit ); ?>
+				<?php if ( '' !== $ddn_credit_url ) : ?>
+					&mdash; <a href="<?php echo esc_url( $ddn_credit_url ); ?>" rel="noopener"><?php esc_html_e( 'Contacto', 'diario-del-norte' ); ?></a>
+				<?php endif; ?>
+			</p>
 		<?php endif; ?>
 
 	</div>

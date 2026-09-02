@@ -100,7 +100,35 @@
 }
 .site-footer__menu .current-menu-item > a { color: var(--red); font-weight: 700; }
 
-// --- Fila 4: términos + contáctenos + datos ---
+// --- Fila 4: enlaces legales ---
+.site-footer__legal-nav {
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
+.site-footer__legal-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.site-footer__legal-links li { display: inline-flex; align-items: center; }
+.site-footer__legal-links li + li::before {
+  content: "";
+  width: 1px;
+  height: 0.9em;
+  margin: 0 0.9rem;
+  background: var(--rule-strong);
+  opacity: 0.4;
+}
+.site-footer__legal-links a { color: var(--ink); }
+.site-footer__legal-links a:hover { color: var(--red); }
+
+// --- Fila 5: contáctenos + datos de contacto ---
 .site-footer__bar {
   display: flex;
   flex-wrap: wrap;
@@ -109,32 +137,12 @@
   padding: 1.2rem 0;
   border-top: 1px solid var(--rule);
 }
-.site-footer__terms {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-.site-footer__terms::after {
-  content: "+";
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--red);
-  color: #fff;
-  font-weight: 700;
-  line-height: 1;
-}
-.site-footer__terms:hover { color: var(--red); }
 .site-footer a.site-footer__contact-btn,
 .site-footer a.site-footer__contact-btn:hover {
   color: #fff;
 }
 .site-footer__contact-btn {
+  flex-shrink: 0;
   padding: 0.62rem 1.35rem;
   font-size: 0.76rem;
 }
@@ -144,7 +152,7 @@
   font-size: 0.84rem;
 }
 
-// --- Fila 5: crédito ---
+// --- Fila 6: crédito ---
 .site-footer__credit {
   margin: 0;
   padding: 1.1rem 0 0;
@@ -153,9 +161,21 @@
   font-size: 0.8rem;
   color: var(--slate);
 }
+.site-footer__credit a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.site-footer__credit a:hover { color: var(--red); }
 
 @media (max-width: 640px) {
   .site-footer__top { flex-direction: column; align-items: flex-start; }
   .site-footer__bar { flex-direction: column; align-items: flex-start; }
   .site-footer__contact { order: 3; }
+  .site-footer__legal-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+  .site-footer__legal-links li + li::before { display: none; }
 }
