@@ -157,7 +157,8 @@ $ddn_contact_bits = array_filter(
 			?>
 		</nav>
 
-		<nav class="site-footer__legal-nav" aria-label="<?php esc_attr_e( 'Información legal', 'diario-del-norte' ); ?>">
+		<details class="site-footer__legal-nav">
+			<summary class="site-footer__legal-summary"><?php esc_html_e( 'Términos y políticas', 'diario-del-norte' ); ?></summary>
 			<?php
 			if ( has_nav_menu( 'footer-legal' ) ) {
 				wp_nav_menu(
@@ -180,7 +181,7 @@ $ddn_contact_bits = array_filter(
 				echo '</ul>';
 			}
 			?>
-		</nav>
+		</details>
 
 		<div class="site-footer__bar">
 			<?php if ( '' !== $ddn_contact_href ) : ?>

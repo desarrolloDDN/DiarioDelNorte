@@ -100,14 +100,41 @@
 }
 .site-footer__menu .current-menu-item > a { color: var(--red); font-weight: 700; }
 
-// --- Fila 4: enlaces legales ---
+// --- Fila 4: enlaces legales (plegables) ---
 .site-footer__legal-nav {
   padding: 1rem 0;
   border-top: 1px solid var(--rule);
 }
+.site-footer__legal-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--ink);
+  list-style: none;
+}
+.site-footer__legal-summary::-webkit-details-marker { display: none; }
+.site-footer__legal-summary::after {
+  content: "+";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+.site-footer__legal-nav[open] .site-footer__legal-summary::after { content: "\2212"; }
+.site-footer__legal-summary:hover { color: var(--red); }
+
 .site-footer__legal-links {
   list-style: none;
-  margin: 0;
+  margin: 0.9rem 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
