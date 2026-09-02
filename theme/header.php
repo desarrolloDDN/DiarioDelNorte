@@ -88,7 +88,6 @@ $ddn_dateline = sprintf(
 
 		<p class="masthead__dateline"><?php echo esc_html( $ddn_dateline ); ?></p>
 	</div>
-	<hr class="nameplate__rule">
 </header>
 
 <nav class="mainnav" aria-label="<?php esc_attr_e( 'Secciones', 'diario-del-norte' ); ?>">

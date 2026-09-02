@@ -94,14 +94,6 @@
   color: var(--slate);
 }
 
-.nameplate__rule {
-  border: 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 3px double var(--rule-strong);
-  height: 4px;
-  margin: 0;
-}
-
 // --- Navegación principal ---
 // La barra roja tiene el mismo ancho que el contenido (1330px) y va
 // centrada, igual que la barra de la plantilla de la nota.
