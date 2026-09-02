@@ -8,11 +8,14 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller as Sections;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$ddn_social_defaults = SiteOptions::social_defaults();
 
 /** Iconos SVG (viewBox 0 0 24 24) de cada red. */
 $ddn_social = array(
@@ -107,7 +110,7 @@ $ddn_contact_bits = array_filter(
 			<?php
 			$ddn_social_out = '';
 			foreach ( $ddn_social as $ddn_key => $ddn_net ) {
-				$ddn_url = (string) get_theme_mod( "ddn_social_{$ddn_key}", '' );
+				$ddn_url = (string) get_theme_mod( "ddn_social_{$ddn_key}", $ddn_social_defaults[ $ddn_key ] ?? '' );
 				if ( '' === $ddn_url ) {
 					continue;
 				}

@@ -55,8 +55,16 @@ final class SiteOptions {
 		$this->text( $wp_customize, 'ddn_footer_credit', __( 'Crédito al pie', 'diario-del-norte' ), __( 'Diseñado por Delvis Ibáñez Sevilla', 'diario-del-norte' ), 'sanitize_text_field', 'ddn_footer', __( 'Línea final centrada. En blanco no se muestra.', 'diario-del-norte' ) );
 		$this->text( $wp_customize, 'ddn_footer_credit_url', __( 'Enlace de «Contacto» del crédito', 'diario-del-norte' ), 'https://wa.me/573028033129', 'esc_url_raw', 'ddn_footer', __( 'Si tiene enlace, tras el crédito aparece «— Contacto».', 'diario-del-norte' ) );
 
-		foreach ( $this->networks() as $key => $label ) {
-			$this->text( $wp_customize, "ddn_social_{$key}", $label, '', 'esc_url_raw' );
+		foreach ( $this->networks() as $key => $data ) {
+			$this->text(
+				$wp_customize,
+				"ddn_social_{$key}",
+				$data['label'],
+				(string) ( self::social_defaults()[ $key ] ?? '' ),
+				'esc_url_raw',
+				'ddn_footer',
+				__( 'Enlace del perfil. En blanco, ese icono no aparece.', 'diario-del-norte' )
+			);
 		}
 
 		$wp_customize->add_section(
@@ -83,15 +91,31 @@ final class SiteOptions {
 	}
 
 	/**
-	 * @return array<string,string>
+	 * @return array<string,array{label:string}>
 	 */
 	private function networks(): array {
 		return array(
-			'facebook'  => __( 'Facebook (URL)', 'diario-del-norte' ),
-			'x'         => __( 'X / Twitter (URL)', 'diario-del-norte' ),
-			'instagram' => __( 'Instagram (URL)', 'diario-del-norte' ),
-			'youtube'   => __( 'YouTube (URL)', 'diario-del-norte' ),
-			'whatsapp'  => __( 'WhatsApp (URL)', 'diario-del-norte' ),
+			'facebook'  => array( 'label' => __( 'Facebook (URL)', 'diario-del-norte' ) ),
+			'x'         => array( 'label' => __( 'X / Twitter (URL)', 'diario-del-norte' ) ),
+			'instagram' => array( 'label' => __( 'Instagram (URL)', 'diario-del-norte' ) ),
+			'youtube'   => array( 'label' => __( 'YouTube (URL)', 'diario-del-norte' ) ),
+			'whatsapp'  => array( 'label' => __( 'WhatsApp (URL)', 'diario-del-norte' ) ),
+		);
+	}
+
+	/**
+	 * URLs por defecto de las redes (se muestran hasta que la redacción
+	 * ponga las suyas). Fuente única para el Personalizador y el pie.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function social_defaults(): array {
+		return array(
+			'facebook'  => 'https://www.facebook.com/DiarioDelNorte',
+			'x'         => 'https://x.com/diariodelnorte',
+			'instagram' => 'https://www.instagram.com/diariodelnorte',
+			'youtube'   => 'https://www.youtube.com/@diariodelnorte',
+			'whatsapp'  => '',
 		);
 	}
 
