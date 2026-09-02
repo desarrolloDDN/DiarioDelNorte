@@ -134,6 +134,19 @@
   border-left: 1px solid var(--rule);
   padding-left: 1.75rem;
 }
+// Antetítulo de sección (rojo) en las notas de las columnas laterales.
+.hero-kicker {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.35rem;
+}
+.hero-kicker:hover { color: var(--link-hover); }
+
 .hero-feature { display: flex; flex-direction: column; }
 .hero-feature__media { display: block; margin-bottom: 0.8rem; }
 .hero-feature__media img {

@@ -176,9 +176,13 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 				while ( $ddn_jud->have_posts() ) :
 					$ddn_jud->the_post();
 					?>
+					<?php $ddn_fcat = Format::primary_category(); ?>
 					<article <?php post_class( 'hero-feature' ); ?>>
 						<?php if ( has_post_thumbnail() ) : ?>
 							<a class="hero-feature__media" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true"><?php the_post_thumbnail( 'ddn-card', array( 'loading' => 'lazy' ) ); ?></a>
+						<?php endif; ?>
+						<?php if ( $ddn_fcat ) : ?>
+							<a class="hero-kicker" href="<?php echo esc_url( (string) get_category_link( $ddn_fcat ) ); ?>"><?php echo esc_html( $ddn_fcat->name ); ?></a>
 						<?php endif; ?>
 						<h3 class="hero-feature__title"><a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 						<?php if ( get_the_excerpt() ) : ?>
@@ -197,7 +201,11 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 					while ( $ddn_side_query->have_posts() ) :
 						$ddn_side_query->the_post();
 						?>
+						<?php $ddn_scat = Format::primary_category(); ?>
 						<article <?php post_class( 'hero-side-item' ); ?>>
+							<?php if ( $ddn_scat ) : ?>
+								<a class="hero-kicker" href="<?php echo esc_url( (string) get_category_link( $ddn_scat ) ); ?>"><?php echo esc_html( $ddn_scat->name ); ?></a>
+							<?php endif; ?>
 							<h3 class="hero-side-item__title"><a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 							<?php if ( has_post_thumbnail() ) : ?>
 								<a class="hero-side-item__media" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true"><?php the_post_thumbnail( 'ddn-card', array( 'loading' => 'lazy' ) ); ?></a>
