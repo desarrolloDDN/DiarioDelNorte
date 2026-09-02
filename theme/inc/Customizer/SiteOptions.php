@@ -32,9 +32,14 @@ final class SiteOptions {
 			)
 		);
 
-		$this->text( $wp_customize, 'ddn_legal', __( 'Texto legal / copyright', 'diario-del-norte' ), '© ' . gmdate( 'Y' ) . ' Sistema Cardenal S.A.S. Todos los derechos reservados.' );
-		$this->text( $wp_customize, 'ddn_address', __( 'Dirección y teléfono', 'diario-del-norte' ), 'Riohacha, La Guajira, Colombia' );
+		$this->text( $wp_customize, 'ddn_legal', __( 'Texto legal / copyright', 'diario-del-norte' ), '© ' . gmdate( 'Y' ) . ' Sistema Cardenal S.A.S. Todos los derechos reservados. Prohibida la reproducción total o parcial de los contenidos sin autorización previa, expresa y por escrito.' );
+		$this->text( $wp_customize, 'ddn_address', __( 'Dirección', 'diario-del-norte' ), 'Riohacha, La Guajira, Colombia' );
+		$this->text( $wp_customize, 'ddn_phone', __( 'Teléfono / servicio al cliente', 'diario-del-norte' ), '' );
+		$this->text( $wp_customize, 'ddn_whatsapp', __( 'WhatsApp (número visible)', 'diario-del-norte' ), '' );
 		$this->text( $wp_customize, 'ddn_email', __( 'Correo de redacción', 'diario-del-norte' ), 'redaccion@diariodelnorte.net', 'sanitize_email' );
+		$this->text( $wp_customize, 'ddn_terms_url', __( 'Enlace a «Términos y condiciones»', 'diario-del-norte' ), '', 'esc_url_raw' );
+		$this->text( $wp_customize, 'ddn_contact_url', __( 'Enlace a «Contáctenos»', 'diario-del-norte' ), '', 'esc_url_raw' );
+		$this->text( $wp_customize, 'ddn_footer_credit', __( 'Crédito al pie (opcional)', 'diario-del-norte' ), '' );
 		$this->text( $wp_customize, 'ddn_dateline_city', __( 'Ciudad por defecto en las firmas', 'diario-del-norte' ), 'Riohacha' );
 
 		foreach ( $this->networks() as $key => $label ) {

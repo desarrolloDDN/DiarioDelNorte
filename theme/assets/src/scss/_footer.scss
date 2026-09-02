@@ -1,59 +1,161 @@
-// Pie de página.
+// Pie de página: identidad, redes, aviso legal, menú de secciones y
+// datos de contacto. Panel claro separado por un filete superior.
 
 .site-footer {
-  background: var(--ink-deep);
-  color: rgba(255, 255, 255, 0.72);
   margin-top: 3.5rem;
-  padding: 3rem 0 2rem;
+  border-top: 3px solid var(--rule-strong);
+  background: var(--sand);
+  color: var(--ink-soft);
   font-family: var(--sans);
+  font-size: 0.9rem;
 }
-.site-footer__grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 2rem;
-}
-.site-footer a { color: rgba(255, 255, 255, 0.72); }
-.site-footer a:hover { color: #fff; }
+.site-footer .wrap { padding-block: 2.4rem 1.6rem; }
+.site-footer a { color: var(--ink-soft); }
+.site-footer a:hover { color: var(--red); }
 
-.site-footer__name {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: var(--step-2);
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  margin: 0 0 0.4rem;
-}
-.site-footer__brand p { font-size: 0.86rem; line-height: 1.5; max-width: 42ch; margin: 0.2rem 0; }
-
-.site-footer__social {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
+// --- Fila 1: identidad + redes ---
+.site-footer__top {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+  padding-bottom: 1.6rem;
+}
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.site-footer__logo,
+.site-footer .custom-logo {
+  display: block;
+  width: auto;
+  max-width: 260px;
+  height: auto;
+}
+.site-footer .custom-logo-link,
+.site-footer__logo-link { display: inline-block; }
+.site-footer__tagline {
+  font-family: var(--serif);
+  font-style: italic;
   font-size: 0.82rem;
+  color: var(--slate);
 }
 
+.site-footer__social {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.site-footer__social-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.site-footer__social ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.45rem;
+}
+.site-footer__social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+}
+.site-footer__social a:hover { background: var(--ink-deep); color: #fff; }
+.site-footer__social svg { width: 15px; height: 15px; fill: currentColor; }
+
+// --- Fila 2: aviso legal ---
+.site-footer__legal {
+  margin: 0;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--rule);
+  max-width: 66ch;
+  color: var(--slate);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+// --- Fila 3: menú de secciones ---
+.site-footer__nav {
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
 .site-footer__menu {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.86rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.9rem;
 }
-.site-footer__menu li { padding: 0.28rem 0; }
-.site-footer__nav h4,
-.site-footer__nav .site-footer__menu { max-width: 100%; }
+.site-footer__menu .current-menu-item > a { color: var(--red); font-weight: 700; }
 
-.site-footer__legal {
-  margin-top: 2.4rem;
-  padding-top: 1.4rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+// --- Fila 4: términos + contáctenos + datos ---
+.site-footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1.5rem;
+  padding: 1.2rem 0;
+  border-top: 1px solid var(--rule);
+}
+.site-footer__terms {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.site-footer__terms::after {
+  content: "+";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+.site-footer__terms:hover { color: var(--red); }
+.site-footer a.site-footer__contact-btn,
+.site-footer a.site-footer__contact-btn:hover {
+  color: #fff;
+}
+.site-footer__contact-btn {
+  padding: 0.62rem 1.35rem;
   font-size: 0.76rem;
-  color: rgba(255, 255, 255, 0.5);
+}
+.site-footer__contact {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.84rem;
 }
 
-@media (max-width: 720px) {
-  .site-footer__grid { grid-template-columns: 1fr; }
+// --- Fila 5: crédito ---
+.site-footer__credit {
+  margin: 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--slate);
+}
+
+@media (max-width: 640px) {
+  .site-footer__top { flex-direction: column; align-items: flex-start; }
+  .site-footer__bar { flex-direction: column; align-items: flex-start; }
+  .site-footer__contact { order: 3; }
 }
