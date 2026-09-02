@@ -131,14 +131,11 @@ function initShareCopy() {
   });
 }
 
-function initTopbar() {
-  const bar = document.querySelector('.topbar');
+function initBarPanels(barSelector, pairs) {
+  const bar = document.querySelector(barSelector);
   if (!bar) return;
 
-  const panels = [
-    ['[data-drawer-toggle]', 'topbar-drawer'],
-    ['[data-search-toggle]', 'topbar-search'],
-  ]
+  const panels = pairs
     .map(([btnSel, panelId]) => ({
       btn: bar.querySelector(btnSel),
       panel: document.getElementById(panelId),
@@ -173,7 +170,11 @@ function initTopbar() {
 
 function boot() {
   initSubmenu();
-  initTopbar();
+  initBarPanels('.topbar', [
+    ['[data-drawer-toggle]', 'topbar-drawer'],
+    ['[data-search-toggle]', 'topbar-search'],
+  ]);
+  initBarPanels('.masthead', [['[data-search-toggle]', 'masthead-search']]);
   initHeroSlider();
   initCardSliders();
   initShareCopy();

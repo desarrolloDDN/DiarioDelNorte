@@ -10,19 +10,69 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  min-height: 1.75rem;
   border-bottom: 1px solid var(--rule);
   padding-bottom: 0.5rem;
-  font-family: var(--sans);
-  font-size: var(--step--1);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+}
+
+// Redes sociales en la barra superior.
+.masthead__social {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.masthead__social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
   color: var(--slate);
 }
-.masthead__topline > span:first-child::first-letter { text-transform: uppercase; }
+.masthead__social a:hover { color: var(--red); }
+.masthead__social svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: currentColor;
+}
+
+.masthead__search-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--slate);
+  cursor: pointer;
+}
+.masthead__search-toggle:hover { color: var(--red); }
+.masthead__search-toggle svg { width: 1.15rem; height: 1.15rem; }
+.masthead__search-toggle[aria-expanded="true"] { color: var(--red); }
+
+.masthead-search {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.75rem 0;
+}
+.masthead-search[hidden] { display: none; }
+.masthead-search__inner {
+  max-width: 32rem;
+  margin-inline: auto;
+}
+.masthead-search__inner form { display: flex; gap: 0.5rem; }
+.masthead-search__inner input[type="search"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 
 .nameplate {
   text-align: center;
-  padding: 1.6rem 0 1.4rem;
+  padding: 1.5rem 0 1rem;
 }
 .nameplate__link { display: inline-block; }
 .nameplate__logo,
@@ -31,6 +81,17 @@
   margin: 0 auto;
   width: min(486px, 84vw);
   height: auto;
+}
+
+// «Riohacha - 1° de Septiembre de 2026», centrado bajo el logotipo.
+.masthead__dateline {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
 }
 
 .nameplate__rule {
@@ -42,21 +103,24 @@
 }
 
 // --- Navegación principal ---
+// La barra roja tiene el mismo ancho que el contenido (1200px) y va
+// centrada, igual que la barra de la plantilla de la nota.
 .mainnav {
-  background: var(--ink-deep);
+  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
+  margin-inline: auto;
+  background: var(--red);
   position: sticky;
   top: 0;
   z-index: 40;
 }
 .mainnav__inner {
-  max-width: calc(var(--maxw-site) + 2 * var(--gutter));
-  margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
 .mainnav__menu {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: stretch;
   gap: 0.1rem;
   list-style: none;
@@ -69,14 +133,14 @@
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.88);
   padding: 0.85rem 0.7rem;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   border-bottom: 3px solid transparent;
 }
-.mainnav__menu a:hover { color: #fff; border-bottom-color: var(--red); }
+.mainnav__menu a:hover { color: #fff; border-bottom-color: #fff; }
 .mainnav__menu .current-menu-item > a,
 .mainnav__menu .current-cat > a { color: #fff; border-bottom-color: #fff; }
 
@@ -85,7 +149,7 @@
 .mainnav__menu .menu-item--more > a { color: #fff; gap: 0.4ch; }
 .mainnav__menu .menu-item--more > a::after { content: "\25be"; font-size: 0.7em; }
 .mainnav__menu .menu-item--more:hover > a,
-.mainnav__menu .menu-item--more:focus-within > a { border-bottom-color: var(--red); }
+.mainnav__menu .menu-item--more:focus-within > a { border-bottom-color: #fff; }
 
 .mainnav__menu .sub-menu {
   position: absolute;
@@ -95,8 +159,8 @@
   list-style: none;
   margin: 0;
   padding: 0.3rem 0;
-  background: var(--ink-deep);
-  border-top: 3px solid var(--red);
+  background: var(--red-deep);
+  border-top: 3px solid #fff;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
   display: none;
   z-index: 50;
@@ -109,7 +173,7 @@
   padding: 0.6rem 1.1rem;
   border-bottom: 0;
 }
-.mainnav__menu .sub-menu a:hover { background: rgba(255, 255, 255, 0.08); border-bottom: 0; }
+.mainnav__menu .sub-menu a:hover { background: rgba(255, 255, 255, 0.14); border-bottom: 0; }
 
 // En móvil la barra es una sola fila que se desplaza en horizontal:
 // las 19 secciones (incluidas las de «Más») quedan en línea, sin
@@ -118,6 +182,7 @@
   .mainnav__inner { padding-inline: 0; }
   .mainnav__menu {
     flex-wrap: nowrap;
+    justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -150,5 +215,5 @@
     padding: 0.8rem 0.55rem;
     border-bottom: 3px solid transparent;
   }
-  .mainnav__menu .sub-menu a:hover { background: none; border-bottom-color: var(--red); }
+  .mainnav__menu .sub-menu a:hover { background: none; border-bottom-color: #fff; }
 }

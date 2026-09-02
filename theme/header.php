@@ -8,11 +8,24 @@
 declare(strict_types=1);
 
 use DiarioDelNorte\Support\Ads;
+use DiarioDelNorte\Support\Social;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$ddn_city     = (string) get_theme_mod( 'ddn_dateline_city', 'Riohacha' );
+$ddn_dnum     = (int) wp_date( 'j' );
+$ddn_day      = 1 === $ddn_dnum ? '1°' : (string) $ddn_dnum;
+$ddn_month    = ucfirst( wp_date( 'F' ) );
+$ddn_dateline = sprintf(
+	/* translators: 1: ciudad, 2: día, 3: mes, 4: año. */
+	__( '%1$s - %2$s de %3$s de %4$s', 'diario-del-norte' ),
+	$ddn_city,
+	$ddn_day,
+	$ddn_month,
+	wp_date( 'Y' )
+);
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -30,8 +43,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 <header class="masthead">
 	<div class="wrap">
 		<div class="masthead__topline">
-			<span><?php echo esc_html( wp_date( 'l j \d\e F \d\e Y' ) ); ?></span>
-			<span class="masthead__edition"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
+			<?php
+			$ddn_social_out = Social::render( 'masthead__social' );
+			if ( '' !== $ddn_social_out ) {
+				echo $ddn_social_out; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG ya escapado en Social::render().
+			} else {
+				echo '<span></span>';
+			}
+			?>
+			<button
+				type="button"
+				class="masthead__search-toggle"
+				data-search-toggle
+				aria-controls="masthead-search"
+				aria-expanded="false"
+			>
+				<span class="screen-reader-text"><?php esc_attr_e( 'Buscar', 'diario-del-norte' ); ?></span>
+				<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+					<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+					<path d="m20 20-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+				</svg>
+			</button>
+		</div>
+
+		<div class="masthead-search" id="masthead-search" hidden>
+			<div class="masthead-search__inner"><?php get_search_form(); ?></div>
 		</div>
 
 		<div class="nameplate">
@@ -49,6 +85,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 			</a>
 		</div>
+
+		<p class="masthead__dateline"><?php echo esc_html( $ddn_dateline ); ?></p>
 	</div>
 	<hr class="nameplate__rule">
 </header>
