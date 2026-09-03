@@ -176,9 +176,10 @@
 }
 
 // --- Cuerpo del artículo (the_content) ---
+// La columna de lectura va centrada bajo el titular y la foto.
 .article__body {
   max-width: var(--maxw-read);
-  margin: 2rem 0 0;
+  margin: 2rem auto 0;
 }
 
 .prose { font-size: 1.125rem; line-height: 1.72; }
