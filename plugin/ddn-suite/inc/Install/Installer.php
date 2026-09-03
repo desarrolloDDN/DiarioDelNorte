@@ -19,6 +19,7 @@ final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
 	private const DB_VERSION = '4';
+	private const FLUSH_FLAG = 'ddn_suite_flush_rewrite';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -26,16 +27,29 @@ final class Installer {
 		// La regla de reescritura de /ddn-anuncio/clic/{id} ya se registró
 		// en el hook `init` de esta misma petición (ver ClickController).
 		flush_rewrite_rules();
+		delete_option( self::FLUSH_FLAG );
 	}
 
 	/** Se ejecuta también en `init` por si el plugin se actualizó vía zip. */
 	public static function maybe_upgrade(): void {
 		if ( get_option( self::OPTION ) !== self::DB_VERSION ) {
 			self::migrate();
-			// El CPT `ddn_edition` se registra en `init`; se refrescan las
-			// reglas de reescritura cuando ya están todas cargadas.
-			add_action( 'wp_loaded', 'flush_rewrite_rules' );
+			// El CPT `ddn_edition` (URL /edicion-impresa/) se registra en
+			// `init`; hay que refrescar las reglas de reescritura. Se marca
+			// con una opción y se reintenta en cada carga hasta lograrlo,
+			// por si la primera petición está cacheada o falla.
+			update_option( self::FLUSH_FLAG, '1', false );
 		}
+
+		if ( '1' === get_option( self::FLUSH_FLAG ) ) {
+			add_action( 'wp_loaded', array( self::class, 'flush' ), 99 );
+		}
+	}
+
+	/** Refresca las reglas de reescritura una vez el CPT ya está registrado. */
+	public static function flush(): void {
+		flush_rewrite_rules();
+		delete_option( self::FLUSH_FLAG );
 	}
 
 	private static function migrate(): void {
