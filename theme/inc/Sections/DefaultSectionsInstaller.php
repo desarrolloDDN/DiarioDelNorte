@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class DefaultSectionsInstaller {
 
 	private const OPTION      = 'ddn_sections_version';
-	private const VERSION     = '3';
+	private const VERSION     = '4';
 	private const LEGACY_MENU = 'Secciones';
 
 	/** Visibles en la barra, en orden. slug preferido => nombre. */
@@ -39,6 +39,19 @@ final class DefaultSectionsInstaller {
 		'editorial'       => 'Editorial',
 		'edicion-impresa' => 'Edición Impresa',
 		'sociales'        => 'Sociales',
+	);
+
+	/**
+	 * Slugs alternativos vistos en el sitio migrado (el JNews actual usa
+	 * los compuestos sin guion: «laguajira», etc.). Se prueban antes de
+	 * buscar por nombre. slug preferido => lista de alternativos.
+	 *
+	 * @var array<string,list<string>>
+	 */
+	private const ALIASES = array(
+		'la-guajira'      => array( 'laguajira' ),
+		'edicion-impresa' => array( 'edicionimpresa' ),
+		'notas-rosas'     => array( 'notasrosas' ),
 	);
 
 	/** Dentro del submenú «Más», en orden. slug preferido => nombre. */
@@ -67,24 +80,43 @@ final class DefaultSectionsInstaller {
 
 	/**
 	 * Categoría de una sección conocida, tolerante a que el sitio migrado
-	 * la tenga con otro slug: busca por slug preferido y luego por nombre.
+	 * la tenga con otro slug. Reúne los candidatos (slug preferido, slugs
+	 * alternativos y coincidencia por nombre) y devuelve el que más
+	 * entradas tiene: así, si la instalación sembró una «la-guajira» vacía
+	 * junto a la «laguajira» migrada con notas, gana la que tiene contenido.
 	 */
 	public static function category( string $preferred_slug ): ?WP_Term {
 		$name = self::VISIBLE[ $preferred_slug ] ?? self::MORE[ $preferred_slug ] ?? '';
 
-		$term = get_term_by( 'slug', $preferred_slug, 'category' );
-		if ( $term instanceof WP_Term ) {
-			return $term;
+		/** @var array<int,WP_Term> $candidates */
+		$candidates = array();
+
+		$slugs = array_merge( array( $preferred_slug ), self::ALIASES[ $preferred_slug ] ?? array() );
+		foreach ( $slugs as $slug ) {
+			$term = get_term_by( 'slug', $slug, 'category' );
+			if ( $term instanceof WP_Term ) {
+				$candidates[ $term->term_id ] = $term;
+			}
 		}
 
 		if ( '' !== $name ) {
 			$term = get_term_by( 'name', $name, 'category' );
 			if ( $term instanceof WP_Term ) {
-				return $term;
+				$candidates[ $term->term_id ] = $term;
 			}
 		}
 
-		return null;
+		if ( array() === $candidates ) {
+			return null;
+		}
+
+		$candidates = array_values( $candidates );
+		usort(
+			$candidates,
+			static fn ( WP_Term $a, WP_Term $b ): int => $b->count <=> $a->count
+		);
+
+		return $candidates[0];
 	}
 
 	private function create_missing_categories(): void {
