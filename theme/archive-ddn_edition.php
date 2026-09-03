@@ -27,9 +27,17 @@ get_header();
 			<?php
 			while ( have_posts() ) :
 				the_post();
+
+				$ddn_long = get_the_date( 'l j \d\e F \d\e Y' );
+				$ddn_lead = get_the_date( 'Y-m-d' ) === current_time( 'Y-m-d' )
+					/* translators: %s: fecha en formato largo, p. ej. «jueves 3 de septiembre de 2026». */
+					? sprintf( __( 'Esta es nuestra edición impresa de hoy %s', 'diario-del-norte' ), $ddn_long )
+					/* translators: %s: fecha en formato largo. */
+					: sprintf( __( 'Nuestra edición impresa del %s', 'diario-del-norte' ), $ddn_long );
 				?>
 				<article class="edition-card">
 					<a class="edition-card__link" href="<?php the_permalink(); ?>">
+						<span class="edition-card__lead"><?php echo esc_html( $ddn_lead ); ?></span>
 						<span class="edition-card__cover">
 							<?php
 							if ( has_post_thumbnail() ) {
@@ -39,7 +47,6 @@ get_header();
 							}
 							?>
 						</span>
-						<span class="edition-card__date"><?php echo esc_html( get_the_date( 'j \d\e F, Y' ) ); ?></span>
 					</a>
 				</article>
 				<?php
