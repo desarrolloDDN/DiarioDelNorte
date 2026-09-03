@@ -5,7 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+### Añadido
+- **Edición impresa pública.** El tipo de contenido `ddn_edition` pasa a ser
+  público en `/edicion-impresa/`, con archivo de ediciones anteriores. Cada
+  edición tiene su propia entrada (portada + nota de la redacción + botón para
+  descargar el PDF); plantillas `single-ddn_edition.php` y
+  `archive-ddn_edition.php` en el tema.
+
 ### Cambiado
+- El botón de «Edición impresa» del lateral de la portada se llama ahora
+  **«Ver Edición Impresa»** y lleva a la entrada de la edición, no al PDF
+  suelto de la biblioteca de medios.
 - **Portada, cuerpo a dos columnas** (principal + lateral). Columna principal:
   La Guajira (3 destacadas + 4 en lista), Judiciales y Opinión en carrusel
   horizontal con flechas, y «Más noticias» — un cajón que recoge todo lo que no

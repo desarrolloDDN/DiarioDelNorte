@@ -37,7 +37,7 @@ final class EditionPostType {
 		register_post_type(
 			self::TYPE,
 			array(
-				'labels'          => array(
+				'labels'              => array(
 					'name'               => __( 'Ediciones impresas', 'ddn-suite' ),
 					'singular_name'      => __( 'Edición impresa', 'ddn-suite' ),
 					'add_new'            => __( 'Añadir edición', 'ddn-suite' ),
@@ -51,16 +51,22 @@ final class EditionPostType {
 					'featured_image'     => __( 'Portada de la edición', 'ddn-suite' ),
 					'set_featured_image' => __( 'Subir portada', 'ddn-suite' ),
 				),
-				'public'          => false,
-				'show_ui'         => true,
-				'show_in_menu'    => 'ddn-suite-calendario',
-				'show_in_rest'    => false,
-				'menu_icon'       => 'dashicons-media-document',
-				'supports'        => array( 'title', 'thumbnail' ),
-				'capability_type' => 'post',
-				'map_meta_cap'    => true,
-				'has_archive'     => false,
-				'rewrite'         => false,
+				'public'              => true,
+				'publicly_queryable'  => true,
+				'exclude_from_search' => true,
+				'show_ui'             => true,
+				'show_in_menu'        => 'ddn-suite-calendario',
+				'show_in_nav_menus'   => true,
+				'show_in_rest'        => false,
+				'menu_icon'           => 'dashicons-media-document',
+				'supports'            => array( 'title', 'editor', 'thumbnail' ),
+				'capability_type'     => 'post',
+				'map_meta_cap'        => true,
+				'has_archive'         => 'edicion-impresa',
+				'rewrite'             => array(
+					'slug'       => 'edicion-impresa',
+					'with_front' => false,
+				),
 			)
 		);
 	}

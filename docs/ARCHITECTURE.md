@@ -50,8 +50,8 @@ se duplican esos archivos.
 | `Calendar/Admin/CalendarPage` | Retícula mensual en wp-admin con enlace a editar cada nota. |
 | `Analytics/PageviewRecorder` | Cuenta páginas vistas de noticias en cubos por hora (`ddn_pageviews`); sin PII, excluye editores y bots; poda diaria (WP-Cron). |
 | `Analytics/PageviewRepository` | Filtro `ddn/most_read` → IDs de las noticias más vistas en 24 h. |
-| `PrintEdition/EditionPostType` | Tipo de contenido `ddn_edition`: portada (imagen destacada) + PDF por fecha. |
-| `PrintEdition/EditionRepository` | Filtro `ddn/print_edition` → la edición vigente (portada + URL del PDF). |
+| `PrintEdition/EditionPostType` | Tipo de contenido público `ddn_edition` (slug `/edicion-impresa/`, con archivo): portada (imagen destacada) + PDF + nota, por fecha. Plantillas en el tema: `single-ddn_edition.php` y `archive-ddn_edition.php`. |
+| `PrintEdition/EditionRepository` | Filtros `ddn/print_edition` (edición vigente) y `ddn/edition_pdf_url` (URL del PDF de una edición dada). |
 | `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad + Edición impresa). |
 
 ### Contratos tema ↔ plugin (filtros)
@@ -60,7 +60,8 @@ se duplican esos archivos.
 |---|---|---|---|
 | `ddn/ad_zone` (acción) | tema (plantillas) | `Ads/ZoneController` | — (imprime el anuncio) |
 | `ddn/most_read` | `front-page.php` | `Analytics/PageviewRepository` | `int[]` IDs |
-| `ddn/print_edition` | `front-page.php` | `PrintEdition/EditionRepository` | `array{cover_id,pdf_url,date,edit_link}` o `null` |
+| `ddn/print_edition` | `front-page.php` | `PrintEdition/EditionRepository` | `array{date,title,permalink,cover_id,pdf_url,edit_link}` o `null` |
+| `ddn/edition_pdf_url` | `single-ddn_edition.php` | `PrintEdition/EditionRepository` | `string` URL del PDF (`$url, $post_id`) |
 | `ddn/home_sections` | `front-page.php` | — (personalizable) | `string[]` slugs |
 | `ddn/newsletter_action` | `front-page.php` | — (integración externa) | `string` URL |
 

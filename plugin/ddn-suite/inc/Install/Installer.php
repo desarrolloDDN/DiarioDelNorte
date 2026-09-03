@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '3';
+	private const DB_VERSION = '4';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -32,6 +32,9 @@ final class Installer {
 	public static function maybe_upgrade(): void {
 		if ( get_option( self::OPTION ) !== self::DB_VERSION ) {
 			self::migrate();
+			// El CPT `ddn_edition` se registra en `init`; se refrescan las
+			// reglas de reescritura cuando ya están todas cargadas.
+			add_action( 'wp_loaded', 'flush_rewrite_rules' );
 		}
 	}
 

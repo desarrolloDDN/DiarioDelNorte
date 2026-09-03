@@ -421,22 +421,36 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 			// si no está activo, se usan los campos del Personalizador.
 			$ddn_edition = apply_filters( 'ddn/print_edition', null );
 			if ( is_array( $ddn_edition ) ) {
-				$ddn_cover = (int) ( $ddn_edition['cover_id'] ?? 0 );
-				$ddn_pdf   = (string) ( $ddn_edition['pdf_url'] ?? '' );
+				$ddn_cover  = (int) ( $ddn_edition['cover_id'] ?? 0 );
+				$ddn_ed_url = (string) ( $ddn_edition['permalink'] ?? '' );
 			} else {
-				$ddn_cover = (int) get_theme_mod( 'ddn_print_cover', 0 );
-				$ddn_pdf   = (string) get_theme_mod( 'ddn_print_pdf', '' );
+				$ddn_cover  = (int) get_theme_mod( 'ddn_print_cover', 0 );
+				$ddn_ed_url = (string) get_post_type_archive_link( 'ddn_edition' );
+			}
+			// Sin plugin no hay entrada de la edición; se enlaza al PDF del
+			// Personalizador solo como último recurso.
+			if ( '' === $ddn_ed_url ) {
+				$ddn_ed_url = (string) get_theme_mod( 'ddn_print_pdf', '' );
 			}
 			?>
 			<section class="aside-block aside-print">
 				<div class="aside-block__head"><?php esc_html_e( 'Edición impresa', 'diario-del-norte' ); ?></div>
-				<?php if ( $ddn_cover ) : ?>
-					<div class="aside-print__cover"><?php echo wp_get_attachment_image( $ddn_cover, 'medium_large', false, array( 'alt' => __( 'Portada de la edición impresa de hoy', 'diario-del-norte' ) ) ); ?></div>
-				<?php else : ?>
+				<?php
+				if ( $ddn_cover ) {
+					$ddn_cover_img = wp_get_attachment_image( $ddn_cover, 'medium_large', false, array( 'alt' => __( 'Portada de la edición impresa de hoy', 'diario-del-norte' ) ) );
+					if ( '' !== $ddn_ed_url ) {
+						printf( '<a class="aside-print__cover" href="%s">%s</a>', esc_url( $ddn_ed_url ), $ddn_cover_img ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image ya escapa.
+					} else {
+						printf( '<div class="aside-print__cover">%s</div>', $ddn_cover_img ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ídem.
+					}
+				} else {
+					?>
 					<div class="aside-print__cover aside-print__cover--empty"><span><?php esc_html_e( 'Portada no disponible', 'diario-del-norte' ); ?></span></div>
-				<?php endif; ?>
-				<?php if ( '' !== $ddn_pdf ) : ?>
-					<a class="btn aside-print__btn" href="<?php echo esc_url( $ddn_pdf ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Ver edición digital', 'diario-del-norte' ); ?></a>
+					<?php
+				}
+				?>
+				<?php if ( '' !== $ddn_ed_url ) : ?>
+					<a class="btn aside-print__btn" href="<?php echo esc_url( $ddn_ed_url ); ?>"><?php esc_html_e( 'Ver Edición Impresa', 'diario-del-norte' ); ?></a>
 				<?php endif; ?>
 			</section>
 
