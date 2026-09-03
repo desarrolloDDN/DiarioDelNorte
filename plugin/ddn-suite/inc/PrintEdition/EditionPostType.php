@@ -24,6 +24,7 @@ final class EditionPostType {
 
 	public function register(): void {
 		add_action( 'init', array( $this, 'register_type' ) );
+		add_action( 'init', array( $this, 'register_rules' ), 11 );
 		add_action( 'add_meta_boxes_' . self::TYPE, array( $this, 'add_meta_box' ) );
 		add_action( 'save_post_' . self::TYPE, array( $this, 'save' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
@@ -68,6 +69,26 @@ final class EditionPostType {
 					'with_front' => false,
 				),
 			)
+		);
+	}
+
+	/**
+	 * Regla explícita para la URL de cada edición
+	 * (`/edicion-impresa/{slug}/`). WordPress ya genera esta regla al
+	 * registrar el tipo, pero se añade «arriba» del todo para que gane a
+	 * las reglas de categoría de sitios migrados sin base de categoría,
+	 * que si no se «comen» la ruta y devuelven un 404.
+	 */
+	public function register_rules(): void {
+		add_rewrite_rule(
+			'^edicion-impresa/([^/]+)/?$',
+			'index.php?post_type=' . self::TYPE . '&name=$matches[1]',
+			'top'
+		);
+		add_rewrite_rule(
+			'^edicion-impresa/([^/]+)/page/([0-9]{1,})/?$',
+			'index.php?post_type=' . self::TYPE . '&name=$matches[1]&paged=$matches[2]',
+			'top'
 		);
 	}
 

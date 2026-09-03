@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '4';
+	private const DB_VERSION = '5';
 	private const FLUSH_FLAG = 'ddn_suite_flush_rewrite';
 
 	/** Hook de activación del plugin. */
