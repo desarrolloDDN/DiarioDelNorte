@@ -381,7 +381,14 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 							<?php
 							while ( $ddn_mn->have_posts() ) :
 								$ddn_mn->the_post();
-								get_template_part( 'template-parts/home/card-row', null, array( 'label' => true ) );
+								get_template_part(
+									'template-parts/home/card-row',
+									null,
+									array(
+										'label'     => true,
+										'full_date' => true,
+									)
+								);
 							endwhile;
 							wp_reset_postdata();
 							?>

@@ -554,9 +554,18 @@ figcaption {
   .home-list-2col,
   .card-row { grid-template-columns: 1fr; gap: 1.5rem; }
   .home-list-2col .h-row:nth-child(2) { border-top: 1px solid var(--rule); padding-top: 1rem; }
-  .home-list-4col { grid-template-columns: 1fr; }
-  .home-list-4col .h-row { flex-direction: row; }
-  .home-list-4col .h-row__media { width: 110px; }
+  // «Más noticias»: foto e titular a la par (la foto ya no se ve chica
+  // junto al bloque de texto) y menos aire entre notas.
+  .home-list-4col { grid-template-columns: 1fr; gap: 0; }
+  .home-list-4col .h-row {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .home-list-4col .h-row:first-child { border-top: 0; padding-top: 0; }
+  .home-list-4col .h-row__media { width: 130px; flex-shrink: 0; }
+  .home-list-4col .h-row__media img { aspect-ratio: 4 / 3; }
   // Los carruseles (Judiciales, Opinión) muestran una sola tarjeta a todo
   // el ancho, sin que la siguiente asome ni recorte foto/titular; las
   // flechas quedan visibles a los lados para pasar de una a otra, y el
