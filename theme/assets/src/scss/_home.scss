@@ -550,6 +550,12 @@ figcaption {
   .card-slider__track > * { flex-basis: 78%; }
   .card-slider__nav { display: none; }
 
+  // Opinión: una tarjeta a todo el ancho del panel, con flechas a los
+  // lados para pasar de una a otra (sin la tarjeta siguiente asomando).
+  .card-slider--opinion .card-slider__track { scroll-snap-type: x mandatory; }
+  .card-slider--opinion .card-slider__track > * { flex-basis: 100%; }
+  .card-slider--opinion .card-slider__nav { display: grid; }
+
   .hero-slide__img,
   .hero-slide__link img { aspect-ratio: 4 / 3; }
   .hero-slide__body { padding: 1.1rem 1.15rem 1.2rem; }
