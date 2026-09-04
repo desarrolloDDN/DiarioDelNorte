@@ -318,6 +318,17 @@ figcaption {
 .home-list-4col .h-row__media { width: 100%; }
 .home-list-4col .h-row__media img { aspect-ratio: 3 / 2; width: 100%; }
 
+// «Más noticias»: 8 visibles en móvil, 16 en escritorio; el botón «Leer
+// más» revela el resto (initMoreNews en app.js añade .is-expanded).
+.more-news:not(.is-expanded) .home-list-4col > :nth-child(n + 9) { display: none; }
+@media (min-width: 1001px) {
+  .more-news:not(.is-expanded) .home-list-4col > :nth-child(n + 9):nth-child(-n + 16) {
+    display: flex;
+  }
+}
+.more-news__action { text-align: center; margin-top: 1.75rem; }
+.more-news.is-expanded .more-news__btn { display: none; }
+
 // --- Carrusel horizontal de tarjetas ---
 .card-slider { position: relative; }
 .card-slider__track {
@@ -467,10 +478,43 @@ figcaption {
 .aside-news__form .btn { text-align: center; }
 
 // --- Responsive ---
+// En móvil, portada y lateral dejan de ser dos columnas: se combinan en
+// un único orden de lectura (`.home-main`/`.home-aside` sueltan su caja
+// con `display:contents` y cada bloque se posiciona con `order`). El
+// escritorio (>1080px, arriba) no se toca.
 @media (max-width: 1080px) {
-  .home-layout { grid-template-columns: 1fr; }
-  .home-aside { flex-direction: row; flex-wrap: wrap; }
-  .home-aside > * { flex: 1 1 280px; }
+  .home-layout { display: flex; flex-direction: column; }
+  .home-main,
+  .home-aside { display: contents; }
+
+  .home-section--guajira    { order: 1; }
+  .home-section--judiciales { order: 2; }
+  .aside-editorial          { order: 3; margin-top: 2rem; }
+  .aside-print              { order: 4; margin-top: 2rem; }
+  .home-section--opinion    { order: 5; }
+  .aside-read               { order: 6; margin-top: 2rem; }
+  .home-section--more       { order: 7; }
+  .aside-news               { order: 8; margin-top: 2rem; }
+
+  // «Lo más leído» pasa a carrusel horizontal.
+  .aside-read .ranked--lg {
+    display: flex;
+    gap: 1.1rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.2rem;
+  }
+  .aside-read .ranked--lg::-webkit-scrollbar { display: none; }
+  .aside-read .ranked--lg li {
+    flex: 0 0 72%;
+    scroll-snap-align: start;
+    border-top: 0;
+    padding: 0;
+    display: block;
+  }
+  .aside-read .ranked--lg li::before { display: block; margin-bottom: 0.35rem; }
 }
 @media (max-width: 1000px) {
   .home-hero__grid { grid-template-columns: 1fr 1fr; }

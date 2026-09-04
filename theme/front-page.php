@@ -232,7 +232,7 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 			$ddn_gj_q = $ddn_pick( $ddn_gj, 7, $ddn_used );
 			if ( $ddn_gj_q->have_posts() ) :
 				?>
-				<section class="home-section">
+				<section class="home-section home-section--guajira">
 					<?php
 					get_template_part(
 						'template-parts/home/section-head',
@@ -275,7 +275,7 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 			$ddn_jd_q = $ddn_pick( $ddn_jd, 8, $ddn_used );
 			if ( $ddn_jd_q->have_posts() ) :
 				?>
-				<section class="home-section">
+				<section class="home-section home-section--judiciales">
 					<?php
 					get_template_part(
 						'template-parts/home/section-head',
@@ -319,7 +319,7 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 				: null;
 			if ( $ddn_op_q instanceof WP_Query && $ddn_op_q->have_posts() ) :
 				?>
-				<section class="home-section">
+				<section class="home-section home-section--opinion">
 					<?php
 					get_template_part(
 						'template-parts/home/section-head',
@@ -349,17 +349,19 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 
 			<?php
 			// === Más noticias: todo lo que no salió antes ================
+			// Se traen de más (24): 8 visibles en móvil / 16 en escritorio,
+			// el resto lo revela el botón «Leer más» (initMoreNews en app.js).
 			$ddn_mn = new WP_Query(
 				array(
 					'post__not_in'        => $ddn_used,
-					'posts_per_page'      => 8,
+					'posts_per_page'      => 24,
 					'ignore_sticky_posts' => true,
 					'no_found_rows'       => true,
 				)
 			);
 			if ( $ddn_mn->have_posts() ) :
 				?>
-				<section class="home-section">
+				<section class="home-section home-section--more">
 					<?php
 					get_template_part(
 						'template-parts/home/section-head',
@@ -370,14 +372,21 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 						)
 					);
 					?>
-					<div class="home-list-4col">
-						<?php
-						while ( $ddn_mn->have_posts() ) :
-							$ddn_mn->the_post();
-							get_template_part( 'template-parts/home/card-row', null, array( 'label' => true ) );
-						endwhile;
-						wp_reset_postdata();
-						?>
+					<div class="more-news" data-more-news>
+						<div class="home-list-4col">
+							<?php
+							while ( $ddn_mn->have_posts() ) :
+								$ddn_mn->the_post();
+								get_template_part( 'template-parts/home/card-row', null, array( 'label' => true ) );
+							endwhile;
+							wp_reset_postdata();
+							?>
+						</div>
+						<?php if ( $ddn_mn->post_count > 8 ) : ?>
+							<div class="more-news__action">
+								<button type="button" class="btn btn--ghost more-news__btn" data-more-news-btn aria-expanded="false"><?php esc_html_e( 'Leer más', 'diario-del-norte' ); ?></button>
+							</div>
+						<?php endif; ?>
 					</div>
 				</section>
 			<?php endif; ?>

@@ -109,6 +109,18 @@ function initCardSliders() {
   });
 }
 
+function initMoreNews() {
+  document.querySelectorAll('[data-more-news]').forEach((wrap) => {
+    const btn = wrap.querySelector('[data-more-news-btn]');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      wrap.classList.add('is-expanded');
+      btn.setAttribute('aria-expanded', 'true');
+    });
+  });
+}
+
 function initShareCopy() {
   const btn = document.querySelector('.article__share-copy');
   if (!btn) return;
@@ -177,6 +189,7 @@ function boot() {
   initBarPanels('.masthead', [['[data-search-toggle]', 'masthead-search']]);
   initHeroSlider();
   initCardSliders();
+  initMoreNews();
   initShareCopy();
 }
 
