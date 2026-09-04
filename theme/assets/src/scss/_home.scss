@@ -164,13 +164,9 @@
 }
 
 // Columna derecha: Caribe + Nación (titular, luego imagen)
-.hero-col--side { gap: 1.4rem; }
+.hero-col--side { gap: 1.6rem; }
 .hero-side-item { display: flex; flex-direction: column; }
-.hero-side-item + .hero-side-item {
-  border-top: 1px solid var(--rule);
-  padding-top: 1.4rem;
-}
-.hero-side-item__title { font-size: 1.06rem; line-height: 1.18; margin-bottom: 0.6rem; }
+.hero-side-item__title { font-size: 1.22rem; line-height: 1.2; margin-bottom: 0.6rem; }
 .hero-side-item__media { display: block; }
 .hero-side-item__media img {
   width: 100%;
@@ -217,6 +213,9 @@ figcaption {
 // página) más ancha que la pantalla.
 .home-section { border-top: 3px solid var(--rule-strong); padding-top: 1.6rem; margin-top: 2rem; min-width: 0; }
 .home-section:first-child { margin-top: 0; }
+// La Guajira va justo debajo de la apertura: sin el filete negro que la
+// separaría de otra sección (aquí no hay dos secciones, es la apertura).
+.home-section--guajira { border-top: 0; padding-top: 0; }
 .home-section__head { margin-bottom: 1.4rem; }
 .home-section__title {
   font-family: var(--serif);
