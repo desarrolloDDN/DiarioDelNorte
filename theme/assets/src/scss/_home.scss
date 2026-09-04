@@ -466,16 +466,6 @@ figcaption {
 .ranked--lg li { grid-template-columns: 2.6rem 1fr; padding: 0.85rem 0; align-items: baseline; }
 .ranked--lg li::before { content: counter(r, decimal-leading-zero); font-size: var(--step-3); }
 
-.aside-news__pitch { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.8rem; }
-.aside-news__form { display: flex; flex-direction: column; gap: 0.6rem; }
-.aside-news__form input {
-  font: inherit;
-  padding: 0.7rem 0.9rem;
-  border: 1px solid var(--rule-strong);
-  background: var(--surface);
-  color: var(--ink);
-}
-.aside-news__form .btn { text-align: center; }
 
 // --- Responsive ---
 // En móvil, portada y lateral dejan de ser dos columnas: se combinan en
@@ -494,7 +484,6 @@ figcaption {
   .home-section--opinion    { order: 5; }
   .aside-read               { order: 6; margin-top: 2rem; }
   .home-section--more       { order: 7; }
-  .aside-news               { order: 8; margin-top: 2rem; }
 
   // «Lo más leído» pasa a carrusel horizontal.
   .aside-read .ranked--lg {

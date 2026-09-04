@@ -10,7 +10,11 @@
  *    - principal: La Guajira, Judiciales (carrusel), Opinión (carrusel) y
  *      «Más noticias» (todo lo que no salió antes);
  *    - lateral: Editorial, Edición impresa, Lo más leído (24 h, vía
- *      `ddn/most_read` del plugin) y boletín.
+ *      `ddn/most_read` del plugin).
+ *
+ * En móvil (<=1080px) el orden cambia: La Guajira, Judiciales, Editorial,
+ * Edición impresa, Opinión, Lo más leído (carrusel) y Más noticias — ver
+ * `.home-layout`/`display:contents`/`order` en `_home.scss`.
  *
  * @package DiarioDelNorte
  */
@@ -504,22 +508,6 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 						wp_reset_postdata();
 						?>
 					</ol>
-				</section>
-			<?php endif; ?>
-
-			<?php
-			// --- Boletín ---
-			$ddn_news_action = (string) apply_filters( 'ddn/newsletter_action', '' );
-			if ( '' !== $ddn_news_action ) :
-				?>
-				<section class="aside-block aside-news">
-					<div class="aside-block__head"><?php esc_html_e( 'Boletín', 'diario-del-norte' ); ?></div>
-					<p class="aside-news__pitch"><?php esc_html_e( 'Recibe lo más importante de La Guajira y el Caribe en tu correo.', 'diario-del-norte' ); ?></p>
-					<form class="aside-news__form" method="post" action="<?php echo esc_url( $ddn_news_action ); ?>">
-						<label class="screen-reader-text" for="ddn-news-email"><?php esc_html_e( 'Tu correo electrónico', 'diario-del-norte' ); ?></label>
-						<input type="email" id="ddn-news-email" name="email" required placeholder="<?php esc_attr_e( 'Tu correo electrónico', 'diario-del-norte' ); ?>">
-						<button type="submit" class="btn"><?php esc_html_e( 'Suscribirme', 'diario-del-norte' ); ?></button>
-					</form>
 				</section>
 			<?php endif; ?>
 

@@ -17,6 +17,10 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
   migrados sin base de categoría: se añade una regla de reescritura explícita
   «arriba» y el refresco de reglas se reintenta hasta lograrlo.
 
+### Quitado
+- El bloque **«Boletín»** del lateral de la portada (escritorio y móvil) y el
+  filtro `ddn/newsletter_action` que lo alimentaba.
+
 ### Cambiado
 - El botón de «Edición impresa» del lateral de la portada se llama ahora
   **«Ver Edición Impresa»** y lleva a la entrada de la edición, no al PDF

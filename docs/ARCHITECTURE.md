@@ -63,7 +63,6 @@ se duplican esos archivos.
 | `ddn/print_edition` | `front-page.php` | `PrintEdition/EditionRepository` | `array{date,title,permalink,cover_id,pdf_url,edit_link}` o `null` |
 | `ddn/edition_pdf_url` | `single-ddn_edition.php` | `PrintEdition/EditionRepository` | `string` URL del PDF (`$url, $post_id`) |
 | `ddn/home_sections` | `front-page.php` | — (personalizable) | `string[]` slugs |
-| `ddn/newsletter_action` | `front-page.php` | — (integración externa) | `string` URL |
 
 ## Versionado
 
