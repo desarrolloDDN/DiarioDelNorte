@@ -360,27 +360,64 @@ figcaption {
 }
 
 // --- Columnista (en carrusel de Opinión) ---
-.opinion-card { display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
-.opinion-card__by { display: flex; align-items: center; gap: 0.7rem; }
-.opinion-card__by img {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
+// Panel arena tras el carrusel; tarjetas blancas verticales con foto
+// cuadrada, el detalle de comillas «sosteniendo» la foto, nombre, columna
+// y botón «Leer columna».
+.card-slider--opinion { background: var(--sand); padding: 1.5rem 1.5rem 1.75rem; }
+
+.opinion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.6rem 1.2rem 1.4rem;
+}
+.opinion-card__photo { position: relative; margin-bottom: 0.2rem; }
+.opinion-card__photo img {
+  display: block;
+  width: 108px;
+  height: 108px;
   object-fit: cover;
   background: var(--sand);
   filter: grayscale(1);
-  flex-shrink: 0;
 }
-.opinion-card__by b { font-family: var(--sans); font-size: 0.88rem; letter-spacing: 0.02em; }
-.opinion-card__by span {
-  display: block;
+.opinion-card__quote {
+  position: absolute;
+  top: -0.65rem;
+  right: -0.95rem;
+  font-family: var(--display);
+  font-size: 2.75rem;
+  line-height: 1;
+  color: var(--red);
+  pointer-events: none;
+}
+.opinion-card__name {
   font-family: var(--sans);
-  font-size: 0.7rem;
-  color: var(--slate);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
 }
-.opinion-card h3 { font-size: 1.05rem; line-height: 1.2; }
+.opinion-card__excerpt {
+  margin: 0;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.86rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+}
+.opinion-card__excerpt a { color: inherit; }
+.opinion-card__excerpt a:hover { color: var(--red); }
+.opinion-card__btn { margin-top: 0.4rem; }
 
 // --- Cuadrícula de archivo (category / 404) ---
 .card-row {
