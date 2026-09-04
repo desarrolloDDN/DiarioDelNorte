@@ -213,13 +213,7 @@ figcaption {
 // --- Cabecera de sección ---
 .home-section { border-top: 3px solid var(--rule-strong); padding-top: 1.6rem; margin-top: 2rem; }
 .home-section:first-child { margin-top: 0; }
-.home-section__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.4rem;
-}
+.home-section__head { margin-bottom: 1.4rem; }
 .home-section__title {
   font-family: var(--serif);
   font-weight: 500;
@@ -228,15 +222,9 @@ figcaption {
   border-bottom: 3px solid var(--red);
   padding-bottom: 0.35rem;
 }
-.home-section__more {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: var(--step--1);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--red);
-  white-space: nowrap;
-}
+// El título es el acceso a la sección cuando hay enlace.
+.home-section__title a { color: inherit; }
+.home-section__title a:hover { color: var(--red); }
 
 // --- Tarjeta de portada (h-card) ---
 .h-card { min-width: 0; }
