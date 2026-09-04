@@ -502,7 +502,13 @@ figcaption {
 // con `display:contents` y cada bloque se posiciona con `order`). El
 // escritorio (>1080px, arriba) no se toca.
 @media (max-width: 1080px) {
-  .home-layout { display: flex; flex-direction: column; }
+  // align-items:start viene de la regla de escritorio (arriba, para que
+  // el grid de 2 columnas no estire lateral y principal a la misma
+  // altura). En esta columna única hay que anular ese «start»: si no,
+  // cada bloque deja de encogerse al ancho de .home-layout y toma el
+  // ancho de su contenido — el carrusel interno (Judiciales, Opinión,
+  // Lo más leído) se salía de la pantalla en vez de quedar contenido.
+  .home-layout { display: flex; flex-direction: column; align-items: stretch; }
   .home-main,
   .home-aside { display: contents; }
 
