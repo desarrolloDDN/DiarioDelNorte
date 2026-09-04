@@ -211,7 +211,11 @@ figcaption {
 .home-main { min-width: 0; }
 
 // --- Cabecera de sección ---
-.home-section { border-top: 3px solid var(--rule-strong); padding-top: 1.6rem; margin-top: 2rem; }
+// min-width: 0 — en móvil cada sección es un ítem flex directo de
+// .home-layout (.home-main suelta su caja con display:contents); sin
+// esto, el carrusel de tarjetas de dentro podía forzar la sección (y la
+// página) más ancha que la pantalla.
+.home-section { border-top: 3px solid var(--rule-strong); padding-top: 1.6rem; margin-top: 2rem; min-width: 0; }
 .home-section:first-child { margin-top: 0; }
 .home-section__head { margin-bottom: 1.4rem; }
 .home-section__title {
@@ -431,7 +435,7 @@ figcaption {
 //  Lateral de la portada
 // =====================================================================
 .home-aside { display: flex; flex-direction: column; gap: 1.75rem; }
-.aside-block { border: 1px solid var(--rule); padding: 1.25rem; }
+.aside-block { border: 1px solid var(--rule); padding: 1.25rem; min-width: 0; }
 .aside-block__head {
   font-family: var(--sans);
   font-weight: 800;
@@ -547,14 +551,13 @@ figcaption {
   .home-list-4col { grid-template-columns: 1fr; }
   .home-list-4col .h-row { flex-direction: row; }
   .home-list-4col .h-row__media { width: 110px; }
-  .card-slider__track > * { flex-basis: 78%; }
-  .card-slider__nav { display: none; }
-
-  // Opinión: una tarjeta a todo el ancho del panel, con flechas a los
-  // lados para pasar de una a otra (sin la tarjeta siguiente asomando).
-  .card-slider--opinion .card-slider__track { scroll-snap-type: x mandatory; }
-  .card-slider--opinion .card-slider__track > * { flex-basis: 100%; }
-  .card-slider--opinion .card-slider__nav { display: grid; }
+  // Los carruseles (Judiciales, Opinión) muestran una sola tarjeta a todo
+  // el ancho, sin que la siguiente asome ni recorte foto/titular; las
+  // flechas quedan visibles a los lados para pasar de una a otra, y el
+  // ajuste (scroll-snap mandatory) no deja la tarjeta a medio arrastrar.
+  .card-slider__track { scroll-snap-type: x mandatory; }
+  .card-slider__track > * { flex-basis: 100%; }
+  .card-slider__nav { display: grid; }
 
   .hero-slide__img,
   .hero-slide__link img { aspect-ratio: 4 / 3; }
