@@ -365,7 +365,9 @@
   font-size: 0.9rem;
 }
 .edition__aside { display: flex; flex-direction: column; gap: 1.2rem; position: sticky; top: 5rem; }
-.edition__download { text-align: center; }
+.edition__actions { display: flex; flex-direction: column; gap: 0.7rem; }
+.edition__download,
+.edition__read-toggle { text-align: center; }
 .edition__note { font-size: 1rem; line-height: 1.6; }
 .edition__archive-link {
   font-family: var(--sans);
@@ -375,6 +377,22 @@
   text-transform: uppercase;
   color: var(--red);
 }
+
+// Visor embebido: lee el PDF sin descargarlo. A todo el ancho de
+// .edition, debajo de la portada + la barra lateral.
+.edition__reader {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.edition__reader iframe {
+  display: block;
+  width: 100%;
+  height: 85vh;
+  border: 1px solid var(--rule);
+  background: var(--sand);
+}
+.edition__reader[hidden] { display: none; }
 
 .edition-grid {
   display: grid;

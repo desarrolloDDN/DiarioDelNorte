@@ -1,8 +1,8 @@
 <?php
 /**
  * Una edición impresa: portada grande, fecha, nota de la redacción y
- * botón para descargar el PDF. El CPT `ddn_edition` lo provee el plugin
- * DDN Suite.
+ * botones para descargar el PDF o leerlo en línea (visor embebido, sin
+ * descargar). El CPT `ddn_edition` lo provee el plugin DDN Suite.
  *
  * @package DiarioDelNorte
  */
@@ -47,9 +47,21 @@ while ( have_posts() ) :
 
 			<div class="edition__aside">
 				<?php if ( '' !== $ddn_pdf ) : ?>
-					<a class="btn edition__download" href="<?php echo esc_url( $ddn_pdf ); ?>" target="_blank" rel="noopener">
-						<?php esc_html_e( 'Descargar edición en PDF', 'diario-del-norte' ); ?>
-					</a>
+					<div class="edition__actions">
+						<a class="btn edition__download" href="<?php echo esc_url( $ddn_pdf ); ?>" target="_blank" rel="noopener">
+							<?php esc_html_e( 'Descargar edición en PDF', 'diario-del-norte' ); ?>
+						</a>
+						<button
+							type="button"
+							class="btn btn--ghost edition__read-toggle"
+							data-edition-reader-toggle
+							data-label-hide="<?php esc_attr_e( 'Cerrar lectura en línea', 'diario-del-norte' ); ?>"
+							aria-controls="edition-reader"
+							aria-expanded="false"
+						>
+							<?php esc_html_e( 'Leer en línea', 'diario-del-norte' ); ?>
+						</button>
+					</div>
 				<?php endif; ?>
 
 				<?php if ( get_the_content() ) : ?>
@@ -63,6 +75,16 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 		</div>
+
+		<?php if ( '' !== $ddn_pdf ) : ?>
+			<div class="edition__reader" id="edition-reader" hidden>
+				<iframe
+					src="<?php echo esc_url( $ddn_pdf ); ?>"
+					title="<?php echo esc_attr( sprintf( /* translators: %s: título de la edición. */ __( 'Lectura en línea: %s', 'diario-del-norte' ), get_the_title() ) ); ?>"
+					loading="lazy"
+				></iframe>
+			</div>
+		<?php endif; ?>
 
 	</article>
 	<?php
