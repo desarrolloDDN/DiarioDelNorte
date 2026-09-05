@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite\Install;
 
+use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
 use DiarioDelNorte\Suite\Support\Db;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,7 +20,6 @@ final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
 	private const DB_VERSION = '5';
-	private const FLUSH_FLAG = 'ddn_suite_flush_rewrite';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -27,29 +27,37 @@ final class Installer {
 		// La regla de reescritura de /ddn-anuncio/clic/{id} ya se registró
 		// en el hook `init` de esta misma petición (ver ClickController).
 		flush_rewrite_rules();
-		delete_option( self::FLUSH_FLAG );
 	}
 
-	/** Se ejecuta también en `init` por si el plugin se actualizó vía zip. */
+	/**
+	 * Se ejecuta también en `init` por si el plugin se actualizó vía zip
+	 * (o se volvió a subir sin pasar por el hook de activación, que es lo
+	 * que hacen algunos gestores de plugins al reinstalar).
+	 */
 	public static function maybe_upgrade(): void {
 		if ( get_option( self::OPTION ) !== self::DB_VERSION ) {
 			self::migrate();
-			// El CPT `ddn_edition` (URL /edicion-impresa/) se registra en
-			// `init`; hay que refrescar las reglas de reescritura. Se marca
-			// con una opción y se reintenta en cada carga hasta lograrlo,
-			// por si la primera petición está cacheada o falla.
-			update_option( self::FLUSH_FLAG, '1', false );
 		}
 
-		if ( '1' === get_option( self::FLUSH_FLAG ) ) {
-			add_action( 'wp_loaded', array( self::class, 'flush' ), 99 );
-		}
+		// No depende de si la versión cambió: cada carga comprueba si la
+		// regla de /edicion-impresa/{fecha}/ sigue en las reglas de
+		// reescritura guardadas, y solo si falta se refresca (una vez
+		// registrado el CPT en `init`). Así, reinstalar el plugin con el
+		// mismo zip —lo que antes dejaba la edición impresa en 404 hasta
+		// entrar a Ajustes → Enlaces permanentes a mano— se autocorrige
+		// solo, sin flushear en cada petición (caro) ni depender de un
+		// número de versión que reinstalar no cambia.
+		add_action( 'wp_loaded', array( self::class, 'maybe_flush_rewrite_rules' ), 99 );
 	}
 
-	/** Refresca las reglas de reescritura una vez el CPT ya está registrado. */
-	public static function flush(): void {
+	/** Refresca las reglas de reescritura solo si de verdad falta la de la edición. */
+	public static function maybe_flush_rewrite_rules(): void {
+		$rules = get_option( 'rewrite_rules' );
+		if ( is_array( $rules ) && isset( $rules[ EditionPostType::RULE_PATTERN ] ) ) {
+			return;
+		}
+
 		flush_rewrite_rules();
-		delete_option( self::FLUSH_FLAG );
 	}
 
 	private static function migrate(): void {

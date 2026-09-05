@@ -16,6 +16,11 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 - Las URLs de cada edición (`/edicion-impresa/{fecha}/`) daban 404 en sitios
   migrados sin base de categoría: se añade una regla de reescritura explícita
   «arriba» y el refresco de reglas se reintenta hasta lograrlo.
+- El mismo 404 volvía a aparecer cada vez que se reinstalaba el plugin con el
+  mismo zip (sin pasar por el hook de activación), porque el refresco de
+  reglas dependía de un cambio de versión. Ahora se comprueba en cada carga
+  si la regla de la edición sigue guardada y, si falta, se refresca sola —
+  sin tener que entrar a Ajustes → Enlaces permanentes a mano.
 
 ### Quitado
 - El bloque **«Boletín»** del lateral de la portada (escritorio y móvil) y el

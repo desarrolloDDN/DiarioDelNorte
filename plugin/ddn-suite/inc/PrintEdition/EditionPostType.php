@@ -22,6 +22,14 @@ final class EditionPostType {
 	private const META_PDF = '_ddn_edition_pdf';
 	private const NONCE    = 'ddn_edition_meta';
 
+	/**
+	 * Patrón exacto de la regla de `register_rules()`. `Install\Installer`
+	 * la usa para comprobar, sin flushear a ciegas en cada carga, si las
+	 * reglas de reescritura guardadas siguen teniendo la URL de la
+	 * edición (por si una reinstalación del plugin las dejó atrás).
+	 */
+	public const RULE_PATTERN = '^edicion-impresa/([^/]+)/?$';
+
 	public function register(): void {
 		add_action( 'init', array( $this, 'register_type' ) );
 		add_action( 'init', array( $this, 'register_rules' ), 11 );
@@ -81,7 +89,7 @@ final class EditionPostType {
 	 */
 	public function register_rules(): void {
 		add_rewrite_rule(
-			'^edicion-impresa/([^/]+)/?$',
+			self::RULE_PATTERN,
 			'index.php?post_type=' . self::TYPE . '&name=$matches[1]',
 			'top'
 		);
