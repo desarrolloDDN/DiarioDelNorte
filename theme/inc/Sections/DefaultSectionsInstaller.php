@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Sections;
 
+use WP_Query;
 use WP_Term;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -80,10 +81,13 @@ final class DefaultSectionsInstaller {
 
 	/**
 	 * Categoría de una sección conocida, tolerante a que el sitio migrado
-	 * la tenga con otro slug. Reúne los candidatos (slug preferido, slugs
-	 * alternativos y coincidencia por nombre) y devuelve el que más
-	 * entradas tiene: así, si la instalación sembró una «la-guajira» vacía
-	 * junto a la «laguajira» migrada con notas, gana la que tiene contenido.
+	 * la tenga con otro slug. Reúne los candidatos — el slug alternativo
+	 * (el real en el sitio migrado, si lo hay), el slug preferido y la
+	 * coincidencia por nombre, en ese orden — y devuelve el primero que
+	 * de verdad tiene entradas: así, si la instalación sembró una
+	 * «la-guajira» vacía junto a la «laguajira» migrada con notas, gana
+	 * la que tiene contenido aunque `WP_Term::count` (que tras una
+	 * migración por SQL puede quedar desactualizado) diga lo contrario.
 	 */
 	public static function category( string $preferred_slug ): ?WP_Term {
 		$name = self::VISIBLE[ $preferred_slug ] ?? self::MORE[ $preferred_slug ] ?? '';
@@ -91,7 +95,7 @@ final class DefaultSectionsInstaller {
 		/** @var array<int,WP_Term> $candidates */
 		$candidates = array();
 
-		$slugs = array_merge( array( $preferred_slug ), self::ALIASES[ $preferred_slug ] ?? array() );
+		$slugs = array_merge( self::ALIASES[ $preferred_slug ] ?? array(), array( $preferred_slug ) );
 		foreach ( $slugs as $slug ) {
 			$term = get_term_by( 'slug', $slug, 'category' );
 			if ( $term instanceof WP_Term ) {
@@ -110,13 +114,39 @@ final class DefaultSectionsInstaller {
 			return null;
 		}
 
-		$candidates = array_values( $candidates );
-		usort(
-			$candidates,
-			static fn ( WP_Term $a, WP_Term $b ): int => $b->count <=> $a->count
-		);
+		foreach ( $candidates as $term ) {
+			if ( self::has_posts( $term ) ) {
+				return $term;
+			}
+		}
 
-		return $candidates[0];
+		return reset( $candidates );
+	}
+
+	/**
+	 * Si una categoría tiene al menos una entrada publicada, con una
+	 * consulta real (no `WP_Term::count`, que en un sitio migrado por SQL
+	 * puede haber quedado desactualizado). Se cachea por petición: el
+	 * mismo slug se resuelve varias veces por página (menú, pie, portada).
+	 */
+	private static function has_posts( WP_Term $term ): bool {
+		static $cache = array();
+
+		if ( ! isset( $cache[ $term->term_id ] ) ) {
+			$query = new WP_Query(
+				array(
+					'category__in'        => array( $term->term_id ),
+					'posts_per_page'      => 1,
+					'fields'              => 'ids',
+					'no_found_rows'       => true,
+					'ignore_sticky_posts' => true,
+				)
+			);
+
+			$cache[ $term->term_id ] = $query->have_posts();
+		}
+
+		return $cache[ $term->term_id ];
 	}
 
 	private function create_missing_categories(): void {
