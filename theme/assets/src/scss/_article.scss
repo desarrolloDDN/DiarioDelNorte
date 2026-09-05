@@ -396,7 +396,7 @@
 
 .edition-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.75rem 1.5rem;
 }
 .edition-card__link { display: block; color: var(--ink); }
@@ -411,6 +411,11 @@
   color: var(--headline);
   text-transform: none;
   text-wrap: pretty;
+}
+// Titular un poco más grande en escritorio; en móvil (<=820px, donde
+// cambian las columnas de la cuadrícula) queda igual que estaba.
+@media (min-width: 821px) {
+  .edition-card__lead { font-size: 1.12rem; line-height: 1.3; }
 }
 .edition-card__lead::first-letter { text-transform: uppercase; }
 .edition-card__link:hover .edition-card__lead { color: var(--red); }
