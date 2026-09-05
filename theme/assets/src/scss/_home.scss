@@ -211,11 +211,10 @@ figcaption {
 // .home-layout (.home-main suelta su caja con display:contents); sin
 // esto, el carrusel de tarjetas de dentro podía forzar la sección (y la
 // página) más ancha que la pantalla.
-.home-section { border-top: 3px solid var(--rule-strong); padding-top: 1.6rem; margin-top: 2rem; min-width: 0; }
+// Sin filete divisorio entre secciones de la portada: solo el espacio
+// (margin-top) las separa.
+.home-section { margin-top: 2rem; min-width: 0; }
 .home-section:first-child { margin-top: 0; }
-// La Guajira va justo debajo de la apertura: sin el filete negro que la
-// separaría de otra sección (aquí no hay dos secciones, es la apertura).
-.home-section--guajira { border-top: 0; padding-top: 0; }
 .home-section__head { margin-bottom: 1.4rem; }
 .home-section__title {
   font-family: var(--serif);
