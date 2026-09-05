@@ -79,7 +79,7 @@ while ( have_posts() ) :
 		<?php if ( '' !== $ddn_pdf ) : ?>
 			<div class="edition__reader" id="edition-reader" hidden>
 				<iframe
-					src="<?php echo esc_url( $ddn_pdf ); ?>"
+					src="<?php echo esc_url( $ddn_pdf . '#view=FitH' ); ?>"
 					title="<?php echo esc_attr( sprintf( /* translators: %s: título de la edición. */ __( 'Lectura en línea: %s', 'diario-del-norte' ), get_the_title() ) ); ?>"
 					loading="lazy"
 				></iframe>
