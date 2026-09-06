@@ -4,6 +4,8 @@ includes:
 parameters:
 	level: 5
 	phpVersion: 80100
+	parallel:
+		maximumNumberOfProcesses: 2
 	paths:
 		- theme/inc
 		- theme/functions.php

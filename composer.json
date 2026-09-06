@@ -24,7 +24,7 @@
     "scripts": {
         "lint": "phpcs -q",
         "lint:fix": "phpcbf",
-        "stan": "phpstan analyse --memory-limit=1G",
+        "stan": "phpstan analyse --memory-limit=2G",
         "check": [
             "@lint",
             "@stan"
