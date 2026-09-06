@@ -33,6 +33,9 @@ final class CampaignsPage {
 	public const ACTION_EVIDENCE = 'ddn_suite_evidence_placement';
 	private const NONCE          = 'ddn_suite_placement';
 
+	/** Pie del membrete de Sistema Cardenal S.A.S. para el informe. */
+	private const MEMBRETE_FOOT = 'Tel. 313 503 8948  ·  Calle 110 Nº 100 # 75 A-620, Bg 4, Parque Ind. Río Norte  ·  Barranquilla, Atlántico';
+
 	public function __construct(
 		private readonly CampaignRepository $campaigns,
 		private readonly StatsRepository $stats,
@@ -408,9 +411,9 @@ final class CampaignsPage {
 			</p>
 
 			<article class="ddn-report__sheet">
-				<header>
-					<p class="ddn-report__brand"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></p>
-					<h1><?php esc_html_e( 'Informe de campaña', 'ddn-suite' ); ?></h1>
+				<header class="ddn-report__head">
+					<img class="ddn-report__logo" src="<?php echo esc_url( DDN_SUITE_URL . 'assets/img/membrete.png' ); ?>" alt="Sistema Cardenal S.A.S.">
+					<h1><?php esc_html_e( 'Informe de campaña publicitaria', 'ddn-suite' ); ?></h1>
 				</header>
 
 				<table class="ddn-report__meta">
@@ -450,6 +453,10 @@ final class CampaignsPage {
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
+
+				<footer class="ddn-report__foot">
+					<?php echo esc_html( self::MEMBRETE_FOOT ); ?>
+				</footer>
 			</article>
 		</div>
 		<?php
@@ -566,9 +573,9 @@ final class CampaignsPage {
 		<style>
 		.ddn-report__toolbar{display:flex;align-items:center;gap:1rem;margin:1rem 0}
 		.ddn-report__sheet{background:#fff;border:1px solid #dcdcde;max-width:820px;padding:3rem;margin:0 0 3rem;color:#1d2327}
-		.ddn-report__sheet header{border-bottom:3px solid #bf0202;padding-bottom:1rem;margin-bottom:1.5rem}
-		.ddn-report__brand{margin:0;font-weight:700;letter-spacing:.02em;text-transform:uppercase;font-size:12px;color:#646970}
-		.ddn-report__sheet h1{margin:.2rem 0 0;font-size:26px}
+		.ddn-report__head{border-bottom:2px solid #bf0202;padding-bottom:1.25rem;margin-bottom:1.75rem}
+		.ddn-report__logo{display:block;width:200px;height:auto;margin-bottom:1rem}
+		.ddn-report__sheet h1{margin:0;font-size:24px;font-weight:600}
 		.ddn-report__meta{border-collapse:collapse;margin-bottom:1.5rem}
 		.ddn-report__meta th{text-align:left;padding:4px 1.5rem 4px 0;color:#646970;font-weight:600;white-space:nowrap}
 		.ddn-report__meta td{padding:4px 0}
@@ -579,10 +586,14 @@ final class CampaignsPage {
 		.ddn-report__daily th,.ddn-report__daily td{border:1px solid #dcdcde;padding:6px 10px;text-align:left}
 		.ddn-report__evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
 		.ddn-report__evidence img{max-width:100%;height:auto;border:1px solid #dcdcde}
+		.ddn-report__foot{margin-top:2.5rem;padding-top:1rem;border-top:1px solid #dcdcde;text-align:center;font-size:11px;letter-spacing:.02em;color:#646970;text-transform:uppercase}
 		@media print{
-			#adminmenumain,#wpadminbar,#wpfooter,.ddn-report__toolbar,.update-nag,.notice{display:none!important}
-			#wpcontent,#wpbody-content,.wrap{margin:0!important;padding:0!important}
-			.ddn-report__sheet{border:0;max-width:none;padding:0}
+			#adminmenumain,#wpadminbar,#wpfooter,#screen-meta,#screen-meta-links,.ddn-report__toolbar,.update-nag,.notice{display:none!important}
+			html.wp-toolbar{padding-top:0!important}
+			#wpcontent,#wpbody-content,#wpbody,.wrap{margin:0!important;padding:0!important}
+			.ddn-report__sheet{border:0;max-width:none;padding:0 0 3cm}
+			.ddn-report__foot{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #bfbfbf;padding:.6rem 0;margin:0}
+			@page{margin:1.4cm 1.4cm 2.6cm}
 		}
 		</style>
 		<?php
