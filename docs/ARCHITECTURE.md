@@ -64,10 +64,29 @@ se duplican esos archivos.
 | `ddn/edition_pdf_url` | `single-ddn_edition.php` | `PrintEdition/EditionRepository` | `string` URL del PDF (`$url, $post_id`) |
 | `ddn/home_sections` | `front-page.php` | — (personalizable) | `string[]` slugs |
 
-## Versionado
+## Versionado y publicación
 
-El tema (`style.css`), el plugin (`ddn-suite.php`) y `package.json`
-comparten número. El job `version-consistency` de CI lo verifica.
+El tema (`style.css` + `DDN_THEME_VERSION`), el plugin (`ddn-suite.php` +
+`DDN_SUITE_VERSION`) y `package.json` comparten número. El job
+`version-consistency` de CI verifica que `style.css`, `ddn-suite.php` y
+`package.json` coincidan.
+
+**Publicar una versión nueva** (dispara la actualización automática en los
+sitios):
+
+1. Subir el número en `theme/style.css`, `theme/functions.php`,
+   `plugin/ddn-suite/ddn-suite.php` (cabecera **y** constante) y
+   `package.json`. Anotar los cambios en `CHANGELOG.md`.
+2. `git commit` + `git push` (CI en verde).
+3. `bash tools/build/package.sh` → genera los dos zip en `tools/build/dist/`.
+4. `gh release create vX.Y.Z tools/build/dist/diario-del-norte-X.Y.Z.zip tools/build/dist/ddn-suite-X.Y.Z.zip --title "vX.Y.Z" --notes-file <(...)`.
+
+`Updater\GitHubUpdater` (tema e `inc/Updater` del plugin) consulta
+`releases/latest` de la API de GitHub (repo público, sin token; cacheado
+12 h en el transient compartido `ddn_gh_release`), compara con la versión
+instalada y, si hay una mayor, la inyecta en el aviso de actualizaciones
+de WordPress apuntando al adjunto `diario-del-norte-*.zip` /
+`ddn-suite-*.zip` del *release*.
 
 ## Pendiente para v0.1
 

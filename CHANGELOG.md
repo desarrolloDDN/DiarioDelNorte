@@ -5,7 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.1] — 2026-09-06
+
 ### Añadido
+- **Actualización automática desde GitHub.** El tema y `ddn-suite` comprueban los
+  *releases* del repositorio (público, sin token) y muestran «Hay una
+  actualización disponible» en Apariencia / Plugins de WordPress; se actualiza
+  con un clic. A partir de esta versión ya no hace falta subir zips a mano.
+- **Membrete de Sistema Cardenal** en el informe de campaña (logo arriba, pie con
+  teléfono y dirección; en impresión el pie se repite en cada página).
 - **Gestor de publicidad rediseñado.** Tabla con pestañas Campañas / Historial,
   ficha de alta/edición en tarjeta con vista previa en vivo, y por campaña:
   activar/desactivar, **subir evidencia** (pantallazos del anuncio publicado) y

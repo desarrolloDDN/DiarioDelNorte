@@ -24,6 +24,7 @@ use DiarioDelNorte\Suite\Calendar\CalendarRepository;
 use DiarioDelNorte\Suite\Install\Installer;
 use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
 use DiarioDelNorte\Suite\PrintEdition\EditionRepository;
+use DiarioDelNorte\Suite\Updater\GitHubUpdater;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,6 +42,8 @@ final class Plugin {
 
 	public function boot(): void {
 		add_action( 'init', array( Installer::class, 'maybe_upgrade' ) );
+
+		( new GitHubUpdater( DDN_SUITE_VERSION ) )->register();
 
 		$campaigns = new CampaignRepository();
 		$stats     = new StatsRepository();

@@ -16,6 +16,7 @@ use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller;
+use DiarioDelNorte\Updater\GitHubUpdater;
 use DiarioDelNorte\Users\AuthorProfile;
 use WP_Screen;
 
@@ -43,6 +44,7 @@ final class Theme {
 		( new DatelineField() )->register();
 		( new PhotoCredit() )->register();
 		( new InlineRelated() )->register();
+		( new GitHubUpdater( DDN_THEME_VERSION ) )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
 		// el editor de bloques.
