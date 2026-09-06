@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.6] — 2026-09-06
+
+### Corregido
+- **Cuadro gris en el informe de campaña impreso / en PDF.** El fondo gris de
+  wp-admin asomaba bajo la hoja del informe cuando el contenido no llegaba al
+  final de la página; ahora al imprimir se fuerza fondo blanco en toda la
+  cadena de contenedores.
+
 ## [0.1.5] — 2026-09-06
 
 ### Corregido

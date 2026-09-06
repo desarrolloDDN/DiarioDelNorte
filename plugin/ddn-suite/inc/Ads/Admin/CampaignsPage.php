@@ -590,8 +590,10 @@ final class CampaignsPage {
 		@media print{
 			#adminmenumain,#wpadminbar,#wpfooter,#screen-meta,#screen-meta-links,.ddn-report__toolbar,.update-nag,.notice{display:none!important}
 			html.wp-toolbar{padding-top:0!important}
+			/* El fondo gris de wp-admin asomaba bajo la hoja: se fuerza blanco en toda la cadena. */
+			html,body,#wpwrap,#wpcontent,#wpbody,#wpbody-content,.wrap,.ddn-report{background:#fff!important}
 			#wpcontent,#wpbody-content,#wpbody,.wrap{margin:0!important;padding:0!important}
-			.ddn-report__sheet{border:0;max-width:none;padding:0 0 3cm}
+			.ddn-report__sheet{border:0;max-width:none;padding:0 0 3cm;background:#fff!important}
 			.ddn-report__foot{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #bfbfbf;padding:.6rem 0;margin:0}
 			@page{margin:1.4cm 1.4cm 2.6cm}
 		}
