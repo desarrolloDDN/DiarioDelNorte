@@ -654,10 +654,13 @@ final class CampaignsPage {
 		?>
 		<script>
 		( function () {
+			function start() {
 			var addBtn = document.getElementById( 'ddn-evidence-add' );
 			var grid = document.getElementById( 'ddn-evidence' );
 			var hidden = document.getElementById( 'ddn-evidence-ids' );
-			if ( ! addBtn || ! grid || ! hidden || ! window.wp || ! wp.media ) { return; }
+			if ( ! addBtn || ! grid || ! hidden ) { return; }
+			// wp.media se imprime en el pie del admin: si aún no está, reintenta.
+			if ( ! window.wp || ! wp.media ) { window.setTimeout( start, 60 ); return; }
 
 			function sync() {
 				var ids = [];
@@ -686,6 +689,13 @@ final class CampaignsPage {
 				} );
 				sync();
 			} );
+			}
+
+			if ( 'loading' === document.readyState ) {
+				document.addEventListener( 'DOMContentLoaded', start );
+			} else {
+				start();
+			}
 		}() );
 		</script>
 		<?php

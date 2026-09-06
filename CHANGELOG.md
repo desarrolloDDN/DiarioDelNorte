@@ -5,6 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.5] — 2026-09-06
+
+### Corregido
+- **Línea negra bajo la publicidad de cabecera.** Muchas creatividades traen un
+  filete oscuro de 1 px en el borde (o lo genera el navegador al reescalar el
+  banner); ahora el contenedor de anuncios recorta 1 px arriba y abajo, así que
+  ya no aparece una raya entre el anuncio y la barra de secciones / redes.
+- **«Subir evidencia» en el gestor de publicidad.** El botón «Añadir imagen» no
+  hacía nada: el script se ejecutaba antes de que WordPress cargara el selector
+  de medios (`wp.media`). Ahora espera a que el selector esté disponible.
+
 ## [0.1.4] — 2026-09-06
 
 ### Añadido

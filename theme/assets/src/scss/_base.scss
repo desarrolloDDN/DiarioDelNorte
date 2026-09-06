@@ -148,7 +148,16 @@ p { margin: 0 0 1rem; }
   max-width: 100%;
 }
 .ddn-ad > * { max-width: 100%; }
-.ddn-ad img { display: block; height: auto; margin-inline: auto; }
+.ddn-ad img {
+  display: block;
+  height: auto;
+  margin-inline: auto;
+  // Muchas creatividades traen un filete oscuro de 1-2 px en el borde
+  // (o lo genera el navegador al reescalar el banner). Se recorta para que
+  // no aparezca una «línea negra» entre el anuncio y lo que va debajo.
+  clip-path: inset(1px 0);
+}
+.ddn-ad a { display: block; line-height: 0; }
 .ddn-ad__label {
   font-family: var(--sans);
   font-size: 0.68rem;
