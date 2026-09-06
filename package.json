@@ -1,6 +1,6 @@
 {
   "name": "diario-del-norte",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "Orquesta la compilación de assets del tema Diario del Norte.",
   "license": "GPL-2.0-or-later",

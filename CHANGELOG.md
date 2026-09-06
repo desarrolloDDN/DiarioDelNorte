@@ -5,6 +5,12 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.4] — 2026-09-06
+
+### Añadido
+- **Imagen de presentación del tema** (`screenshot.png`): ya no sale el recuadro
+  a cuadros en Apariencia → Temas.
+
 ## [0.1.3] — 2026-09-06
 
 ### Añadido
