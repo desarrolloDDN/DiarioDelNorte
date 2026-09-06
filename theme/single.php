@@ -21,6 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header( 'entrada' );
 
 get_template_part( 'template-parts/latest-ticker' );
+?>
+<div class="wrap"><?php Ads::zone( 'home' ); ?></div>
+<?php
 
 while ( have_posts() ) :
 	the_post();

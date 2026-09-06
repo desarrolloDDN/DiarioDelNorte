@@ -5,6 +5,18 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.2] — 2026-09-06
+
+### Cambiado
+- **Zonas de publicidad, colocación real:**
+  - *Cabecera*: al principio de todas las páginas (home, notas, secciones…),
+    por encima de la fecha y las redes sociales.
+  - *Portada*: bajo el menú principal — en el home y también en las notas,
+    justo después de la cinta «Lo último».
+  - *Inicio de la nota*: bajo la firma del autor.
+  - *Dentro de la nota*: tras el tercer párrafo (sin cambios).
+  - *Final de la nota*: al terminar el texto (sin cambios).
+
 ## [0.1.1] — 2026-09-06
 
 ### Añadido

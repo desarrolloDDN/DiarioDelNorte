@@ -25,11 +25,11 @@ enum AdZone: string {
 	public function label(): string {
 		// phpcs:ignore PHPCompatibility.Variables.ForbiddenThisUseContexts.OutsideObjectContext -- falso positivo: un método de enum SÍ tiene contexto de objeto (PHP 8.1+).
 		return match ( $this ) {
-			self::Header          => __( 'Cabecera (por encima de la fecha/redes sociales)', 'ddn-suite' ),
-			self::Home            => __( 'Portada (debajo del menú principal — home y artículos)', 'ddn-suite' ),
-			self::InArticleTop    => __( 'Inicio del artículo (home y artículos)', 'ddn-suite' ),
-			self::InArticle       => __( 'Dentro del artículo (tras el tercer párrafo)', 'ddn-suite' ),
-			self::InArticleBottom => __( 'Al final del artículo', 'ddn-suite' ),
+			self::Header          => __( 'Cabecera — en toda la web, por encima de la fecha y las redes sociales', 'ddn-suite' ),
+			self::Home            => __( 'Portada — bajo el menú principal (home, y en las notas tras la cinta «Lo último»)', 'ddn-suite' ),
+			self::InArticleTop    => __( 'Inicio de la nota — bajo la firma del autor', 'ddn-suite' ),
+			self::InArticle       => __( 'Dentro de la nota — tras el tercer párrafo', 'ddn-suite' ),
+			self::InArticleBottom => __( 'Al final de la nota — al terminar el texto', 'ddn-suite' ),
 		};
 	}
 

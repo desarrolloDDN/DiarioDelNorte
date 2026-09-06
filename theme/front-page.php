@@ -105,6 +105,8 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 ?>
 <div class="wrap">
 
+	<?php Ads::zone( 'home' ); ?>
+
 	<section class="home-hero">
 		<div class="home-hero__grid">
 
@@ -224,8 +226,6 @@ foreach ( array( 'caribe', 'nacion' ) as $ddn_slug ) {
 
 		</div>
 	</section>
-
-	<?php Ads::zone( 'home' ); ?>
 
 	<div class="home-layout">
 		<div class="home-main">

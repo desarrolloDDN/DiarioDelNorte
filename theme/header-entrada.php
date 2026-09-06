@@ -11,6 +11,7 @@
 declare(strict_types=1);
 
 use DiarioDelNorte\Nav\SectionMenu;
+use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,6 +33,8 @@ $ddn_name = get_bloginfo( 'name' );
 <?php wp_body_open(); ?>
 
 <a class="skip-link screen-reader-text" href="#contenido"><?php esc_html_e( 'Saltar al contenido', 'diario-del-norte' ); ?></a>
+
+<div class="wrap"><?php Ads::zone( 'header' ); ?></div>
 
 <header class="topbar">
 	<div class="topbar__inner">

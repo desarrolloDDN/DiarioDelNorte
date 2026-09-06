@@ -40,6 +40,8 @@ $ddn_dateline = sprintf(
 
 <a class="skip-link screen-reader-text" href="#contenido"><?php esc_html_e( 'Saltar al contenido', 'diario-del-norte' ); ?></a>
 
+<div class="wrap"><?php Ads::zone( 'header' ); ?></div>
+
 <header class="masthead">
 	<div class="wrap">
 		<div class="masthead__topline">
@@ -110,7 +112,5 @@ $ddn_dateline = sprintf(
 	}
 	?>
 </nav>
-
-<div class="wrap"><?php Ads::zone( 'header' ); ?></div>
 
 <main id="contenido" class="site-main">
