@@ -58,4 +58,34 @@ final class StatsRepository {
 
 		return $out;
 	}
+
+	/**
+	 * Impresiones y clics por día de una campaña, de la más reciente a la
+	 * más antigua. Para el informe del anunciante.
+	 *
+	 * @return array<string,array{impression:int,click:int}> día => totales.
+	 */
+	public function daily( int $campaign_id ): array {
+		global $wpdb;
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT event_day, kind, SUM(hits) AS total FROM %i WHERE campaign_id = %d GROUP BY event_day, kind ORDER BY event_day DESC',
+				Db::table( Db::EVENTS ),
+				$campaign_id
+			),
+			ARRAY_A
+		);
+
+		$out = array();
+		foreach ( (array) $rows as $row ) {
+			$day                                  = (string) $row['event_day'];
+			$out[ $day ]                        ??= array(
+				'impression' => 0,
+				'click'      => 0,
+			);
+			$out[ $day ][ (string) $row['kind'] ] = (int) $row['total'];
+		}
+
+		return $out;
+	}
 }

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '5';
+	private const DB_VERSION = '6';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -73,7 +73,8 @@ final class Installer {
 				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 				name VARCHAR(191) NOT NULL,
 				advertiser VARCHAR(191) NOT NULL DEFAULT '',
-				zone VARCHAR(40) NOT NULL,
+				zone VARCHAR(40) NOT NULL DEFAULT '',
+				zones TEXT NOT NULL DEFAULT '',
 				type VARCHAR(20) NOT NULL DEFAULT 'image',
 				active TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
 				priority SMALLINT NOT NULL DEFAULT 10,
@@ -81,6 +82,9 @@ final class Installer {
 				category_slugs TEXT NOT NULL DEFAULT '',
 				creative LONGTEXT NOT NULL,
 				target_url TEXT NOT NULL,
+				adsense_client VARCHAR(64) NOT NULL DEFAULT '',
+				adsense_slot VARCHAR(64) NOT NULL DEFAULT '',
+				evidence_ids TEXT NOT NULL DEFAULT '',
 				starts_at DATETIME NULL DEFAULT NULL,
 				ends_at DATETIME NULL DEFAULT NULL,
 				created_at DATETIME NOT NULL,
@@ -89,6 +93,12 @@ final class Installer {
 				KEY priority (priority)
 			) {$charset};"
 		);
+
+		// v6: la zona única `zone` pasa a la lista `zones`; se copia el
+		// valor anterior de las campañas que ya existían.
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "UPDATE {$campaigns} SET zones = zone WHERE zones = '' AND zone <> ''" );
 
 		dbDelta(
 			"CREATE TABLE {$events} (

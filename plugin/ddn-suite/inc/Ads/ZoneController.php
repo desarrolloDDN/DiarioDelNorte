@@ -83,7 +83,7 @@ final class ZoneController {
 			$this->context_categories()
 		);
 
-		$html = null !== $campaign ? $this->renderer->render( $campaign ) : '';
+		$html = null !== $campaign ? $this->renderer->render( $campaign, $zone ) : '';
 
 		if ( null !== $campaign && '' !== $html && ! is_admin() ) {
 			$this->stats->record( $campaign->id, 'impression' );

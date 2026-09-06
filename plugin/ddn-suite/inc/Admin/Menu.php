@@ -26,7 +26,8 @@ final class Menu {
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this->calendar, 'enqueue' ) );
-		add_action( 'admin_post_' . CampaignsPage::ACTION, array( $this->campaigns, 'handle_save' ) );
+		add_action( 'admin_enqueue_scripts', array( $this->campaigns, 'enqueue' ) );
+		$this->campaigns->register_hooks();
 	}
 
 	public function menu(): void {

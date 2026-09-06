@@ -43,9 +43,8 @@ final class CampaignRepository {
 		global $wpdb;
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM %i WHERE zone = %s AND active = 1 ORDER BY priority ASC, id DESC',
-				Db::table( Db::CAMPAIGNS ),
-				$zone->value
+				'SELECT * FROM %i WHERE active = 1 ORDER BY priority ASC, id DESC',
+				Db::table( Db::CAMPAIGNS )
 			),
 			ARRAY_A
 		);
@@ -55,7 +54,7 @@ final class CampaignRepository {
 		return array_values(
 			array_filter(
 				array_map( array( Campaign::class, 'from_row' ), (array) $rows ),
-				static fn ( Campaign $c ): bool => $c->is_running( $now )
+				static fn ( Campaign $c ): bool => $c->in_zone( $zone ) && $c->is_running( $now )
 			)
 		);
 	}
@@ -70,14 +69,16 @@ final class CampaignRepository {
 		$fields = array(
 			'name'           => sanitize_text_field( (string) ( $data['name'] ?? '' ) ),
 			'advertiser'     => sanitize_text_field( (string) ( $data['advertiser'] ?? '' ) ),
-			'zone'           => sanitize_text_field( (string) ( $data['zone'] ?? '' ) ),
-			'type'           => sanitize_text_field( (string) ( $data['type'] ?? 'image' ) ),
+			'zones'          => $this->clean_zones( $data['zones'] ?? array() ),
+			'type'           => $this->clean_type( (string) ( $data['type'] ?? 'image' ) ),
 			'active'         => ! empty( $data['active'] ) ? 1 : 0,
-			'priority'       => (int) ( $data['priority'] ?? 10 ),
+			'priority'       => max( 1, (int) ( $data['priority'] ?? 10 ) ),
 			'weight'         => max( 1, (int) ( $data['weight'] ?? 1 ) ),
 			'category_slugs' => $this->clean_slugs( (string) ( $data['category_slugs'] ?? '' ) ),
 			'creative'       => wp_kses_post( (string) ( $data['creative'] ?? '' ) ),
 			'target_url'     => esc_url_raw( (string) ( $data['target_url'] ?? '' ) ),
+			'adsense_client' => sanitize_text_field( (string) ( $data['adsense_client'] ?? '' ) ),
+			'adsense_slot'   => sanitize_text_field( (string) ( $data['adsense_slot'] ?? '' ) ),
 			'starts_at'      => $this->date_or_null( $data['starts_at'] ?? null ),
 			'ends_at'        => $this->date_or_null( $data['ends_at'] ?? null ),
 		);
@@ -89,11 +90,28 @@ final class CampaignRepository {
 			return $id;
 		}
 
-		$fields['created_at'] = current_time( 'mysql', true );
+		$fields['evidence_ids'] = '';
+		$fields['created_at']   = current_time( 'mysql', true );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->insert( $table, $fields );
 
 		return (int) $wpdb->insert_id;
+	}
+
+	public function set_active( int $id, bool $active ): void {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->update( Db::table( Db::CAMPAIGNS ), array( 'active' => $active ? 1 : 0 ), array( 'id' => $id ) );
+	}
+
+	/**
+	 * @param list<int> $attachment_ids
+	 */
+	public function set_evidence( int $id, array $attachment_ids ): void {
+		global $wpdb;
+		$clean = implode( ',', array_values( array_unique( array_filter( array_map( 'intval', $attachment_ids ) ) ) ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->update( Db::table( Db::CAMPAIGNS ), array( 'evidence_ids' => $clean ), array( 'id' => $id ) );
 	}
 
 	public function delete( int $id ): void {
@@ -102,6 +120,28 @@ final class CampaignRepository {
 		$wpdb->delete( Db::table( Db::CAMPAIGNS ), array( 'id' => $id ) );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->delete( Db::table( Db::EVENTS ), array( 'campaign_id' => $id ) );
+	}
+
+	/**
+	 * Lista de slugs de zona del formulario -> cadena «a,b,c» saneada.
+	 *
+	 * @param mixed $zones
+	 */
+	private function clean_zones( mixed $zones ): string {
+		$zones = is_array( $zones ) ? $zones : array();
+		$out   = array();
+		foreach ( $zones as $value ) {
+			$zone = AdZone::tryFrom( sanitize_text_field( (string) $value ) );
+			if ( $zone instanceof AdZone ) {
+				$out[ $zone->value ] = $zone->value;
+			}
+		}
+
+		return implode( ',', array_values( $out ) );
+	}
+
+	private function clean_type( string $value ): string {
+		return CampaignType::tryFrom( $value ) instanceof CampaignType ? $value : CampaignType::Image->value;
 	}
 
 	private function clean_slugs( string $csv ): string {

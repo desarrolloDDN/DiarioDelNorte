@@ -6,6 +6,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 ## [Sin publicar]
 
 ### Añadido
+- **Gestor de publicidad rediseñado.** Tabla con pestañas Campañas / Historial,
+  ficha de alta/edición en tarjeta con vista previa en vivo, y por campaña:
+  activar/desactivar, **subir evidencia** (pantallazos del anuncio publicado) y
+  **generar informe** imprimible para el anunciante (impresiones, clics, CTR,
+  detalle por día y evidencia). Tipos nuevos: `gam`, `video`, `sponsored`.
+  Una campaña puede aparecer en **varias zonas** a la vez. Campos de AdSense
+  (client ID + slot). Migración de base de datos a v6 (conserva las campañas
+  existentes; su zona única pasa a la lista de zonas).
 - **Edición impresa pública.** El tipo de contenido `ddn_edition` pasa a ser
   público en `/edicion-impresa/`, con archivo de ediciones anteriores. Cada
   edición tiene su propia entrada (portada + nota de la redacción + botón para

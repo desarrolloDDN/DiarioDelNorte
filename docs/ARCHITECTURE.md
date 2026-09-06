@@ -39,13 +39,13 @@ se duplican esos archivos.
 
 | Módulo | Qué hace |
 |---|---|
-| `Install/Installer.php` | Crea `wp_ddn_ad_campaigns` y `wp_ddn_ad_events` (dbDelta), versión en `ddn_suite_db_version`. |
-| `Ads/AdZone`, `Ads/CampaignType` | Enums; `AdZone` debe coincidir con `DiarioDelNorte\Support\Ads::ZONES` del tema. |
-| `Ads/CampaignRepository`, `Ads/StatsRepository` | Acceso a datos (consultas preparadas con `%i`). |
-| `Ads/CampaignSelector`, `Ads/AdRenderer` | Selección (prioridad → sorteo ponderado por peso, filtrado por categoría) y render de la creatividad. Puros. |
-| `Ads/ZoneController` | Puente `ddn/ad_zone` + inserción tras el 3.er párrafo vía `the_content`; registra impresión. |
+| `Install/Installer.php` | Crea `wp_ddn_ad_campaigns` y `wp_ddn_ad_events` (dbDelta), versión en `ddn_suite_db_version` (v6: campaña con zonas múltiples `zones`, `adsense_client`, `adsense_slot`, `evidence_ids`). |
+| `Ads/AdZone`, `Ads/CampaignType` | Enums; `AdZone` debe coincidir con `DiarioDelNorte\Support\Ads::ZONES` del tema. `CampaignType`: adsense, gam, html, image, video, sponsored. |
+| `Ads/CampaignRepository`, `Ads/StatsRepository` | Acceso a datos (consultas preparadas con `%i`). `StatsRepository::daily($id)` = impresiones/clics por día para el informe. |
+| `Ads/CampaignSelector`, `Ads/AdRenderer` | Selección (prioridad → sorteo ponderado por peso, filtrado por categoría) y render (`render($campaign, $zone)`; adsense = `<ins class="adsbygoogle">` con client/slot, image/video enlazados, html/gam/sponsored = creativa cruda). Puros. |
+| `Ads/ZoneController` | Puente `ddn/ad_zone` + inserción tras el 3.er párrafo vía `the_content`; registra impresión. Campaña vale para una zona si esa zona está en `$campaign->zones`. |
 | `Ads/ClickController` | `/ddn-anuncio/clic/{id}` → redirección resuelta en el servidor por ID (sin open-redirect). |
-| `Ads/Admin/CampaignsPage` | Alta/edición/borrado de campañas + impresiones/clics/CTR. Slug sin las palabras «ad»/«campaign» (bloqueadores). |
+| `Ads/Admin/CampaignsPage` | Gestor: tabla + pestañas Campañas/Historial, ficha con vista previa en vivo, subir evidencia (imágenes del anuncio publicado, media modal), informe imprimible del anunciante (impresiones/clics/CTR + detalle por día + evidencia). Slug sin las palabras «ad»/«campaign» (bloqueadores). |
 | `Calendar/CalendarRepository` | Noticias por día de un mes (publicadas, programadas, borradores). |
 | `Calendar/Admin/CalendarPage` | Retícula mensual en wp-admin con enlace a editar cada nota. |
 | `Analytics/PageviewRecorder` | Cuenta páginas vistas de noticias en cubos por hora (`ddn_pageviews`); sin PII, excluye editores y bots; poda diaria (WP-Cron). |
