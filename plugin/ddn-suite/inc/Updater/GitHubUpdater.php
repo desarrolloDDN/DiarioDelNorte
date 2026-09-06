@@ -18,11 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class GitHubUpdater {
 
-	private const REPO      = 'desarrolloDDN/DiarioDelNorte';
-	private const ASSET_RE  = '/^ddn-suite-.*\.zip$/';
-	private const TRANSIENT = 'ddn_gh_release';
-	private const SLUG      = 'ddn-suite';
-	private const BASENAME  = 'ddn-suite/ddn-suite.php';
+	private const REPO         = 'desarrolloDDN/DiarioDelNorte';
+	private const ASSET_RE     = '/^ddn-suite-.*\.zip$/';
+	private const TRANSIENT    = 'ddn_gh_release';
+	private const SLUG         = 'ddn-suite';
+	private const BASENAME     = 'ddn-suite/ddn-suite.php';
+	private const CHECK_ACTION = 'ddn_suite_force_update_check';
+	private const CHECK_NONCE  = 'ddn_suite_force_update_check';
 
 	public function __construct( private readonly string $current_version ) {}
 
@@ -30,6 +32,85 @@ final class GitHubUpdater {
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'inject' ) );
 		add_filter( 'plugins_api', array( $this, 'info' ), 20, 3 );
 		add_action( 'upgrader_process_complete', array( $this, 'flush' ), 10, 2 );
+
+		add_filter( 'plugin_action_links_' . self::BASENAME, array( $this, 'action_link' ) );
+		add_action( 'admin_post_' . self::CHECK_ACTION, array( $this, 'handle_force_check' ) );
+		add_action( 'admin_notices', array( $this, 'checked_notice' ) );
+	}
+
+	/**
+	 * Enlace «Comprobar actualizaciones» en la fila del plugin.
+	 *
+	 * @param array<string,string> $links
+	 * @return array<string,string>
+	 */
+	public function action_link( array $links ): array {
+		$url = wp_nonce_url(
+			admin_url( 'admin-post.php?action=' . self::CHECK_ACTION ),
+			self::CHECK_NONCE
+		);
+
+		return array_merge(
+			array( 'ddn-check' => '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Comprobar actualizaciones', 'ddn-suite' ) . '</a>' ),
+			$links
+		);
+	}
+
+	/**
+	 * Fuerza una comprobación inmediata contra GitHub del tema y el plugin
+	 * (vacía las cachés y pide a WordPress que vuelva a mirar).
+	 */
+	public function handle_force_check(): void {
+		if ( ! current_user_can( 'update_plugins' ) || ! check_admin_referer( self::CHECK_NONCE ) ) {
+			wp_die( esc_html__( 'Acción no permitida.', 'ddn-suite' ) );
+		}
+
+		delete_transient( self::TRANSIENT );
+		delete_site_transient( 'update_plugins' );
+		delete_site_transient( 'update_themes' );
+		wp_update_plugins();
+		wp_update_themes();
+
+		wp_safe_redirect( add_query_arg( 'ddn-checked', '1', admin_url( 'plugins.php' ) ) );
+		exit;
+	}
+
+	public function checked_notice(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['ddn-checked'] ) || ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( null === $screen || 'plugins' !== $screen->id ) {
+			return;
+		}
+
+		$plugins = get_site_transient( 'update_plugins' );
+		$themes  = get_site_transient( 'update_themes' );
+		$new     = '';
+		if ( is_object( $plugins ) && isset( $plugins->response[ self::BASENAME ]->new_version ) ) {
+			$new = (string) $plugins->response[ self::BASENAME ]->new_version;
+		} elseif ( is_object( $themes ) && isset( $themes->response['diario-del-norte']['new_version'] ) ) {
+			$new = (string) $themes->response['diario-del-norte']['new_version'];
+		}
+
+		if ( '' !== $new ) {
+			printf(
+				'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+				sprintf(
+					/* translators: %s: número de versión. */
+					esc_html__( 'Diario del Norte: hay una actualización disponible (versión %s). Actualiza desde la lista de abajo o en Apariencia.', 'ddn-suite' ),
+					esc_html( $new )
+				)
+			);
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+			esc_html__( 'Diario del Norte: ya tienes la última versión.', 'ddn-suite' )
+		);
 	}
 
 	/**

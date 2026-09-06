@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.3] — 2026-09-06
+
+### Añadido
+- **«Comprobar actualizaciones»** en la fila de DDN Suite (Plugins): fuerza una
+  consulta inmediata a GitHub —vacía las cachés y vuelve a mirar el tema y el
+  plugin— y avisa si hay una versión nueva o si ya estás al día.
+
 ## [0.1.2] — 2026-09-06
 
 ### Cambiado
