@@ -378,21 +378,70 @@
   color: var(--red);
 }
 
-// Visor embebido: lee el PDF sin descargarlo. A todo el ancho de
-// .edition, debajo de la portada + la barra lateral.
+// Visor de la edición: renderiza el PDF con pdf.js, ajustado al ancho.
+// Va a todo el ancho de .edition, bajo la portada + la barra lateral.
 .edition__reader {
   margin-top: 2.5rem;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--rule);
 }
-.edition__reader iframe {
-  display: block;
-  width: 100%;
-  height: 85vh;
-  border: 1px solid var(--rule);
-  background: var(--sand);
-}
 .edition__reader[hidden] { display: none; }
+
+.edition__reader-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+.edition__reader-zoom {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--rule-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.edition__reader-zoom:hover { background: var(--sand); }
+.edition__reader-level {
+  min-width: 3.5rem;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--slate);
+}
+
+.edition__reader-pages {
+  overflow-x: auto;
+}
+.edition__reader-page {
+  min-width: 100%;
+  width: fit-content;
+  min-height: 40vh;
+  margin: 0 auto 1.25rem;
+  background: var(--sand);
+  border: 1px solid var(--rule);
+}
+.edition__reader-page:last-child { margin-bottom: 0; }
+.edition__reader-page canvas {
+  display: block;
+  margin-inline: auto;
+}
+.edition__reader-status {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--slate);
+  font-family: var(--sans);
+}
+.edition__reader-status a { color: var(--red); text-decoration: underline; }
 
 .edition-grid {
   display: grid;
@@ -435,11 +484,9 @@
   .edition__aside { position: static; }
   .edition-grid { grid-template-columns: repeat(3, 1fr); }
 
-  // En móvil no se embebe el PDF: el <iframe> no se ajusta al ancho de la
-  // pantalla (iOS ignora #view=FitH). El botón «Leer» abre el PDF a
-  // pantalla completa en el visor nativo (lo hace el JS; esto es la red de
-  // seguridad por si el JS no cargara).
-  .edition__reader { display: none; }
+  .edition__reader { margin-inline: calc(-1 * var(--gutter)); }
+  .edition__reader-toolbar { margin-inline: var(--gutter); }
+  .edition__reader-page { border-inline: 0; }
 }
 @media (max-width: 560px) {
   .edition-grid { grid-template-columns: repeat(2, 1fr); }

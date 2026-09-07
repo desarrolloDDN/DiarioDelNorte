@@ -55,9 +55,7 @@ while ( have_posts() ) :
 							type="button"
 							class="btn btn--ghost edition__read-toggle"
 							data-edition-reader-toggle
-							data-pdf="<?php echo esc_url( $ddn_pdf ); ?>"
 							data-label-hide="<?php esc_attr_e( 'Cerrar lectura en línea', 'diario-del-norte' ); ?>"
-							data-label-mobile="<?php esc_attr_e( 'Leer la edición a pantalla completa', 'diario-del-norte' ); ?>"
 							aria-controls="edition-reader"
 							aria-expanded="false"
 						>
@@ -79,12 +77,24 @@ while ( have_posts() ) :
 		</div>
 
 		<?php if ( '' !== $ddn_pdf ) : ?>
-			<div class="edition__reader" id="edition-reader" hidden>
-				<iframe
-					src="<?php echo esc_url( $ddn_pdf . '#view=FitH' ); ?>"
-					title="<?php echo esc_attr( sprintf( /* translators: %s: título de la edición. */ __( 'Lectura en línea: %s', 'diario-del-norte' ), get_the_title() ) ); ?>"
-					loading="lazy"
-				></iframe>
+			<div
+				class="edition__reader"
+				id="edition-reader"
+				data-edition-reader
+				data-pdf="<?php echo esc_url( $ddn_pdf ); ?>"
+				data-lib="<?php echo esc_url( DDN_THEME_URI . 'assets/vendor/pdfjs/pdf.min.js' ); ?>"
+				data-worker="<?php echo esc_url( DDN_THEME_URI . 'assets/vendor/pdfjs/pdf.worker.min.js' ); ?>"
+				data-i18n-loading="<?php esc_attr_e( 'Cargando la edición…', 'diario-del-norte' ); ?>"
+				data-i18n-error="<?php esc_attr_e( 'No se pudo cargar el visor.', 'diario-del-norte' ); ?>"
+				data-i18n-open="<?php esc_attr_e( 'Abrir el PDF', 'diario-del-norte' ); ?>"
+				hidden
+			>
+				<div class="edition__reader-toolbar">
+					<button type="button" class="edition__reader-zoom" data-edition-zoom="out" aria-label="<?php esc_attr_e( 'Alejar', 'diario-del-norte' ); ?>">&minus;</button>
+					<span class="edition__reader-level" data-edition-level>100&thinsp;%</span>
+					<button type="button" class="edition__reader-zoom" data-edition-zoom="in" aria-label="<?php esc_attr_e( 'Acercar', 'diario-del-norte' ); ?>">+</button>
+				</div>
+				<div class="edition__reader-pages" data-edition-pages></div>
 			</div>
 		<?php endif; ?>
 

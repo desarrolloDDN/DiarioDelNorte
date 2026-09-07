@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.19] — 2026-09-07
+
+### Cambiado
+- **Edición impresa: visor propio de PDF.** «Leer en línea» ya no usa el visor
+  del navegador (que no ajustaba el ancho en el móvil): el PDF se pinta con
+  **pdf.js** dentro de la propia entrada, **ajustado al ancho de la pantalla**,
+  página por página, con botones de zoom (−/+). El lector sigue pudiendo
+  descargarlo. pdf.js (Apache-2.0) va empaquetado en `assets/vendor/pdfjs/` y
+  solo se descarga al pulsar «Leer en línea».
+
 ## [0.1.18] — 2026-09-07
 
 ### Corregido
