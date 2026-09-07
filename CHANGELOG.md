@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.9] — 2026-09-07
+
+### Cambiado
+- El rótulo **«Espacio publicitario»** de cada anuncio va ahora **debajo**
+  del banner, no encima (`AdRenderer` lo emite después de la creatividad y
+  `.ddn-ad__label` lo fija abajo con `order`).
+
 ## [0.1.8] — 2026-09-07
 
 ### Quitado

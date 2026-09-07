@@ -31,7 +31,7 @@ final class AdRenderer {
 		}
 
 		return sprintf(
-			'<aside class="ddn-ad ddn-ad--%1$s" aria-label="%2$s"><span class="ddn-ad__label">%2$s</span>%3$s</aside>',
+			'<aside class="ddn-ad ddn-ad--%1$s" aria-label="%2$s">%3$s<span class="ddn-ad__label">%2$s</span></aside>',
 			esc_attr( $zone->value ),
 			esc_html__( 'Espacio publicitario', 'ddn-suite' ),
 			$inner

@@ -159,11 +159,13 @@ p { margin: 0 0 1rem; }
 }
 .ddn-ad a { display: block; line-height: 0; }
 .ddn-ad__label {
+  // Va debajo del banner, no encima.
+  order: 1;
   font-family: var(--sans);
   font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--slate);
-  margin-bottom: 0.35rem;
+  margin-top: 0.35rem;
 }
 .ddn-ad--in-article { max-width: 30rem; }
