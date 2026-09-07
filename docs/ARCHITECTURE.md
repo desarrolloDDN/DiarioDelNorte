@@ -52,7 +52,10 @@ se duplican esos archivos.
 | `Analytics/PageviewRepository` | Filtro `ddn/most_read` → IDs de las noticias más vistas en 24 h. |
 | `PrintEdition/EditionPostType` | Tipo de contenido público `ddn_edition` (slug `/edicion-impresa/`, con archivo): portada (imagen destacada) + PDF + nota, por fecha. Plantillas en el tema: `single-ddn_edition.php` y `archive-ddn_edition.php`. |
 | `PrintEdition/EditionRepository` | Filtros `ddn/print_edition` (edición vigente) y `ddn/edition_pdf_url` (URL del PDF de una edición dada). |
-| `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad + Edición impresa). |
+| `Radio/RadioSettings` | Opción `ddn_suite_radio`: `enabled` + lista de emisoras (`name`, `stream`, `logo_id`). Sanea cada campo al leer y al guardar. |
+| `Radio/RadioPlayer` | Reproductor flotante en `wp_footer` (solo si está activo y hay emisoras): marcado + `assets/radio/radio.{css,js}`. El estado (emisora, pausa, minimizado) se recuerda en `localStorage` del visitante. |
+| `Radio/Admin/RadioPage` | Página «Radio» del menú: on/off + filas de emisora repetibles con selector de logo (media modal). |
+| `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad + Radio + Edición impresa). |
 
 ### Contratos tema ↔ plugin (filtros)
 

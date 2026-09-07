@@ -1,0 +1,176 @@
+/* Reproductor de radio flotante · DDN Suite */
+
+.ddn-radio,
+.ddn-radio * {
+	box-sizing: border-box;
+}
+
+.ddn-radio[hidden] {
+	display: none;
+}
+
+.ddn-radio {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 9000;
+	width: 320px;
+	background: #fff;
+	border-radius: 18px;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+	transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
+}
+
+/* --- Minimizado: burbuja --- */
+.ddn-radio.is-minimized {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	overflow: visible;
+	cursor: pointer;
+	background: radial-gradient(circle at 30% 30%, #e11d1d, #8c0000);
+	box-shadow: 0 12px 25px rgba(140, 0, 0, 0.55), inset 0 4px 8px rgba(255, 255, 255, 0.25);
+}
+
+/* --- Cabecera --- */
+.ddn-radio__bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 11px 12px;
+	background: linear-gradient(135deg, #8c0000, #bf0202);
+	color: #fff;
+}
+.ddn-radio.is-minimized .ddn-radio__bar {
+	height: 100%;
+	padding: 0;
+	justify-content: center;
+	background: transparent;
+}
+
+.ddn-radio__brand {
+	font-size: 20px;
+	line-height: 1;
+}
+.ddn-radio.is-minimized .ddn-radio__brand {
+	font-size: 30px;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.ddn-radio__title {
+	flex: 1;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
+.ddn-radio__actions {
+	display: flex;
+	gap: 2px;
+}
+.ddn-radio__btn {
+	appearance: none;
+	-webkit-appearance: none;
+	border: 0;
+	background: none;
+	color: #fff;
+	font-size: 16px;
+	line-height: 1;
+	padding: 4px 7px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.ddn-radio__btn:hover {
+	background: rgba(255, 255, 255, 0.18);
+}
+
+.ddn-radio.is-minimized .ddn-radio__title,
+.ddn-radio.is-minimized .ddn-radio__actions,
+.ddn-radio.is-minimized .ddn-radio__stations {
+	display: none;
+}
+
+/* --- Emisoras --- */
+.ddn-radio__stations {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 10px;
+}
+
+.ddn-radio__station {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 10px;
+	align-items: center;
+	padding: 8px 10px;
+	border-radius: 12px;
+	background: #f3f3f3;
+}
+.ddn-radio__station.is-active {
+	background: #ffe1e1;
+}
+
+.ddn-radio__logo {
+	width: 40px;
+	height: 40px;
+	object-fit: contain;
+	border-radius: 8px;
+	display: block;
+}
+.ddn-radio__logo--blank {
+	background: #d9d9d9;
+}
+
+.ddn-radio__info {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+.ddn-radio__info strong {
+	font-size: 14px;
+	color: #1a1a1a;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.ddn-radio__info small {
+	font-size: 12px;
+	color: #777;
+}
+.ddn-radio__station.is-active .ddn-radio__info small {
+	color: #bf0202;
+	font-weight: 600;
+}
+
+.ddn-radio__play {
+	flex-shrink: 0;
+	width: 34px;
+	height: 34px;
+	border: 0;
+	border-radius: 50%;
+	background: #bf0202;
+	color: #fff;
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
+}
+.ddn-radio__play:hover {
+	background: #8c0000;
+}
+
+@media (max-width: 480px) {
+	.ddn-radio:not(.is-minimized) {
+		right: 12px;
+		left: 12px;
+		width: auto;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ddn-radio {
+		transition: none;
+	}
+}

@@ -5,6 +5,18 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.14] — 2026-09-07
+
+### Añadido
+- **Reproductor de radio en vivo** (`ddn-suite`). Cinta flotante abajo a la
+  derecha en toda la web con las emisoras que se configuren. El visitante
+  elige emisora, puede minimizarla (queda como una burbuja) o cerrarla; el
+  estado (emisora, pausa, minimizado) se recuerda al cambiar de página.
+  Nueva página **DDN Suite → Radio**: activar/desactivar y gestionar las
+  emisoras (nombre, URL del stream, logo desde la biblioteca de medios).
+  Viene con Cardenal Stereo Riohacha y Valledupar precargadas (desactivado
+  hasta que se marque «Mostrarlo en la web»).
+
 ## [0.1.13] — 2026-09-07
 
 ### Cambiado

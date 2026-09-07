@@ -24,6 +24,9 @@ use DiarioDelNorte\Suite\Calendar\CalendarRepository;
 use DiarioDelNorte\Suite\Install\Installer;
 use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
 use DiarioDelNorte\Suite\PrintEdition\EditionRepository;
+use DiarioDelNorte\Suite\Radio\Admin\RadioPage;
+use DiarioDelNorte\Suite\Radio\RadioPlayer;
+use DiarioDelNorte\Suite\Radio\RadioSettings;
 use DiarioDelNorte\Suite\Updater\GitHubUpdater;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -59,10 +62,14 @@ final class Plugin {
 		( new EditionPostType() )->register();
 		( new EditionRepository() )->register();
 
+		$radio_settings = new RadioSettings();
+		( new RadioPlayer( $radio_settings ) )->register();
+
 		if ( is_admin() ) {
 			$calendar_page  = new CalendarPage( new CalendarRepository() );
 			$campaigns_page = new CampaignsPage( $campaigns, $stats );
-			( new Menu( $calendar_page, $campaigns_page ) )->register();
+			$radio_page     = new RadioPage( $radio_settings );
+			( new Menu( $calendar_page, $campaigns_page, $radio_page ) )->register();
 		}
 	}
 }

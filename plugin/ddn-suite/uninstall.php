@@ -19,6 +19,7 @@ foreach ( array( 'ddn_ad_campaigns', 'ddn_ad_events', 'ddn_pageviews' ) as $tabl
 }
 
 delete_option( 'ddn_suite_db_version' );
+delete_option( 'ddn_suite_radio' );
 
 wp_clear_scheduled_hook( 'ddn_suite_prune_pageviews' );
 flush_rewrite_rules();
