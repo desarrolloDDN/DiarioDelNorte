@@ -5,6 +5,12 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.8] — 2026-09-07
+
+### Quitado
+- El **filete negro de 3 px** del cabezote (`.masthead`), el que quedaba
+  entre la publicidad de cabecera y la barra superior de redes/buscador.
+
 ## [0.1.7] — 2026-09-06
 
 ### Cambiado
