@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.20] — 2026-09-07
+
+### Corregido
+- **Edición impresa: el visor ya no alarga la página.** «Leer en línea» abría
+  todas las páginas apiladas y la entrada se volvía interminable. Ahora el
+  visor es una **ventana de alto fijo** (≈80 % de la pantalla) con su propio
+  desplazamiento: se lee la edición completa dentro de esa caja y el contenido
+  que va debajo queda donde debe. Además solo mantiene en memoria las páginas
+  cercanas a la que se está viendo (da igual cuántas tenga el PDF).
+
 ## [0.1.19] — 2026-09-07
 
 ### Cambiado

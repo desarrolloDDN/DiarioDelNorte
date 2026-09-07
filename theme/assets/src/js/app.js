@@ -147,9 +147,11 @@ function initEditionReader() {
   const labelHide = btn.dataset.labelHide || labelShow;
   const t = reader.dataset;
 
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   let started = false;
   let doc = null;
   let zoom = 1;
+  let ratio = 1.29; // ancho/alto de página (tabloide ≈ 0.65, se recalcula)
   let renderT;
 
   function setStatus(html) {
@@ -163,6 +165,8 @@ function initEditionReader() {
       const pdfjsLib = window.pdfjsLib;
       pdfjsLib.GlobalWorkerOptions.workerSrc = t.worker;
       doc = await pdfjsLib.getDocument(t.pdf).promise;
+      const first = (await doc.getPage(1)).getViewport({ scale: 1 });
+      ratio = first.width / first.height;
       build();
     } catch (e) {
       setStatus(
@@ -172,48 +176,84 @@ function initEditionReader() {
     }
   }
 
+  // Alto aproximado de una página sin renderizar, para que la barra de
+  // desplazamiento sea proporcional y el scroll no salte.
+  function placeholderHeight() {
+    return Math.round((pagesEl.clientWidth * zoom) / ratio);
+  }
+
+  // Mantiene renderizadas solo las páginas cercanas a la que se está
+  // viendo (memoria acotada, sin importar cuántas tenga el PDF).
+  function prune() {
+    const kids = pagesEl.children;
+    const mid = pagesEl.scrollTop + pagesEl.clientHeight / 2;
+    let acc = 0;
+    let center = 1;
+    for (let i = 0; i < kids.length; i++) {
+      acc += kids[i].offsetHeight;
+      center = i + 1;
+      if (acc >= mid) break;
+    }
+    for (let i = 0; i < kids.length; i++) {
+      if (kids[i].dataset.rendered && Math.abs(i + 1 - center) > 3) unrender(kids[i]);
+    }
+    return center;
+  }
+
   function build() {
     pagesEl.innerHTML = '';
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          const holder = entry.target;
-          if (entry.isIntersecting) {
-            renderPage(holder, dpr);
-          } else if (holder.dataset.rendered && Math.abs(entry.boundingClientRect.top) > window.innerHeight * 4) {
-            // Libera memoria en páginas muy lejos de la vista.
-            holder.innerHTML = '';
-            delete holder.dataset.rendered;
-          }
+          if (entry.isIntersecting) renderPage(entry.target);
         });
       },
-      { rootMargin: '800px 0px' }
+      { root: pagesEl, rootMargin: '900px 0px' }
     );
 
     for (let n = 1; n <= doc.numPages; n++) {
       const holder = document.createElement('div');
       holder.className = 'edition__reader-page';
       holder.dataset.page = String(n);
+      holder.style.height = placeholderHeight() + 'px';
       pagesEl.appendChild(holder);
       io.observe(holder);
     }
 
+    let pruneT;
+    pagesEl.addEventListener(
+      'scroll',
+      () => {
+        clearTimeout(pruneT);
+        pruneT = setTimeout(prune, 400);
+      },
+      { passive: true }
+    );
+
     reader._rerender = () => {
       clearTimeout(renderT);
       renderT = setTimeout(() => {
+        const ph = placeholderHeight() + 'px';
+        const view = pagesEl.getBoundingClientRect();
         pagesEl.querySelectorAll('.edition__reader-page').forEach((h) => {
-          delete h.dataset.rendered;
-          h.innerHTML = '';
+          unrender(h);
+          h.style.height = ph;
           const r = h.getBoundingClientRect();
-          if (r.bottom > -800 && r.top < window.innerHeight + 800) renderPage(h, dpr);
+          if (r.bottom > view.top - 1200 && r.top < view.bottom + 1200) renderPage(h);
         });
       }, 250);
     };
   }
 
-  async function renderPage(holder, dpr) {
+  function unrender(holder) {
+    if (!holder.dataset.rendered) return;
+    holder.innerHTML = '';
+    delete holder.dataset.rendered;
+    holder.style.height = placeholderHeight() + 'px';
+  }
+
+  async function renderPage(holder) {
     if (holder.dataset.rendered || !doc) return;
     holder.dataset.rendered = '1';
     const page = await doc.getPage(Number(holder.dataset.page));
@@ -226,6 +266,7 @@ function initEditionReader() {
     canvas.style.width = cssWidth + 'px';
     canvas.style.height = 'auto';
     holder.innerHTML = '';
+    holder.style.height = 'auto';
     holder.appendChild(canvas);
     try {
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;

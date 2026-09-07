@@ -388,17 +388,14 @@
 .edition__reader[hidden] { display: none; }
 
 .edition__reader-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.9rem;
   padding: 0.5rem;
-  margin-bottom: 1rem;
   background: var(--surface);
   border: 1px solid var(--rule);
+  border-bottom: 0;
 }
 .edition__reader-zoom {
   width: 2rem;
@@ -419,16 +416,22 @@
   color: var(--slate);
 }
 
+// Ventana de lectura de alto fijo: el visor no crece con el nº de
+// páginas; se desplaza dentro de esta caja.
 .edition__reader-pages {
-  overflow-x: auto;
+  height: clamp(24rem, 78vh, 60rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 0;
+  background: var(--sand);
+  border: 1px solid var(--rule);
 }
 .edition__reader-page {
   min-width: 100%;
   width: fit-content;
-  min-height: 40vh;
-  margin: 0 auto 1.25rem;
-  background: var(--sand);
-  border: 1px solid var(--rule);
+  margin: 0 auto 1rem;
+  background: var(--surface);
+  box-shadow: 0 1px 4px rgba(17, 17, 17, 0.15);
 }
 .edition__reader-page:last-child { margin-bottom: 0; }
 .edition__reader-page canvas {
@@ -485,8 +488,7 @@
   .edition-grid { grid-template-columns: repeat(3, 1fr); }
 
   .edition__reader { margin-inline: calc(-1 * var(--gutter)); }
-  .edition__reader-toolbar { margin-inline: var(--gutter); }
-  .edition__reader-page { border-inline: 0; }
+  .edition__reader-pages { height: clamp(24rem, 82vh, 46rem); border-inline: 0; }
 }
 @media (max-width: 560px) {
   .edition-grid { grid-template-columns: repeat(2, 1fr); }
