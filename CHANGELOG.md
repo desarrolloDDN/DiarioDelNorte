@@ -5,6 +5,28 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.15] — 2026-09-07
+
+### Añadido
+- **Reproductor de radio, mejoras:**
+  - **Estados de conexión.** «Conectando…» / «Cargando…» mientras arranca; si
+    el stream se cae, «Sin señal, reintentando…» con reintento automático
+    (espera creciente).
+  - **Volumen y silencio**, recordados en el navegador.
+  - **«Sonando ahora».** Muestra la canción en curso (y el nº de oyentes) si el
+    panel de la emisora lo publica. Lo consulta WordPress y lo cachea, porque
+    esos paneles no permiten pedirlo desde el navegador.
+  - **Controles del sistema** (Media Session): pantalla de bloqueo del móvil y
+    botones de auriculares/volante.
+  - **Escuchas.** DDN Suite → Radio muestra, por emisora y sin datos
+    personales, cuántas veces se pulsó play y las horas escuchadas (30 días).
+  - **Ajustes nuevos:** empezar minimizado, emisora por defecto; y por emisora,
+    botón «Probar», aviso si la URL es `http://` en una web `https://`, y una
+    URL de metadatos opcional.
+  - Fundido al cambiar de emisora; burbuja minimizada manejable con el teclado
+    y con animación de ecualizador cuando hay emisión; `preconnect` a los
+    servidores de streaming para que arranque antes.
+
 ## [0.1.14] — 2026-09-07
 
 ### Añadido

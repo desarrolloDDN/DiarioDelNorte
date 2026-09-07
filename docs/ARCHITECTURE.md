@@ -39,7 +39,7 @@ se duplican esos archivos.
 
 | Módulo | Qué hace |
 |---|---|
-| `Install/Installer.php` | Crea `wp_ddn_ad_campaigns` y `wp_ddn_ad_events` (dbDelta), versión en `ddn_suite_db_version` (v6: campaña con zonas múltiples `zones`, `adsense_client`, `adsense_slot`, `evidence_ids`). |
+| `Install/Installer.php` | Crea las tablas propias (dbDelta), versión en `ddn_suite_db_version` (v6: campaña con zonas múltiples + AdSense + evidencia; v7: `wp_ddn_radio_plays`). |
 | `Ads/AdZone`, `Ads/CampaignType` | Enums; `AdZone` debe coincidir con `DiarioDelNorte\Support\Ads::ZONES` del tema. `CampaignType`: adsense, gam, html, image, video, sponsored. |
 | `Ads/CampaignRepository`, `Ads/StatsRepository` | Acceso a datos (consultas preparadas con `%i`). `StatsRepository::daily($id)` = impresiones/clics por día para el informe. |
 | `Ads/CampaignSelector`, `Ads/AdRenderer` | Selección (prioridad → sorteo ponderado por peso, filtrado por categoría) y render (`render($campaign, $zone)`; adsense = `<ins class="adsbygoogle">` con client/slot, image/video enlazados, html/gam/sponsored = creativa cruda). Puros. |
@@ -52,9 +52,12 @@ se duplican esos archivos.
 | `Analytics/PageviewRepository` | Filtro `ddn/most_read` → IDs de las noticias más vistas en 24 h. |
 | `PrintEdition/EditionPostType` | Tipo de contenido público `ddn_edition` (slug `/edicion-impresa/`, con archivo): portada (imagen destacada) + PDF + nota, por fecha. Plantillas en el tema: `single-ddn_edition.php` y `archive-ddn_edition.php`. |
 | `PrintEdition/EditionRepository` | Filtros `ddn/print_edition` (edición vigente) y `ddn/edition_pdf_url` (URL del PDF de una edición dada). |
-| `Radio/RadioSettings` | Opción `ddn_suite_radio`: `enabled` + lista de emisoras (`name`, `stream`, `logo_id`). Sanea cada campo al leer y al guardar. |
-| `Radio/RadioPlayer` | Reproductor flotante en `wp_footer` (solo si está activo y hay emisoras): marcado + `assets/radio/radio.{css,js}`. El estado (emisora, pausa, minimizado) se recuerda en `localStorage` del visitante. |
-| `Radio/Admin/RadioPage` | Página «Radio» del menú: on/off + filas de emisora repetibles con selector de logo (media modal). |
+| `Radio/RadioSettings` | Opción `ddn_suite_radio`: `enabled`, `start_minimized`, `default_station` + emisoras (`name`, `stream`, `logo_id`, `meta_url` opcional). Sanea al leer y al guardar. |
+| `Radio/RadioPlayer` | Reproductor flotante en `wp_footer` (solo si está activo): marcado + `assets/radio/radio.{css,js}` + config por `wp_add_inline_script` + `preconnect` a los hosts de streaming. Estado (emisora, pausa, volumen, minimizado) en `localStorage`. JS: estados de conexión/reintento con backoff, volumen/silencio, Media Session, fundido al cambiar de emisora, burbuja accesible por teclado. |
+| `Radio/RadioMeta` | «Sonando ahora» de una emisora: consulta el panel Shoutcast/Icecast desde el servidor (esos paneles no permiten CORS), cachea 20 s. Devuelve `{title, listeners}`. |
+| `Radio/RadioStats` | Tabla `wp_ddn_radio_plays` (día × emisora: `starts`, `seconds`). Sin PII. Poda >120 días en el cron `ddn_suite_prune_pageviews`. |
+| `Radio/RadioController` | REST `ddn-suite/v1`: `GET /radio/nowplaying?station=N` (público, proxy con caché) y `POST /radio/tick` (nonce `wp_rest`; `kind` = `start`\|`beat`). |
+| `Radio/Admin/RadioPage` | Página «Radio»: on/off, arranque, emisora por defecto, filas de emisora repetibles (logo por media modal, botón «Probar», aviso de contenido mixto http/https, metadatos opcionales) y resumen de escuchas de 30 días. |
 | `Admin/Menu` | Menú «DDN Suite» (Calendario + Publicidad + Radio + Edición impresa). |
 
 ### Contratos tema ↔ plugin (filtros)

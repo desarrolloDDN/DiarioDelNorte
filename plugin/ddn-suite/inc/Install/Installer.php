@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '6';
+	private const DB_VERSION = '7';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -63,10 +63,11 @@ final class Installer {
 	private static function migrate(): void {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		$charset   = Db::charset_collate();
-		$campaigns = Db::table( Db::CAMPAIGNS );
-		$events    = Db::table( Db::EVENTS );
-		$pageviews = Db::table( Db::PAGEVIEWS );
+		$charset     = Db::charset_collate();
+		$campaigns   = Db::table( Db::CAMPAIGNS );
+		$events      = Db::table( Db::EVENTS );
+		$pageviews   = Db::table( Db::PAGEVIEWS );
+		$radio_plays = Db::table( Db::RADIO_PLAYS );
 
 		dbDelta(
 			"CREATE TABLE {$campaigns} (
@@ -119,6 +120,18 @@ final class Installer {
 				hits INT UNSIGNED NOT NULL DEFAULT 0,
 				PRIMARY KEY  (post_id, bucket),
 				KEY bucket (bucket)
+			) {$charset};"
+		);
+
+		// v7: escuchas de la radio por día y emisora (arranques + segundos).
+		dbDelta(
+			"CREATE TABLE {$radio_plays} (
+				play_day DATE NOT NULL,
+				station SMALLINT UNSIGNED NOT NULL,
+				starts INT UNSIGNED NOT NULL DEFAULT 0,
+				seconds BIGINT UNSIGNED NOT NULL DEFAULT 0,
+				PRIMARY KEY  (play_day, station),
+				KEY play_day (play_day)
 			) {$charset};"
 		);
 

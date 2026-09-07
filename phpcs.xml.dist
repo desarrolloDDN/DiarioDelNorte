@@ -43,6 +43,7 @@
 		<exclude-pattern>plugin/ddn-suite/inc/*Repository.php</exclude-pattern>
 		<exclude-pattern>plugin/ddn-suite/inc/Install/*</exclude-pattern>
 		<exclude-pattern>plugin/ddn-suite/inc/Analytics/*</exclude-pattern>
+		<exclude-pattern>plugin/ddn-suite/inc/Radio/RadioStats.php</exclude-pattern>
 	</rule>
 
 	<config name="minimum_wp_version" value="6.5"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Página «Radio» en el menú DDN Suite: activar el reproductor y gestionar
- * las emisoras (nombre, stream, logo).
+ * Página «Radio» en el menú DDN Suite: activar el reproductor, arranque,
+ * emisora por defecto, gestión de emisoras y resumen de escuchas.
  *
  * @package DiarioDelNorte\Suite
  */
@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace DiarioDelNorte\Suite\Radio\Admin;
 
 use DiarioDelNorte\Suite\Radio\RadioSettings;
+use DiarioDelNorte\Suite\Radio\RadioStats;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,7 +24,10 @@ final class RadioPage {
 	private const ACTION = 'ddn_suite_save_radio';
 	private const NONCE  = 'ddn_suite_radio';
 
-	public function __construct( private readonly RadioSettings $settings ) {}
+	public function __construct(
+		private readonly RadioSettings $settings,
+		private readonly RadioStats $stats,
+	) {}
 
 	public function register_hooks(): void {
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_save' ) );
@@ -41,6 +45,23 @@ final class RadioPage {
 			array( 'jquery' ),
 			file_exists( $js ) ? (string) filemtime( $js ) : DDN_SUITE_VERSION,
 			true
+		);
+		wp_add_inline_script(
+			'ddn-suite-radio-admin',
+			'window.ddnRadioAdmin=' . wp_json_encode(
+				array(
+					'siteIsHttps' => is_ssl(),
+					'i18n'        => array(
+						'testing'  => __( 'Probando&hellip;', 'ddn-suite' ),
+						'ok'       => __( '✓ Suena', 'ddn-suite' ),
+						'fail'     => __( '✗ No responde', 'ddn-suite' ),
+						'mixed'    => __( 'Esta URL es http:// y la web es https:// — el navegador la bloqueará. Pide al proveedor el enlace https.', 'ddn-suite' ),
+						'pickLogo' => __( 'Logo de la emisora', 'ddn-suite' ),
+						'useLogo'  => __( 'Usar este logo', 'ddn-suite' ),
+					),
+				)
+			) . ';',
+			'before'
 		);
 	}
 
@@ -64,14 +85,7 @@ final class RadioPage {
 		$data     = $this->settings->get();
 		$stations = $data['stations'];
 		if ( array() === $stations ) {
-			$stations = array(
-				array(
-					'name'     => '',
-					'stream'   => '',
-					'logo_id'  => 0,
-					'logo_url' => '',
-				),
-			);
+			$stations = array( $this->blank_station() );
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$updated = isset( $_GET['updated'] );
@@ -84,7 +98,7 @@ final class RadioPage {
 			<?php endif; ?>
 
 			<p class="description">
-				<?php esc_html_e( 'Un reproductor flotante aparece abajo a la derecha en toda la web. El visitante elige la emisora y puede minimizarlo (queda como una burbuja) o cerrarlo.', 'ddn-suite' ); ?>
+				<?php esc_html_e( 'Un reproductor flotante aparece abajo a la derecha en toda la web. El visitante elige emisora, regula el volumen y puede minimizarlo (queda como una burbuja) o cerrarlo. El estado se recuerda al cambiar de página.', 'ddn-suite' ); ?>
 			</p>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -95,10 +109,21 @@ final class RadioPage {
 					<tr>
 						<th scope="row"><?php esc_html_e( 'Reproductor', 'ddn-suite' ); ?></th>
 						<td>
-							<label>
-								<input type="checkbox" name="enabled" value="1" <?php checked( $data['enabled'] ); ?>>
-								<?php esc_html_e( 'Mostrarlo en la web', 'ddn-suite' ); ?>
-							</label>
+							<label><input type="checkbox" name="enabled" value="1" <?php checked( $data['enabled'] ); ?>> <?php esc_html_e( 'Mostrarlo en la web', 'ddn-suite' ); ?></label>
+							<br>
+							<label><input type="checkbox" name="start_minimized" value="1" <?php checked( $data['start_minimized'] ); ?>> <?php esc_html_e( 'Empezar minimizado (burbuja)', 'ddn-suite' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="ddn-radio-default"><?php esc_html_e( 'Emisora por defecto', 'ddn-suite' ); ?></label></th>
+						<td>
+							<select name="default_station" id="ddn-radio-default">
+								<option value="-1"><?php esc_html_e( '— Ninguna —', 'ddn-suite' ); ?></option>
+								<?php foreach ( array_values( $data['stations'] ) as $i => $st ) : ?>
+									<option value="<?php echo (int) $i; ?>" <?php selected( $data['default_station'], $i ); ?>><?php echo esc_html( $st['name'] ); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'Queda preseleccionada; no suena sola hasta que el visitante pulse play.', 'ddn-suite' ); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -108,7 +133,7 @@ final class RadioPage {
 					<thead>
 						<tr>
 							<th style="width:90px"><?php esc_html_e( 'Logo', 'ddn-suite' ); ?></th>
-							<th style="width:26%"><?php esc_html_e( 'Nombre', 'ddn-suite' ); ?></th>
+							<th style="width:22%"><?php esc_html_e( 'Nombre', 'ddn-suite' ); ?></th>
 							<th><?php esc_html_e( 'URL del stream (audio)', 'ddn-suite' ); ?></th>
 							<th style="width:80px"></th>
 						</tr>
@@ -124,25 +149,30 @@ final class RadioPage {
 				<?php submit_button( __( 'Guardar cambios', 'ddn-suite' ) ); ?>
 			</form>
 
+			<?php $this->listeners( $data['stations'] ); ?>
+
 			<script type="text/html" id="ddn-radio-row-tpl">
-				<?php
-				$this->row(
-					'__i__',
-					array(
-						'name'     => '',
-						'stream'   => '',
-						'logo_id'  => 0,
-						'logo_url' => '',
-					)
-				);
-				?>
+				<?php $this->row( '__i__', $this->blank_station() ); ?>
 			</script>
 		</div>
 		<?php
 	}
 
 	/**
-	 * @param array{name:string,stream:string,logo_id:int,logo_url:string} $station
+	 * @return array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string}
+	 */
+	private function blank_station(): array {
+		return array(
+			'name'     => '',
+			'stream'   => '',
+			'logo_id'  => 0,
+			'logo_url' => '',
+			'meta_url' => '',
+		);
+	}
+
+	/**
+	 * @param array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string} $station
 	 */
 	private function row( string $index, array $station ): void {
 		$field = static fn ( string $name ): string => 'stations[' . $index . '][' . $name . ']';
@@ -159,9 +189,57 @@ final class RadioPage {
 				<button type="button" class="button-link ddn-radio-row__clear" style="<?php echo 0 === $station['logo_id'] ? 'display:none' : ''; ?>"><?php esc_html_e( 'Quitar', 'ddn-suite' ); ?></button>
 			</td>
 			<td><input type="text" class="regular-text" name="<?php echo esc_attr( $field( 'name' ) ); ?>" value="<?php echo esc_attr( $station['name'] ); ?>"></td>
-			<td><input type="url" class="large-text code" name="<?php echo esc_attr( $field( 'stream' ) ); ?>" value="<?php echo esc_attr( $station['stream'] ); ?>" placeholder="https://&hellip;/stream"></td>
+			<td>
+				<input type="url" class="large-text code ddn-radio-row__stream" name="<?php echo esc_attr( $field( 'stream' ) ); ?>" value="<?php echo esc_attr( $station['stream'] ); ?>" placeholder="https://&hellip;/stream">
+				<button type="button" class="button button-small ddn-radio-row__test"><?php esc_html_e( 'Probar', 'ddn-suite' ); ?></button>
+				<span class="ddn-radio-row__result" aria-live="polite"></span>
+				<p class="ddn-radio-row__warn" style="color:#b32d2e;margin:4px 0 0;<?php echo str_starts_with( $station['stream'], 'http://' ) && is_ssl() ? '' : 'display:none'; ?>"></p>
+				<details style="margin-top:4px">
+					<summary style="cursor:pointer;color:#646970"><?php esc_html_e( 'Metadatos «sonando ahora» (opcional)', 'ddn-suite' ); ?></summary>
+					<input type="url" class="large-text code" style="margin-top:4px" name="<?php echo esc_attr( $field( 'meta_url' ) ); ?>" value="<?php echo esc_attr( $station['meta_url'] ); ?>" placeholder="<?php esc_attr_e( 'Se detecta solo; solo si tu panel usa otra ruta', 'ddn-suite' ); ?>">
+				</details>
+			</td>
 			<td><button type="button" class="button-link delete ddn-radio-row__del"><?php esc_html_e( 'Eliminar', 'ddn-suite' ); ?></button></td>
 		</tr>
+		<?php
+	}
+
+	/**
+	 * @param array<int,array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string}> $stations
+	 */
+	private function listeners( array $stations ): void {
+		if ( array() === $stations ) {
+			return;
+		}
+		$summary = $this->stats->summary( 30 );
+		?>
+		<h2><?php esc_html_e( 'Escuchas (últimos 30 días)', 'ddn-suite' ); ?></h2>
+		<table class="widefat striped" style="max-width:640px">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Emisora', 'ddn-suite' ); ?></th>
+					<th><?php esc_html_e( 'Veces que se pulsó play', 'ddn-suite' ); ?></th>
+					<th><?php esc_html_e( 'Horas escuchadas (aprox.)', 'ddn-suite' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( array_values( $stations ) as $i => $station ) : ?>
+					<?php
+					$row   = $summary[ $i ] ?? array(
+						'starts'  => 0,
+						'seconds' => 0,
+					);
+					$hours = $row['seconds'] > 0 ? round( $row['seconds'] / 3600, 1 ) : 0;
+					?>
+					<tr>
+						<td><?php echo esc_html( $station['name'] ); ?></td>
+						<td><?php echo esc_html( number_format_i18n( $row['starts'] ) ); ?></td>
+						<td><?php echo esc_html( number_format_i18n( $hours, 1 ) ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<p class="description"><?php esc_html_e( 'Sin datos personales: solo cuántas veces se dio a play y el tiempo acumulado (latido cada 30 s).', 'ddn-suite' ); ?></p>
 		<?php
 	}
 }

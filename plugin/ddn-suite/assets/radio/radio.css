@@ -23,6 +23,11 @@
 	transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
 }
 
+.ddn-radio :focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
 /* --- Minimizado: burbuja --- */
 .ddn-radio.is-minimized {
 	width: 64px;
@@ -32,6 +37,35 @@
 	cursor: pointer;
 	background: radial-gradient(circle at 30% 30%, #e11d1d, #8c0000);
 	box-shadow: 0 12px 25px rgba(140, 0, 0, 0.55), inset 0 4px 8px rgba(255, 255, 255, 0.25);
+}
+.ddn-radio.is-minimized:focus-visible {
+	outline: 3px solid #bf0202;
+	outline-offset: 3px;
+}
+
+/* Ecualizador en la burbuja cuando hay emisión en vivo */
+.ddn-radio.is-minimized.is-playing::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	bottom: 14px;
+	transform: translateX(-50%);
+	width: 22px;
+	height: 14px;
+	background:
+		linear-gradient(#fff, #fff) 0 100% / 4px 40% no-repeat,
+		linear-gradient(#fff, #fff) 9px 100% / 4px 100% no-repeat,
+		linear-gradient(#fff, #fff) 18px 100% / 4px 60% no-repeat;
+	animation: ddn-radio-eq 0.9s ease-in-out infinite alternate;
+	opacity: 0.9;
+}
+@keyframes ddn-radio-eq {
+	from {
+		background-size: 4px 40%, 4px 100%, 4px 60%;
+	}
+	to {
+		background-size: 4px 90%, 4px 30%, 4px 100%;
+	}
 }
 
 /* --- Cabecera --- */
@@ -57,6 +91,9 @@
 .ddn-radio.is-minimized .ddn-radio__brand {
 	font-size: 30px;
 	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+.ddn-radio.is-minimized.is-playing .ddn-radio__brand {
+	transform: translateY(-6px);
 }
 
 .ddn-radio__title {
@@ -88,7 +125,8 @@
 
 .ddn-radio.is-minimized .ddn-radio__title,
 .ddn-radio.is-minimized .ddn-radio__actions,
-.ddn-radio.is-minimized .ddn-radio__stations {
+.ddn-radio.is-minimized .ddn-radio__stations,
+.ddn-radio.is-minimized .ddn-radio__controls {
 	display: none;
 }
 
@@ -136,16 +174,23 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.ddn-radio__info small {
+.ddn-radio__state {
 	font-size: 12px;
 	color: #777;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
-.ddn-radio__station.is-active .ddn-radio__info small {
+.ddn-radio__station.is-active .ddn-radio__state {
 	color: #bf0202;
 	font-weight: 600;
 }
+.ddn-radio__station.is-blocked .ddn-radio__state {
+	color: #8c0000;
+}
 
 .ddn-radio__play {
+	position: relative;
 	flex-shrink: 0;
 	width: 34px;
 	height: 34px;
@@ -160,6 +205,45 @@
 .ddn-radio__play:hover {
 	background: #8c0000;
 }
+.ddn-radio__station.is-loading .ddn-radio__play {
+	color: transparent;
+}
+.ddn-radio__station.is-loading .ddn-radio__play::after {
+	content: "";
+	position: absolute;
+	inset: 9px;
+	border: 2px solid rgba(255, 255, 255, 0.4);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: ddn-radio-spin 0.7s linear infinite;
+}
+@keyframes ddn-radio-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* --- Volumen --- */
+.ddn-radio__controls {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 4px 14px 12px;
+}
+.ddn-radio__mute {
+	color: #555;
+	font-size: 15px;
+	padding: 2px 4px;
+}
+.ddn-radio__mute:hover {
+	background: #eee;
+}
+.ddn-radio__volume {
+	flex: 1;
+	height: 4px;
+	accent-color: #bf0202;
+	cursor: pointer;
+}
 
 @media (max-width: 480px) {
 	.ddn-radio:not(.is-minimized) {
@@ -170,7 +254,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.ddn-radio {
+	.ddn-radio,
+	.ddn-radio.is-minimized.is-playing::after,
+	.ddn-radio__station.is-loading .ddn-radio__play::after {
 		transition: none;
+		animation: none;
 	}
 }

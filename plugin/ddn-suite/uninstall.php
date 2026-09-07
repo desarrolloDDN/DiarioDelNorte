@@ -13,7 +13,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-foreach ( array( 'ddn_ad_campaigns', 'ddn_ad_events', 'ddn_pageviews' ) as $table ) {
+foreach ( array( 'ddn_ad_campaigns', 'ddn_ad_events', 'ddn_pageviews', 'ddn_radio_plays' ) as $table ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}{$table}" );
 }
