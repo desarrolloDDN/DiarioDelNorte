@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.17] — 2026-09-07
+
+### Corregido
+- **Pie de página: «Secciones» mostraba los enlaces legales.** Si la ubicación
+  de menú «footer»/«primary» quedaba apuntando a un menú borrado, WordPress
+  volcaba ahí la lista de páginas (términos, cookies…). Ahora, si no hay un
+  menú real asignado, el pie usa su propia lista de secciones (Inicio + las 19
+  categorías + Contacto).
+
 ## [0.1.16] — 2026-09-07
 
 ### Cambiado

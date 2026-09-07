@@ -96,20 +96,39 @@ $ddn_contact_bits = array_filter(
 			<p class="site-footer__legal"><?php echo esc_html( $ddn_legal ); ?></p>
 		<?php endif; ?>
 
+		<?php
+		/*
+		 * Menú de secciones: se toma de la ubicación «footer» (o «primary»)
+		 * solo si tiene un menú real asignado. `fallback_cb => false` evita
+		 * que wp_nav_menu vuelque la lista de páginas (términos, cookies…)
+		 * cuando la ubicación quedó apuntando a un menú borrado.
+		 */
+		$ddn_sections_html = '';
+		foreach ( array( 'footer', 'primary' ) as $ddn_loc ) {
+			if ( ! has_nav_menu( $ddn_loc ) ) {
+				continue;
+			}
+			$ddn_sections_html = (string) wp_nav_menu(
+				array(
+					'theme_location' => $ddn_loc,
+					'container'      => false,
+					'menu_class'     => 'site-footer__menu',
+					'depth'          => 1,
+					'fallback_cb'    => false,
+					'echo'           => false,
+				)
+			);
+			if ( '' !== trim( $ddn_sections_html ) ) {
+				break;
+			}
+		}
+		?>
 		<details class="site-footer__legal-nav site-footer__sections">
 			<summary class="site-footer__legal-summary"><?php esc_html_e( 'Secciones', 'diario-del-norte' ); ?></summary>
 			<nav class="site-footer__nav" aria-label="<?php esc_attr_e( 'Secciones', 'diario-del-norte' ); ?>">
 				<?php
-				$ddn_footer_loc = has_nav_menu( 'footer' ) ? 'footer' : ( has_nav_menu( 'primary' ) ? 'primary' : '' );
-				if ( '' !== $ddn_footer_loc ) {
-					wp_nav_menu(
-						array(
-							'theme_location' => $ddn_footer_loc,
-							'container'      => false,
-							'menu_class'     => 'site-footer__menu',
-							'depth'          => 1,
-						)
-					);
+				if ( '' !== trim( $ddn_sections_html ) ) {
+					echo $ddn_sections_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu ya devuelve HTML escapado.
 				} else {
 					echo '<ul class="site-footer__menu">';
 					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/' ) ), esc_html__( 'Inicio', 'diario-del-norte' ) );
@@ -127,18 +146,25 @@ $ddn_contact_bits = array_filter(
 			</nav>
 		</details>
 
+		<?php
+		$ddn_legal_html = has_nav_menu( 'footer-legal' )
+			? (string) wp_nav_menu(
+				array(
+					'theme_location' => 'footer-legal',
+					'container'      => false,
+					'menu_class'     => 'site-footer__legal-links',
+					'depth'          => 1,
+					'fallback_cb'    => false,
+					'echo'           => false,
+				)
+			)
+			: '';
+		?>
 		<details class="site-footer__legal-nav">
 			<summary class="site-footer__legal-summary"><?php esc_html_e( 'Términos y políticas', 'diario-del-norte' ); ?></summary>
 			<?php
-			if ( has_nav_menu( 'footer-legal' ) ) {
-				wp_nav_menu(
-					array(
-						'theme_location' => 'footer-legal',
-						'container'      => false,
-						'menu_class'     => 'site-footer__legal-links',
-						'depth'          => 1,
-					)
-				);
+			if ( '' !== trim( $ddn_legal_html ) ) {
+				echo $ddn_legal_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_nav_menu ya devuelve HTML escapado.
 			} else {
 				echo '<ul class="site-footer__legal-links">';
 				foreach ( $ddn_legal_links as $ddn_slug => $ddn_label ) {
