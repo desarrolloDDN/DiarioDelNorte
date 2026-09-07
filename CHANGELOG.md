@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.23] — 2026-09-07
+
+### Corregido
+- **Las campañas publicitarias se borraban al actualizar.** `uninstall.php`
+  eliminaba las tablas de campañas y estadísticas, y algunos gestores de
+  plugins «actualizan» borrando y reinstalando (lo que ejecuta ese archivo).
+  Ahora, al desinstalar, **los datos se conservan por defecto**; para vaciarlos
+  a propósito hay que poner la opción `ddn_suite_purge` en `1` antes. Las
+  campañas ya perdidas hay que volver a crearlas una última vez.
+
 ## [0.1.22] — 2026-09-07
 
 ### Añadido

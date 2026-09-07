@@ -41,6 +41,7 @@ se duplican esos archivos.
 | Módulo | Qué hace |
 |---|---|
 | `Install/Installer.php` | Crea las tablas propias (dbDelta), versión en `ddn_suite_db_version` (v6: campaña con zonas múltiples + AdSense + evidencia; v7: `wp_ddn_radio_plays`). |
+| `uninstall.php` | **No** borra tablas ni opciones salvo que `get_option('ddn_suite_purge') === '1'` — así una «actualización» que borre+reinstale el plugin no se lleva las campañas. |
 | `Ads/AdZone`, `Ads/CampaignType` | Enums; `AdZone` debe coincidir con `DiarioDelNorte\Support\Ads::ZONES` del tema. `CampaignType`: adsense, gam, html, image, video, sponsored. |
 | `Ads/CampaignRepository`, `Ads/StatsRepository` | Acceso a datos (consultas preparadas con `%i`). `StatsRepository::daily($id)` = impresiones/clics por día para el informe. |
 | `Ads/CampaignSelector`, `Ads/AdRenderer` | Selección (prioridad → sorteo ponderado por peso, filtrado por categoría) y render (`render($campaign, $zone)`; adsense = `<ins class="adsbygoogle">` con client/slot, image/video enlazados, html/gam/sponsored = creativa cruda). Puros. |
