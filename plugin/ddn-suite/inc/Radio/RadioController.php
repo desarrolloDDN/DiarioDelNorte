@@ -97,7 +97,14 @@ final class RadioController {
 			);
 		}
 
-		return new WP_REST_Response( $this->meta->now_playing( $stations[ $index ] ) );
+		return new WP_REST_Response(
+			$this->meta->now_playing(
+				array(
+					'stream'   => $stations[ $index ]['stream'],
+					'meta_url' => $stations[ $index ]['meta_url'],
+				)
+			)
+		);
 	}
 
 	public function tick( WP_REST_Request $request ): WP_REST_Response {

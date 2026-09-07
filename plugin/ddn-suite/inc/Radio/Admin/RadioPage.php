@@ -126,6 +126,13 @@ final class RadioPage {
 							<p class="description"><?php esc_html_e( 'Queda preseleccionada; no suena sola hasta que el visitante pulse play.', 'ddn-suite' ); ?></p>
 						</td>
 					</tr>
+					<tr>
+						<th scope="row"><label for="ddn-radio-idle"><?php esc_html_e( 'Nombre en la cabecera cuando no suena nada', 'ddn-suite' ); ?></label></th>
+						<td>
+							<input type="text" class="regular-text" id="ddn-radio-idle" name="idle_title" value="<?php echo esc_attr( $data['idle_title'] ); ?>">
+							<p class="description"><?php esc_html_e( 'Al reproducir una emisora, la cabecera muestra la «marca» de esa emisora (ver abajo).', 'ddn-suite' ); ?></p>
+						</td>
+					</tr>
 				</table>
 
 				<h2><?php esc_html_e( 'Emisoras', 'ddn-suite' ); ?></h2>
@@ -133,7 +140,8 @@ final class RadioPage {
 					<thead>
 						<tr>
 							<th style="width:90px"><?php esc_html_e( 'Logo', 'ddn-suite' ); ?></th>
-							<th style="width:22%"><?php esc_html_e( 'Nombre', 'ddn-suite' ); ?></th>
+							<th style="width:18%"><?php esc_html_e( 'Nombre (fila)', 'ddn-suite' ); ?></th>
+							<th style="width:18%"><?php esc_html_e( 'Marca (cabecera)', 'ddn-suite' ); ?></th>
 							<th><?php esc_html_e( 'URL del stream (audio)', 'ddn-suite' ); ?></th>
 							<th style="width:80px"></th>
 						</tr>
@@ -159,11 +167,12 @@ final class RadioPage {
 	}
 
 	/**
-	 * @return array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string}
+	 * @return array{name:string,brand:string,stream:string,logo_id:int,logo_url:string,meta_url:string}
 	 */
 	private function blank_station(): array {
 		return array(
 			'name'     => '',
+			'brand'    => '',
 			'stream'   => '',
 			'logo_id'  => 0,
 			'logo_url' => '',
@@ -172,7 +181,7 @@ final class RadioPage {
 	}
 
 	/**
-	 * @param array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string} $station
+	 * @param array{name:string,brand:string,stream:string,logo_id:int,logo_url:string,meta_url:string} $station
 	 */
 	private function row( string $index, array $station ): void {
 		$field = static fn ( string $name ): string => 'stations[' . $index . '][' . $name . ']';
@@ -189,6 +198,7 @@ final class RadioPage {
 				<button type="button" class="button-link ddn-radio-row__clear" style="<?php echo 0 === $station['logo_id'] ? 'display:none' : ''; ?>"><?php esc_html_e( 'Quitar', 'ddn-suite' ); ?></button>
 			</td>
 			<td><input type="text" class="regular-text" name="<?php echo esc_attr( $field( 'name' ) ); ?>" value="<?php echo esc_attr( $station['name'] ); ?>"></td>
+			<td><input type="text" class="regular-text" name="<?php echo esc_attr( $field( 'brand' ) ); ?>" value="<?php echo esc_attr( $station['brand'] ); ?>" placeholder="<?php esc_attr_e( 'Se detecta solo', 'ddn-suite' ); ?>"></td>
 			<td>
 				<input type="url" class="large-text code ddn-radio-row__stream" name="<?php echo esc_attr( $field( 'stream' ) ); ?>" value="<?php echo esc_attr( $station['stream'] ); ?>" placeholder="https://&hellip;/stream">
 				<button type="button" class="button button-small ddn-radio-row__test"><?php esc_html_e( 'Probar', 'ddn-suite' ); ?></button>
@@ -205,7 +215,7 @@ final class RadioPage {
 	}
 
 	/**
-	 * @param array<int,array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string}> $stations
+	 * @param array<int,array{name:string,brand:string,stream:string,logo_id:int,logo_url:string,meta_url:string}> $stations
 	 */
 	private function listeners( array $stations ): void {
 		if ( array() === $stations ) {

@@ -47,8 +47,17 @@
 		var closeBtn = root.querySelector( '[data-radio-close]' );
 		var muteBtn = root.querySelector( '[data-radio-mute]' );
 		var volInput = root.querySelector( '[data-radio-volume]' );
+		var titleEl = root.querySelector( '.ddn-radio__title' );
 		if ( ! audio || ! stations.length ) {
 			return;
+		}
+
+		var idleTitle = titleEl ? ( titleEl.getAttribute( 'data-idle' ) || titleEl.textContent ) : '';
+
+		function setTitle( text ) {
+			if ( titleEl ) {
+				titleEl.textContent = text || idleTitle;
+			}
 		}
 
 		var current = null; // .ddn-radio__station en curso
@@ -92,12 +101,12 @@
 			if ( ! ( 'mediaSession' in navigator ) || ! station ) {
 				return;
 			}
-			var name = station.querySelector( 'strong' );
+			var brand = station.getAttribute( 'data-brand' ) || 'Diario del Norte';
 			var art = ( CFG.artwork || [] )[ Number( station.getAttribute( 'data-station' ) ) ] || '';
 			try {
 				navigator.mediaSession.metadata = new window.MediaMetadata( {
-					title: title || ( T.live || 'En vivo' ),
-					artist: name ? name.textContent : 'Diario del Norte',
+					title: title || brand,
+					artist: brand,
 					album: 'Diario del Norte',
 					artwork: art ? [ { src: art, sizes: '96x96', type: 'image/png' } ] : []
 				} );
@@ -362,6 +371,7 @@
 				current.classList.remove( 'is-loading', 'is-blocked' );
 				current.classList.add( 'is-active' );
 				setState( current, T.live || 'En vivo' );
+				setTitle( current.getAttribute( 'data-brand' ) );
 				var onBtn = current.querySelector( '[data-radio-play]' );
 				if ( onBtn ) {
 					onBtn.textContent = '⏸';
@@ -376,6 +386,7 @@
 			markPlaying( false );
 			stopBeats();
 			stopPoll();
+			setTitle( idleTitle );
 			if ( current ) {
 				current.classList.remove( 'is-loading' );
 				setState( current, T.idle || 'Detenida' );

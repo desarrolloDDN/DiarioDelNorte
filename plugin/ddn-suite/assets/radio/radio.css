@@ -157,6 +157,7 @@
 	object-fit: contain;
 	border-radius: 8px;
 	display: block;
+	background: #fff;
 }
 .ddn-radio__logo--blank {
 	background: #d9d9d9;

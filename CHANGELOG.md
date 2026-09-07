@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.16] — 2026-09-07
+
+### Cambiado
+- **Radio: nombre en la cabecera.** Ya no dice «Radio en vivo» fijo: al
+  reproducir una emisora muestra su **marca** (Riohacha → «Cardenal Stereo»,
+  Valledupar → «Sistema Cardenal»); en pausa muestra «Sistema Cardenal». La
+  marca de cada emisora y el texto en pausa se editan en DDN Suite → Radio.
+- Logos por defecto de Cardenal Stereo (Riohacha) y Sistema Cardenal
+  (Valledupar). Para verlos nítidos, súbelos en alta resolución con «Elegir».
+
 ## [0.1.15] — 2026-09-07
 
 ### Añadido

@@ -31,7 +31,8 @@ final class RadioPlayer {
 	 *     enabled:bool,
 	 *     start_minimized:bool,
 	 *     default_station:int,
-	 *     stations:array<int,array{name:string,stream:string,logo_id:int,logo_url:string,meta_url:string}>
+	 *     idle_title:string,
+	 *     stations:array<int,array{name:string,brand:string,stream:string,logo_id:int,logo_url:string,meta_url:string}>
 	 * }|null
 	 */
 	private function config(): ?array {
@@ -135,7 +136,7 @@ final class RadioPlayer {
 		<div id="ddn-radio" class="ddn-radio is-expanded" hidden>
 			<div class="ddn-radio__bar">
 				<span class="ddn-radio__brand" aria-hidden="true">&#127911;</span>
-				<span class="ddn-radio__title"><?php esc_html_e( 'Radio en vivo', 'ddn-suite' ); ?></span>
+				<span class="ddn-radio__title" data-idle="<?php echo esc_attr( $config['idle_title'] ); ?>"><?php echo esc_html( $config['idle_title'] ); ?></span>
 				<div class="ddn-radio__actions">
 					<button type="button" class="ddn-radio__btn" data-radio-min aria-label="<?php esc_attr_e( 'Minimizar', 'ddn-suite' ); ?>">&#8211;</button>
 					<button type="button" class="ddn-radio__btn" data-radio-close aria-label="<?php esc_attr_e( 'Cerrar', 'ddn-suite' ); ?>">&times;</button>
@@ -144,7 +145,7 @@ final class RadioPlayer {
 
 			<div class="ddn-radio__stations">
 				<?php foreach ( $stations as $index => $station ) : ?>
-					<div class="ddn-radio__station" data-stream="<?php echo esc_url( $station['stream'] ); ?>" data-station="<?php echo (int) $index; ?>">
+					<div class="ddn-radio__station" data-stream="<?php echo esc_url( $station['stream'] ); ?>" data-station="<?php echo (int) $index; ?>" data-brand="<?php echo esc_attr( $station['brand'] ); ?>">
 						<?php if ( '' !== $station['logo_url'] ) : ?>
 							<img class="ddn-radio__logo" src="<?php echo esc_url( $station['logo_url'] ); ?>" alt="" width="40" height="40" loading="lazy" decoding="async">
 						<?php else : ?>
