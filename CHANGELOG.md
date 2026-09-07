@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.22] — 2026-09-07
+
+### Añadido
+- **Previsualización al compartir (Open Graph / Twitter Card).** Al pegar el
+  enlace de una nota en WhatsApp o redes ahora se ve la **imagen destacada**,
+  el titular y el resumen (antes salía el logotipo del sitio). Nuevo tamaño de
+  imagen `ddn-og` (1200 × 630) y opción en el Personalizador → «Compartir en
+  redes» para la imagen por defecto de la portada y las secciones. Si hay un
+  plugin de SEO activo (Yoast, Rank Math, Jetpack…) se cede el control.
+
 ## [0.1.21] — 2026-09-07
 
 ### Corregido

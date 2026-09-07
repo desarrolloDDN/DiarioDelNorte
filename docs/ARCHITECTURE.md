@@ -24,6 +24,7 @@
 | Secciones + menú | `inc/Sections/DefaultSectionsInstaller.php` (19 categorías + submenú «Más») |
 | Personalizador | `inc/Customizer/SiteOptions.php` (pie, contacto, redes, edición impresa) |
 | Perfil de autor | `inc/Users/AuthorProfile.php` (foto + cargo para la firma; filtra `get_avatar_data`) |
+| Compartir en redes | `inc/Content/SocialMeta.php` (Open Graph + Twitter Card en `wp_head`: imagen destacada, titular, resumen; tamaño `ddn-og` 1200×630; se inhibe si hay plugin SEO). Filtro `ddn/social_meta`. |
 | Helpers de plantilla | `inc/Support/Format.php`, `inc/Support/Ads.php` |
 | Fuentes | Autoalojadas en `assets/fonts/`, declaradas en `assets/src/scss/_fonts.scss`. Sin Google Fonts. |
 | Plantillas | `front-page.php`, `single.php`, `archive.php`, `search.php`, `page.php`, `404.php`, `index.php` |

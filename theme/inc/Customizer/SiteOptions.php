@@ -91,6 +91,28 @@ final class SiteOptions {
 		);
 		$this->text( $wp_customize, 'ddn_print_pdf', __( 'Enlace al PDF', 'diario-del-norte' ), '', 'esc_url_raw', 'ddn_print' );
 		$this->text( $wp_customize, 'ddn_print_label', __( 'Texto bajo la portada', 'diario-del-norte' ), '', 'sanitize_text_field', 'ddn_print' );
+
+		// --- Compartir en redes --------------------------------------------
+		$wp_customize->add_section(
+			'ddn_social',
+			array(
+				'title'       => __( 'Compartir en redes', 'diario-del-norte' ),
+				'description' => __( 'Cada nota usa su imagen destacada al compartirse en WhatsApp y redes. Esta imagen es la reserva para la portada y las secciones.', 'diario-del-norte' ),
+				'priority'    => 122,
+			)
+		);
+		$wp_customize->add_setting( 'ddn_social_image', array( 'sanitize_callback' => 'absint' ) );
+		$wp_customize->add_control(
+			new WP_Customize_Image_Control(
+				$wp_customize,
+				'ddn_social_image',
+				array(
+					'label'       => __( 'Imagen por defecto para compartir', 'diario-del-norte' ),
+					'description' => __( 'Recomendado 1200 × 630 px.', 'diario-del-norte' ),
+					'section'     => 'ddn_social',
+				)
+			)
+		);
 	}
 
 	private function text( WP_Customize_Manager $wp_customize, string $id, string $label, string $default_value = '', string $sanitize = 'sanitize_text_field', string $section = 'ddn_footer', string $description = '' ): void {

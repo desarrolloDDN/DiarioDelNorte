@@ -14,6 +14,7 @@ namespace DiarioDelNorte;
 use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
+use DiarioDelNorte\Content\SocialMeta;
 use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller;
 use DiarioDelNorte\Updater\GitHubUpdater;
@@ -44,6 +45,7 @@ final class Theme {
 		( new DatelineField() )->register();
 		( new PhotoCredit() )->register();
 		( new InlineRelated() )->register();
+		( new SocialMeta() )->register();
 		( new GitHubUpdater( DDN_THEME_VERSION ) )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
@@ -111,6 +113,7 @@ final class Theme {
 		add_image_size( 'ddn-lead', 1280, 800, true );      // Nota principal de portada / artículo.
 		add_image_size( 'ddn-card', 768, 512, true );       // Tarjetas de sección.
 		add_image_size( 'ddn-thumb', 208, 156, true );      // Listados compactos.
+		add_image_size( 'ddn-og', 1200, 630, true );        // Previsualización en redes / WhatsApp.
 		set_post_thumbnail_size( 768, 512, true );
 
 		// Ancho de contenido = columna de lectura del artículo (40rem @ 16px).
