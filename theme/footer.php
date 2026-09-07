@@ -96,31 +96,36 @@ $ddn_contact_bits = array_filter(
 			<p class="site-footer__legal"><?php echo esc_html( $ddn_legal ); ?></p>
 		<?php endif; ?>
 
-		<nav class="site-footer__nav" aria-label="<?php esc_attr_e( 'Secciones', 'diario-del-norte' ); ?>">
-			<?php
-			if ( has_nav_menu( 'footer' ) ) {
-				wp_nav_menu(
-					array(
-						'theme_location' => 'footer',
-						'container'      => false,
-						'menu_class'     => 'site-footer__menu',
-						'depth'          => 1,
-					)
-				);
-			} else {
-				echo '<ul class="site-footer__menu">';
-				foreach ( Sections::VISIBLE as $ddn_slug => $ddn_name ) {
-					$ddn_term = Sections::category( $ddn_slug );
-					$ddn_link = $ddn_term ? get_category_link( $ddn_term ) : home_url( '/' . $ddn_slug . '/' );
-					printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_link ), esc_html( $ddn_name ) );
+		<details class="site-footer__legal-nav site-footer__sections">
+			<summary class="site-footer__legal-summary"><?php esc_html_e( 'Secciones', 'diario-del-norte' ); ?></summary>
+			<nav class="site-footer__nav" aria-label="<?php esc_attr_e( 'Secciones', 'diario-del-norte' ); ?>">
+				<?php
+				$ddn_footer_loc = has_nav_menu( 'footer' ) ? 'footer' : ( has_nav_menu( 'primary' ) ? 'primary' : '' );
+				if ( '' !== $ddn_footer_loc ) {
+					wp_nav_menu(
+						array(
+							'theme_location' => $ddn_footer_loc,
+							'container'      => false,
+							'menu_class'     => 'site-footer__menu',
+							'depth'          => 1,
+						)
+					);
+				} else {
+					echo '<ul class="site-footer__menu">';
+					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/' ) ), esc_html__( 'Inicio', 'diario-del-norte' ) );
+					foreach ( Sections::VISIBLE + Sections::MORE as $ddn_slug => $ddn_name ) {
+						$ddn_term = Sections::category( $ddn_slug );
+						$ddn_link = $ddn_term ? get_category_link( $ddn_term ) : home_url( '/' . $ddn_slug . '/' );
+						printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_link ), esc_html( $ddn_name ) );
+					}
+					if ( '' !== $ddn_contact_href ) {
+						printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_contact_href ), esc_html__( 'Contacto', 'diario-del-norte' ) );
+					}
+					echo '</ul>';
 				}
-				if ( '' !== $ddn_contact_href ) {
-					printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_contact_href ), esc_html__( 'Contacto', 'diario-del-norte' ) );
-				}
-				echo '</ul>';
-			}
-			?>
-		</nav>
+				?>
+			</nav>
+		</details>
 
 		<details class="site-footer__legal-nav">
 			<summary class="site-footer__legal-summary"><?php esc_html_e( 'Términos y políticas', 'diario-del-norte' ); ?></summary>

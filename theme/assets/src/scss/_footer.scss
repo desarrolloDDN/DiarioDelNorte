@@ -1,9 +1,9 @@
 // Pie de página: identidad, redes, aviso legal, menú de secciones y
-// datos de contacto. Panel claro separado por un filete superior.
+// datos de contacto. Panel claro; el cambio de fondo (arena) ya lo
+// separa del resto de la web, sin filete divisorio.
 
 .site-footer {
   margin-top: 3.5rem;
-  border-top: 3px solid var(--rule-strong);
   background: var(--sand);
   color: var(--ink-soft);
   font-family: var(--sans);
@@ -84,10 +84,9 @@
   line-height: 1.55;
 }
 
-// --- Fila 3: menú de secciones ---
-.site-footer__nav {
-  padding: 1rem 0;
-  border-top: 1px solid var(--rule);
+// --- Fila 3: menú de secciones (plegable, como los enlaces legales) ---
+.site-footer__sections .site-footer__nav {
+  margin-top: 0.9rem;
 }
 .site-footer__menu {
   list-style: none;

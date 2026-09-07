@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.7] — 2026-09-06
+
+### Cambiado
+- **Pie de página reorganizado.** El menú de secciones ahora es plegable tras
+  un botón «Secciones» (mismo estilo que «Términos y políticas»); al abrirlo se
+  ven todas las categorías. Si no hay un menú asignado en Apariencia → Menús,
+  el pie usa el menú principal o, en su defecto, la lista completa de
+  secciones (incluidas las de «Más») con «Inicio» y «Contacto».
+
+### Quitado
+- El **filete negro** que separaba el pie del resto de la web; el cambio de
+  fondo (arena) ya lo distingue.
+
 ## [0.1.6] — 2026-09-06
 
 ### Corregido
