@@ -123,8 +123,27 @@ function initMoreNews() {
 
 function initEditionReader() {
   const btn = document.querySelector('[data-edition-reader-toggle]');
+  if (!btn) return;
+
   const panel = document.getElementById('edition-reader');
-  if (!btn || !panel) return;
+  const dl = document.querySelector('.edition__download');
+  const pdf = btn.dataset.pdf || (dl && dl.href) || '';
+
+  // En móvil el visor de PDF embebido en un <iframe> no se ajusta al ancho
+  // de la pantalla (iOS Safari ignora #view=FitH). El visor nativo del
+  // navegador sí lo hace, así que ahí se abre el PDF a pantalla completa.
+  const inlineOk = panel && window.matchMedia('(min-width: 821px)').matches;
+
+  if (!inlineOk) {
+    if (panel) panel.remove();
+    if (btn.dataset.labelMobile) btn.textContent = btn.dataset.labelMobile;
+    btn.removeAttribute('aria-controls');
+    btn.removeAttribute('aria-expanded');
+    btn.addEventListener('click', () => {
+      if (pdf) window.open(pdf, '_blank', 'noopener');
+    });
+    return;
+  }
 
   const labelShow = btn.textContent;
   const labelHide = btn.dataset.labelHide || labelShow;

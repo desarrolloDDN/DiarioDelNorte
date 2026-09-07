@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.18] — 2026-09-07
+
+### Corregido
+- **Edición impresa en el móvil: el PDF no se ajustaba a la pantalla.** El
+  visor embebido (`<iframe>`) no encaja el ancho en el móvil (iOS ignora
+  `#view=FitH`). Ahora, en pantallas pequeñas, «Leer» abre el PDF **a pantalla
+  completa en el visor del propio navegador**, que sí lo ajusta y permite
+  ampliar. En escritorio sigue igual (visor embebido).
+
 ## [0.1.17] — 2026-09-07
 
 ### Corregido

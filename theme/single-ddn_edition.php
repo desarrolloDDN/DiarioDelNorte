@@ -55,7 +55,9 @@ while ( have_posts() ) :
 							type="button"
 							class="btn btn--ghost edition__read-toggle"
 							data-edition-reader-toggle
+							data-pdf="<?php echo esc_url( $ddn_pdf ); ?>"
 							data-label-hide="<?php esc_attr_e( 'Cerrar lectura en línea', 'diario-del-norte' ); ?>"
+							data-label-mobile="<?php esc_attr_e( 'Leer la edición a pantalla completa', 'diario-del-norte' ); ?>"
 							aria-controls="edition-reader"
 							aria-expanded="false"
 						>

@@ -435,18 +435,11 @@
   .edition__aside { position: static; }
   .edition-grid { grid-template-columns: repeat(3, 1fr); }
 
-  // El visor a pantalla completa (sin el margen lateral de .edition ni
-  // el filete/aire de arriba) para que el PDF se lea sin hacer zoom.
-  .edition__reader {
-    margin-inline: calc(-1 * var(--gutter));
-    margin-top: 1.5rem;
-    padding-top: 0;
-    border-top: 0;
-  }
-  .edition__reader iframe {
-    height: 100vh;
-    border: 0;
-  }
+  // En móvil no se embebe el PDF: el <iframe> no se ajusta al ancho de la
+  // pantalla (iOS ignora #view=FitH). El botón «Leer» abre el PDF a
+  // pantalla completa en el visor nativo (lo hace el JS; esto es la red de
+  // seguridad por si el JS no cargara).
+  .edition__reader { display: none; }
 }
 @media (max-width: 560px) {
   .edition-grid { grid-template-columns: repeat(2, 1fr); }
