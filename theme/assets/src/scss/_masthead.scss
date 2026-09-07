@@ -1,8 +1,5 @@
 // Cabezote y barra de secciones.
 
-.masthead {
-  padding-top: 0.5rem;
-}
 // Ancla del rectángulo flotante de búsqueda.
 .masthead > .wrap { position: relative; }
 
@@ -12,8 +9,10 @@
   align-items: center;
   gap: 1rem;
   min-height: 1.75rem;
+  // Filete fino arriba y abajo, iguales.
+  border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.5rem;
+  padding-block: 0.5rem;
 }
 
 // Redes sociales en la barra superior.
@@ -71,7 +70,7 @@
   box-shadow: 0 18px 46px rgba(17, 17, 17, 0.28);
 }
 // Cabezote: justo bajo la fila de redes + lupa.
-.masthead-search { top: 2.6rem; }
+.masthead-search { top: 2.9rem; }
 // Nota: justo bajo la barra roja.
 .topbar-search { top: 100%; }
 

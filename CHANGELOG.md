@@ -5,6 +5,12 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.13] — 2026-09-07
+
+### Cambiado
+- **Cabezote.** La fila superior (redes + buscador) lleva ahora un filete fino
+  arriba, igual al que ya tenía debajo.
+
 ## [0.1.12] — 2026-09-07
 
 ### Cambiado
