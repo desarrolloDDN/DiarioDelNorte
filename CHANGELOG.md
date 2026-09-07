@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.21] — 2026-09-07
+
+### Corregido
+- **Opinión: el título de la columna ya no se recorta.** Se quita el límite de
+  una línea; ahora se lee entero. Las tarjetas del carrusel mantienen la misma
+  altura y en escritorio **todos los botones «Leer columna» quedan alineados**
+  (el botón se ancla abajo).
+
 ## [0.1.20] — 2026-09-07
 
 ### Corregido

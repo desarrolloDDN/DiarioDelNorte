@@ -405,21 +405,21 @@ figcaption {
   color: var(--ink);
 }
 .opinion-card__excerpt {
+  // El título de la columna se lee entero (sin recortar); se reserva el
+  // alto de ~2 líneas para que las tarjetas cortas no queden vacías.
   margin: 0;
+  min-height: calc(2 * 1.35em);
   font-family: var(--sans);
   font-weight: 400;
   font-size: 0.86rem;
   line-height: 1.35;
   color: var(--ink-soft);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  overflow: hidden;
+  text-wrap: pretty;
 }
 .opinion-card__excerpt a { color: inherit; }
 .opinion-card__excerpt a:hover { color: var(--red); }
-.opinion-card__btn { margin-top: 0.4rem; }
+// El botón se ancla abajo: en escritorio todos quedan a la misma altura.
+.opinion-card__btn { margin-top: auto; }
 
 // --- Cuadrícula de archivo (category / 404) ---
 .card-row {
