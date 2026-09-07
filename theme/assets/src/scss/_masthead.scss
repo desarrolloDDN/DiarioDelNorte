@@ -3,6 +3,8 @@
 .masthead {
   padding-top: 0.5rem;
 }
+// Ancla del rectángulo flotante de búsqueda.
+.masthead > .wrap { position: relative; }
 
 .masthead__topline {
   display: flex;
@@ -56,22 +58,22 @@
 
 // --- Búsqueda: rectángulo flotante ---
 // Al activarla se abre como una tarjeta que flota sobre la página (no
-// empuja el contenido). Mismo comportamiento en el cabezote y en la
-// barra roja de la nota.
+// empuja el contenido), colgada justo debajo del icono de la lupa.
 .masthead-search,
 .topbar-search {
-  position: fixed;
+  position: absolute;
   z-index: 200;
-  top: calc(0.9rem + var(--wp-admin--admin-bar--height, 0px));
-  right: 0.9rem;
-  width: min(30rem, calc(100vw - 1.8rem));
+  right: var(--gutter);
+  width: min(28rem, calc(100vw - 2 * var(--gutter)));
   padding: 0.9rem;
   background: var(--surface);
   border: 1px solid var(--rule);
   box-shadow: 0 18px 46px rgba(17, 17, 17, 0.28);
 }
-// En la nota, la barra roja es fija (52px): el rectángulo baja para no taparla.
-.topbar-search { top: calc(3.5rem + var(--wp-admin--admin-bar--height, 0px)); }
+// Cabezote: justo bajo la fila de redes + lupa.
+.masthead-search { top: 2.6rem; }
+// Nota: justo bajo la barra roja.
+.topbar-search { top: 100%; }
 
 .masthead-search[hidden],
 .topbar-search[hidden] { display: none; }

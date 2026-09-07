@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.12] — 2026-09-07
+
+### Cambiado
+- **Buscador flotante, colgado del icono.** El rectángulo de búsqueda ya no
+  aparece fijo en la esquina de la pantalla: se ancla justo debajo del icono
+  de la lupa (bajo la fila de redes en el cabezote; bajo la barra roja en la
+  nota).
+
 ## [0.1.11] — 2026-09-07
 
 ### Cambiado
