@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.10] — 2026-09-07
+
+### Cambiado
+- **Portada de sección, tarjetas con titular sobre la imagen.** El kicker de
+  sección y el titular ya no van pegados al borde izquierdo de la foto; se les
+  deja aire por los cuatro lados (`.cat-overlay__body`).
+
 ## [0.1.9] — 2026-09-07
 
 ### Cambiado

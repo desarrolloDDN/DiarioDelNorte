@@ -167,8 +167,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  // El titular queda alineado con el borde izquierdo de la foto.
-  padding: 1.4rem 1.6rem 1.6rem 0;
+  // Kicker y titular con aire respecto a los bordes de la foto.
+  padding: 1.4rem 1.6rem 1.6rem;
 }
 .cat-overlay__kicker {
   display: block;
