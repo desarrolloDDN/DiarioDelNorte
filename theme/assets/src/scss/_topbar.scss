@@ -75,47 +75,8 @@
 }
 .topbar__brand:hover { color: #fff; }
 
-// --- Búsqueda desplegable ---
-.topbar-search {
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-}
-.topbar-search[hidden] { display: none; }
-.topbar-search__inner {
-  padding: 0.75rem var(--gutter);
-}
-.topbar-search form,
-.topbar-search .search-form {
-  display: flex;
-  gap: 0.5rem;
-  margin: 0;
-}
-.topbar-search .search-field,
-.topbar-search input[type="search"] {
-  flex: 1;
-  min-width: 0;
-  padding: 0.6rem 0.8rem;
-  border: 0;
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  background: #fff;
-  color: var(--ink);
-}
-.topbar-search .search-submit,
-.topbar-search button {
-  flex-shrink: 0;
-  padding: 0.6rem 1.1rem;
-  border: 1px solid #fff;
-  background: transparent;
-  color: #fff;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-.topbar-search .search-submit:hover,
-.topbar-search button:hover { background: #fff; color: var(--red); }
+// La búsqueda (rectángulo flotante) se estiliza junto con `.masthead-search`
+// en `_masthead.scss` — mismo comportamiento en ambas cabeceras.
 
 // --- Panel de secciones ---
 .topbar-drawer {

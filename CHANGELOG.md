@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.11] — 2026-09-07
+
+### Cambiado
+- **Buscador flotante.** Al pulsar la lupa (en el cabezote y en la barra de
+  la nota) la búsqueda ya no despliega una franja que empuja el contenido:
+  aparece como un rectángulo blanco que flota arriba a la derecha, sobre la
+  página. Se cierra con Esc o pulsando fuera.
+
 ## [0.1.10] — 2026-09-07
 
 ### Cambiado
