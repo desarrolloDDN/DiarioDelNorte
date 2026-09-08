@@ -125,7 +125,16 @@ final class AuthorProfile {
 		$photo_id = (int) get_user_meta( $user_id, self::META_PHOTO, true );
 		if ( $photo_id > 0 ) {
 			$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
-			$url  = wp_get_attachment_image_url( $photo_id, array( $size, $size ) );
+			// Se sirve `medium`/`thumbnail` (no el archivo original); el CSS
+			// del avatar usa object-fit: cover, así que la foto se ajusta al
+			// círculo sea cual sea su proporción.
+			$url = wp_get_attachment_image_url( $photo_id, $size > 200 ? 'medium' : 'thumbnail' );
+			if ( ! is_string( $url ) ) {
+				$url = wp_get_attachment_image_url( $photo_id, array( $size, $size ) );
+			}
+			if ( ! is_string( $url ) ) {
+				$url = wp_get_attachment_image_url( $photo_id, 'full' );
+			}
 			if ( is_string( $url ) ) {
 				$args['url']          = $url;
 				$args['found_avatar'] = true;

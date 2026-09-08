@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.24] — 2026-09-07
+
+### Corregido
+- **La foto de perfil del autor se deformaba** si no era cuadrada (firma de la
+  nota, caja del autor, archivo de autor). Ahora se recorta al círculo con
+  `object-fit: cover`, sea cual sea su proporción, y se sirve un tamaño
+  intermedio (`medium`/`thumbnail`) en vez del archivo original.
+
 ## [0.1.23] — 2026-09-07
 
 ### Corregido

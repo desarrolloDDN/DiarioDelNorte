@@ -123,6 +123,8 @@
   height: 44px;
   border-radius: 50%;
   flex-shrink: 0;
+  // Recorta cualquier proporción de foto al círculo, sin deformarla.
+  object-fit: cover;
   background: var(--ink-deep);
 }
 .article__byline-name {
@@ -296,7 +298,7 @@
   background: var(--sand);
   margin: 2.5rem 0;
 }
-.author-box img { width: 64px; height: 64px; border-radius: 50%; filter: grayscale(1); flex-shrink: 0; background: var(--surface); }
+.author-box img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; filter: grayscale(1); flex-shrink: 0; background: var(--surface); }
 .author-box b { font-family: var(--sans); font-size: 0.95rem; }
 .author-box p { margin: 0.4rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); }
 
@@ -329,7 +331,7 @@
 
 .archive-head { padding: 2.5rem 0 1.5rem; border-bottom: 3px solid var(--rule-strong); margin-bottom: 2rem; }
 .archive-head__title { font-size: var(--step-3); }
-.archive-head__avatar { border-radius: 50%; filter: grayscale(1); margin-bottom: 1rem; }
+.archive-head__avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; filter: grayscale(1); margin-bottom: 1rem; }
 .archive-head__desc { color: var(--ink-soft); margin-top: 0.6rem; max-width: 46rem; }
 
 // --- Edición impresa (single + archivo) ---
