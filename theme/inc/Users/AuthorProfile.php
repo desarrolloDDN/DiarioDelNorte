@@ -29,7 +29,9 @@ final class AuthorProfile {
 		add_action( 'personal_options_update', array( $this, 'save' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
-		add_filter( 'get_avatar_data', array( $this, 'filter_avatar' ), 10, 2 );
+		// Prioridad alta: se ejecuta después de los plugins de avatar, para
+		// tener la última palabra sobre la reserva sin pisar sus fotos.
+		add_filter( 'get_avatar_data', array( $this, 'filter_avatar' ), 99, 2 );
 	}
 
 	/** Cargo/rol de un autor para la firma. */
@@ -123,20 +125,29 @@ final class AuthorProfile {
 
 		$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
 
-		// 1) Foto propia del autor.
+		// 1) Foto del campo del tema: siempre manda.
 		$photo_id = (int) get_user_meta( $user_id, self::META_PHOTO, true );
-		$url      = $photo_id > 0 ? $this->attachment_url( $photo_id, $size ) : '';
+		if ( $photo_id > 0 ) {
+			$url = $this->attachment_url( $photo_id, $size );
+			if ( '' !== $url ) {
+				$args['url']          = $url;
+				$args['found_avatar'] = true;
 
-		// 2) Foto por defecto configurada en el Personalizador.
-		if ( '' === $url ) {
-			$default_id = (int) get_theme_mod( 'ddn_author_default_photo', 0 );
-			if ( $default_id > 0 ) {
-				$url = $this->attachment_url( $default_id, $size );
+				return $args;
 			}
 		}
 
-		// 3) Imagen genérica del tema (siempre disponible; nunca Gravatar
-		//    ni el icono de imagen rota).
+		// 2) Si otra fuente (un plugin de autores, un avatar local…) ya puso
+		//    una foto real, se respeta y no se pisa.
+		$current = isset( $args['url'] ) ? (string) $args['url'] : '';
+		if ( '' !== $current && ! $this->is_gravatar( $current ) ) {
+			return $args;
+		}
+
+		// 3) Reserva: la foto por defecto del Personalizador, o la silueta
+		//    del tema. Nunca Gravatar ni el icono de imagen rota.
+		$default_id = (int) get_theme_mod( 'ddn_author_default_photo', 0 );
+		$url        = $default_id > 0 ? $this->attachment_url( $default_id, $size ) : '';
 		if ( '' === $url ) {
 			$url = DDN_THEME_URI . 'assets/img/autor.svg';
 		}
@@ -145,6 +156,10 @@ final class AuthorProfile {
 		$args['found_avatar'] = true;
 
 		return $args;
+	}
+
+	private function is_gravatar( string $url ): bool {
+		return 1 === preg_match( '#//([a-z0-9-]+\.)*gravatar\.com/#i', $url );
 	}
 
 	/** URL de una imagen adjunta, probando tamaños hasta dar con uno. */

@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.28] — 2026-09-09
+
+### Corregido
+- **La foto del autor se quedaba en la genérica** aunque se subiera la real.
+  Si la foto venía de otra fuente (un plugin de autores, un avatar local), el
+  tema la pisaba con la silueta por defecto. Ahora el orden es: foto del campo
+  del tema → cualquier foto real que ya haya puesto otro plugin → silueta por
+  defecto. El filtro corre con prioridad alta para no dejar volver a Gravatar.
+
 ## [0.1.27] — 2026-09-09
 
 ### Quitado
