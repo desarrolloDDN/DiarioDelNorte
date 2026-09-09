@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.25] — 2026-09-08
+
+### Corregido
+- **Pie de página: en «Secciones» salían los enlaces legales.** Ocurría cuando
+  el menú legal estaba asignado a la ubicación «Menú de secciones del pie» en
+  Apariencia → Menús. Ahora «Secciones» muestra **siempre las mismas categorías
+  que la barra principal** (lista propia del tema); ya no depende de un menú
+  guardado. Se retira la ubicación de menú «footer» (era la fuente del enredo).
+
 ## [0.1.24] — 2026-09-07
 
 ### Corregido

@@ -98,19 +98,19 @@ $ddn_contact_bits = array_filter(
 
 		<?php
 		/*
-		 * Menú de secciones: se toma de la ubicación «footer» (o «primary»)
-		 * solo si tiene un menú real asignado. `fallback_cb => false` evita
-		 * que wp_nav_menu vuelque la lista de páginas (términos, cookies…)
-		 * cuando la ubicación quedó apuntando a un menú borrado.
+		 * «Secciones» = las mismas categorías que la barra principal. Se
+		 * dibuja con la lista canónica del tema (VISIBLE + MÁS), no con un
+		 * menú de Apariencia → Menús: así nunca puede acabar mostrando las
+		 * páginas legales por un menú mal asignado a esta ubicación.
+		 *
+		 * Solo se usa un menú propio si se activó `ddn/use_custom_nav`
+		 * (igual que la barra de secciones) y hay uno en «Menú principal».
 		 */
 		$ddn_sections_html = '';
-		foreach ( array( 'footer', 'primary' ) as $ddn_loc ) {
-			if ( ! has_nav_menu( $ddn_loc ) ) {
-				continue;
-			}
+		if ( apply_filters( 'ddn/use_custom_nav', false ) && has_nav_menu( 'primary' ) ) {
 			$ddn_sections_html = (string) wp_nav_menu(
 				array(
-					'theme_location' => $ddn_loc,
+					'theme_location' => 'primary',
 					'container'      => false,
 					'menu_class'     => 'site-footer__menu',
 					'depth'          => 1,
@@ -118,9 +118,6 @@ $ddn_contact_bits = array_filter(
 					'echo'           => false,
 				)
 			);
-			if ( '' !== trim( $ddn_sections_html ) ) {
-				break;
-			}
 		}
 		?>
 		<details class="site-footer__legal-nav site-footer__sections">

@@ -101,10 +101,12 @@ final class Theme {
 		$editor_css = DDN_THEME_DIR . 'assets/dist/app.css';
 		add_editor_style( 'assets/dist/app.css?ver=' . ( file_exists( $editor_css ) ? (string) filemtime( $editor_css ) : DDN_THEME_VERSION ) );
 
+		// El pie de página dibuja las secciones con la lista del tema (las
+		// mismas que la barra principal), no con un menú guardado — por eso
+		// ya no se registra la ubicación «footer».
 		register_nav_menus(
 			array(
 				'primary'      => __( 'Menú principal (barra de secciones)', 'diario-del-norte' ),
-				'footer'       => __( 'Menú de secciones del pie', 'diario-del-norte' ),
 				'footer-legal' => __( 'Enlaces legales del pie (términos, cookies, datos…)', 'diario-del-norte' ),
 			)
 		);
