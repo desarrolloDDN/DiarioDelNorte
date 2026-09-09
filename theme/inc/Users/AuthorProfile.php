@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Users;
 
-use DiarioDelNorte\Support\Monogram;
 use WP_User;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -122,37 +121,43 @@ final class AuthorProfile {
 			return $args;
 		}
 
+		$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
+
+		// 1) Foto propia del autor.
 		$photo_id = (int) get_user_meta( $user_id, self::META_PHOTO, true );
-		if ( $photo_id > 0 ) {
-			$size = isset( $args['size'] ) ? (int) $args['size'] : 96;
-			// Se sirve `medium`/`thumbnail` (no el archivo original); el CSS
-			// del avatar usa object-fit: cover, así que la foto se ajusta al
-			// círculo sea cual sea su proporción.
-			$url = wp_get_attachment_image_url( $photo_id, $size > 200 ? 'medium' : 'thumbnail' );
-			if ( ! is_string( $url ) ) {
-				$url = wp_get_attachment_image_url( $photo_id, array( $size, $size ) );
-			}
-			if ( ! is_string( $url ) ) {
-				$url = wp_get_attachment_image_url( $photo_id, 'full' );
-			}
-			if ( is_string( $url ) ) {
-				$args['url']          = $url;
-				$args['found_avatar'] = true;
-			}
+		$url      = $photo_id > 0 ? $this->attachment_url( $photo_id, $size ) : '';
 
-			return $args;
+		// 2) Foto por defecto configurada en el Personalizador.
+		if ( '' === $url ) {
+			$default_id = (int) get_theme_mod( 'ddn_author_default_photo', 0 );
+			if ( $default_id > 0 ) {
+				$url = $this->attachment_url( $default_id, $size );
+			}
 		}
 
-		// Sin foto propia: avatar de iniciales en vez de Gravatar.
-		if ( apply_filters( 'ddn/author_monogram', true, $user_id ) ) {
-			$user = get_userdata( $user_id );
-			if ( $user instanceof WP_User ) {
-				$args['url']          = Monogram::data_uri( $user->display_name );
-				$args['found_avatar'] = true;
-			}
+		// 3) Imagen genérica del tema (siempre disponible; nunca Gravatar
+		//    ni el icono de imagen rota).
+		if ( '' === $url ) {
+			$url = DDN_THEME_URI . 'assets/img/autor.svg';
 		}
+
+		$args['url']          = $url;
+		$args['found_avatar'] = true;
 
 		return $args;
+	}
+
+	/** URL de una imagen adjunta, probando tamaños hasta dar con uno. */
+	private function attachment_url( int $attachment_id, int $size ): string {
+		$sizes = array( $size > 200 ? 'medium' : 'thumbnail', array( $size, $size ), 'full' );
+		foreach ( $sizes as $wanted ) {
+			$url = wp_get_attachment_image_url( $attachment_id, $wanted );
+			if ( is_string( $url ) && '' !== $url ) {
+				return $url;
+			}
+		}
+
+		return '';
 	}
 
 	private function resolve_user_id( mixed $id_or_email ): int {

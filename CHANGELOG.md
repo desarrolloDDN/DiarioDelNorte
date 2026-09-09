@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.26] — 2026-09-09
+
+### Corregido
+- **Autores sin foto: salía el icono de imagen rota** (firma de la nota y
+  tarjetas de Opinión). El avatar de iniciales usaba un `data:` URI que
+  WordPress descarta al escapar la URL. Ahora todo autor sin foto propia usa
+  una **imagen genérica**: la que se configure en **Personalizar → Autores**,
+  o una silueta neutra incluida en el tema si no se configura ninguna. Aplica
+  automáticamente a los autores nuevos.
+
 ## [0.1.25] — 2026-09-08
 
 ### Corregido

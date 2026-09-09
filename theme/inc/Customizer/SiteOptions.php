@@ -113,6 +113,28 @@ final class SiteOptions {
 				)
 			)
 		);
+
+		// --- Autores -----------------------------------------------------
+		$wp_customize->add_section(
+			'ddn_authors',
+			array(
+				'title'       => __( 'Autores', 'diario-del-norte' ),
+				'description' => __( 'Foto que se usa cuando un autor no ha subido la suya (firma de la nota y tarjetas de Opinión).', 'diario-del-norte' ),
+				'priority'    => 123,
+			)
+		);
+		$wp_customize->add_setting( 'ddn_author_default_photo', array( 'sanitize_callback' => 'absint' ) );
+		$wp_customize->add_control(
+			new WP_Customize_Image_Control(
+				$wp_customize,
+				'ddn_author_default_photo',
+				array(
+					'label'       => __( 'Foto por defecto del autor', 'diario-del-norte' ),
+					'description' => __( 'Cuadrada, mínimo 300 × 300 px. Si la dejas vacía se usa una silueta genérica.', 'diario-del-norte' ),
+					'section'     => 'ddn_authors',
+				)
+			)
+		);
 	}
 
 	private function text( WP_Customize_Manager $wp_customize, string $id, string $label, string $default_value = '', string $sanitize = 'sanitize_text_field', string $section = 'ddn_footer', string $description = '' ): void {
