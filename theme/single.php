@@ -90,16 +90,6 @@ while ( have_posts() ) :
 					?>
 				</div>
 			<?php endif; ?>
-
-			<?php if ( get_the_author_meta( 'description' ) ) : ?>
-				<aside class="author-box">
-					<?php echo get_avatar( get_the_author_meta( 'ID' ), 128 ); ?>
-					<div>
-						<b><?php echo esc_html( get_the_author() ); ?></b>
-						<p><?php echo esc_html( get_the_author_meta( 'description' ) ); ?></p>
-					</div>
-				</aside>
-			<?php endif; ?>
 		</div>
 
 	</article>

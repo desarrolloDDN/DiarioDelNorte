@@ -291,17 +291,6 @@
 }
 .tags a:hover { border-color: var(--red); color: var(--red); }
 
-.author-box {
-  display: flex;
-  gap: 1.2rem;
-  padding: 1.5rem;
-  background: var(--sand);
-  margin: 2.5rem 0;
-}
-.author-box img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; filter: grayscale(1); flex-shrink: 0; background: var(--surface); }
-.author-box b { font-family: var(--sans); font-size: 0.95rem; }
-.author-box p { margin: 0.4rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--ink-soft); }
-
 @media (max-width: 700px) {
   .article__meta { justify-content: center; }
   .article__byline { flex-direction: column; text-align: center; gap: 0.6rem; }

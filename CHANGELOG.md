@@ -5,6 +5,11 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.27] — 2026-09-09
+
+### Quitado
+- **La caja de perfil del autor** (foto + biografía) al final de la nota.
+
 ## [0.1.26] — 2026-09-09
 
 ### Corregido
