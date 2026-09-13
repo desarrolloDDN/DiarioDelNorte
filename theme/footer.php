@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\ContactPageInstaller;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller as Sections;
 use DiarioDelNorte\Support\Social;
 
@@ -21,15 +22,23 @@ $ddn_legal_default = sprintf(
 	wp_date( 'Y' )
 );
 
-$ddn_legal        = (string) get_theme_mod( 'ddn_legal', $ddn_legal_default );
-$ddn_address      = (string) get_theme_mod( 'ddn_address', 'Riohacha, La Guajira, Colombia' );
-$ddn_phone        = (string) get_theme_mod( 'ddn_phone', '' );
-$ddn_wa           = (string) get_theme_mod( 'ddn_whatsapp', '' );
-$ddn_email        = (string) get_theme_mod( 'ddn_email', 'redaccion@diariodelnorte.net' );
-$ddn_contact      = (string) get_theme_mod( 'ddn_contact_url', '' );
-$ddn_credit       = (string) get_theme_mod( 'ddn_footer_credit', __( 'Diseñado por Delvis Ibáñez Sevilla', 'diario-del-norte' ) );
-$ddn_credit_url   = (string) get_theme_mod( 'ddn_footer_credit_url', 'https://wa.me/573028033129' );
-$ddn_contact_href = '' !== $ddn_contact ? $ddn_contact : ( '' !== $ddn_email ? 'mailto:' . $ddn_email : '' );
+$ddn_legal      = (string) get_theme_mod( 'ddn_legal', $ddn_legal_default );
+$ddn_address    = (string) get_theme_mod( 'ddn_address', 'Riohacha, La Guajira, Colombia' );
+$ddn_phone      = (string) get_theme_mod( 'ddn_phone', '' );
+$ddn_wa         = (string) get_theme_mod( 'ddn_whatsapp', '' );
+$ddn_email      = (string) get_theme_mod( 'ddn_email', 'redaccion@diariodelnorte.net' );
+$ddn_contact    = (string) get_theme_mod( 'ddn_contact_url', '' );
+$ddn_credit     = (string) get_theme_mod( 'ddn_footer_credit', __( 'Diseñado por Delvis Ibáñez Sevilla', 'diario-del-norte' ) );
+$ddn_credit_url = (string) get_theme_mod( 'ddn_footer_credit_url', 'https://wa.me/573028033129' );
+// Enlace propio (Personalizador) → página de Contacto (se crea sola,
+// ver Content\ContactPageInstaller) → correo de redacción.
+$ddn_contact_href = $ddn_contact;
+if ( '' === $ddn_contact_href ) {
+	$ddn_contact_href = ContactPageInstaller::url();
+}
+if ( '' === $ddn_contact_href && '' !== $ddn_email ) {
+	$ddn_contact_href = 'mailto:' . $ddn_email;
+}
 
 /**
  * Enlaces legales del pie. Sirven de reserva del menú «footer-legal»:

@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace DiarioDelNorte;
 
 use DiarioDelNorte\Content\CategoryMoreNews;
+use DiarioDelNorte\Content\ContactForm;
+use DiarioDelNorte\Content\ContactPageInstaller;
 use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
@@ -39,6 +41,7 @@ final class Theme {
 	public function boot(): void {
 		add_action( 'after_setup_theme', array( $this, 'setup' ) );
 		add_action( 'init', array( $this, 'ensure_sections' ), 20 );
+		add_action( 'init', array( $this, 'ensure_contact_page' ), 20 );
 
 		( new Assets() )->register();
 		( new SiteOptions() )->register();
@@ -48,6 +51,7 @@ final class Theme {
 		( new InlineRelated() )->register();
 		( new SocialMeta() )->register();
 		( new CategoryMoreNews() )->register();
+		( new ContactForm() )->register();
 		( new GitHubUpdater( DDN_THEME_VERSION ) )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
@@ -130,6 +134,10 @@ final class Theme {
 
 	public function ensure_sections(): void {
 		( new DefaultSectionsInstaller() )->ensure();
+	}
+
+	public function ensure_contact_page(): void {
+		( new ContactPageInstaller() )->ensure();
 	}
 
 	public function classic_editor_for_posts( bool $use_block_editor, string $post_type ): bool {

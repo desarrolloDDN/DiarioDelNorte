@@ -41,6 +41,10 @@ final class SiteOptions {
 		$this->text( $wp_customize, 'ddn_whatsapp', __( 'WhatsApp', 'diario-del-norte' ), '', 'sanitize_text_field', 'ddn_contact', __( 'Número visible de WhatsApp, p. ej. +57 300 000 0000. En blanco no se muestra.', 'diario-del-norte' ) );
 		$this->text( $wp_customize, 'ddn_email', __( 'Correo de redacción', 'diario-del-norte' ), 'redaccion@diariodelnorte.net', 'sanitize_email', 'ddn_contact' );
 		$this->text( $wp_customize, 'ddn_dateline_city', __( 'Ciudad por defecto en las firmas', 'diario-del-norte' ), 'Riohacha', 'sanitize_text_field', 'ddn_contact', __( 'Se usa en la firma de las notas cuando la entrada no trae un lugar propio.', 'diario-del-norte' ) );
+		$this->text( $wp_customize, 'ddn_contact_form_email', __( 'Correo que recibe el formulario de contacto', 'diario-del-norte' ), '', 'sanitize_email', 'ddn_contact', __( 'En blanco: llega al correo de redacción de arriba.', 'diario-del-norte' ) );
+		$this->text( $wp_customize, 'ddn_contact_phone_gerencia', __( 'Teléfono — Gerencia General', 'diario-del-norte' ), '+57 320 542 0459', 'sanitize_text_field', 'ddn_contact' );
+		$this->text( $wp_customize, 'ddn_contact_phone_comercial_rio', __( 'Teléfono — Comercial Riohacha', 'diario-del-norte' ), '+57 300 817 6610', 'sanitize_text_field', 'ddn_contact' );
+		$this->text( $wp_customize, 'ddn_contact_phone_comercial_baq', __( 'Teléfono — Comercial Barranquilla', 'diario-del-norte' ), '+57 320 565 9368', 'sanitize_text_field', 'ddn_contact' );
 
 		// --- Pie de página ---------------------------------------------
 		$wp_customize->add_section(

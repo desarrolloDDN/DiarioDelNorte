@@ -5,6 +5,20 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.30] — 2026-09-13
+
+### Añadido
+- **Nota individual — «Lo último»**: bajo las etiquetas de la nota, las 3
+  noticias más recientes del sitio (foto y titular; nunca repite la que se
+  está leyendo). Las etiquetas ahora llevan la leyenda «Temas
+  relacionados».
+- **Página de Contacto**: se crea sola (como las secciones) con formulario
+  —nombre, correo, asunto y mensaje, sin plugin ni servicio externo— y los
+  teléfonos de Gerencia General, Comercial Riohacha y Comercial
+  Barranquilla, editables en Personalizar → Contacto. El botón
+  «Contáctenos» del pie enlaza aquí automáticamente si no tiene una URL
+  propia configurada.
+
 ## [0.1.29] — 2026-09-13
 
 ### Cambiado

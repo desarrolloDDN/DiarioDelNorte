@@ -1,0 +1,101 @@
+// Página de Contacto (page-contacto.php): formulario a la izquierda,
+// datos de contacto a la derecha.
+
+.layout-contact { padding-block: 2.5rem 3.5rem; }
+
+.contact-layout {
+  max-width: 60rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+// --- Formulario ---
+.contact-form__notice {
+  padding: 0.9rem 1.1rem;
+  margin: 0 0 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  border-left: 3px solid var(--red);
+  background: var(--sand);
+  color: var(--ink);
+}
+.contact-form__notice--error { border-left-color: var(--red-deep); color: var(--red-deep); }
+
+// Trampa para robots: oculta el campo sin usar display:none (algunos
+// bots lo detectan e ignoran el campo igual, sin que un lector de
+// pantalla lo anuncie por error).
+.contact-form__hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.contact-form__field { margin: 0 0 1.3rem; }
+.contact-form__field label {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.4rem;
+}
+.contact-form__field input,
+.contact-form__field select,
+.contact-form__field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 0.65rem 0.8rem;
+}
+.contact-form__field textarea { resize: vertical; }
+.contact-form__field input:focus,
+.contact-form__field select:focus,
+.contact-form__field textarea:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+.contact-form__submit { border: 0; cursor: pointer; }
+
+// --- Datos de contacto ---
+.contact-info__title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--ink);
+  border-left: 3px solid var(--red);
+  padding-left: 0.7rem;
+  margin: 0 0 1.4rem;
+}
+.contact-info__line {
+  margin: 0 0 1.1rem;
+  font-family: var(--sans);
+  font-size: 0.96rem;
+  line-height: 1.4;
+}
+.contact-info__line a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.contact-info__line a:hover { color: var(--red); }
+.contact-info__label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.15rem;
+}
+
+@media (max-width: 760px) {
+  .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+}

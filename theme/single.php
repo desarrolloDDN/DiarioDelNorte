@@ -83,6 +83,7 @@ while ( have_posts() ) :
 
 			<?php if ( has_tag() ) : ?>
 				<div class="tags">
+					<span class="tags__label"><?php esc_html_e( 'Temas relacionados', 'diario-del-norte' ); ?></span>
 					<?php
 					foreach ( (array) get_the_tags() as $ddn_tag ) {
 						printf( '<a href="%s">%s</a>', esc_url( get_tag_link( $ddn_tag ) ), esc_html( $ddn_tag->name ) );
@@ -91,6 +92,32 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 		</div>
+
+		<?php
+		// --- Lo último: las 3 noticias más recientes, sin repetir esta ---
+		$ddn_latest = new WP_Query(
+			array(
+				'posts_per_page'      => 3,
+				'post__not_in'        => array( get_the_ID() ),
+				'ignore_sticky_posts' => true,
+				'no_found_rows'       => true,
+			)
+		);
+		if ( $ddn_latest->have_posts() ) :
+			?>
+			<section class="article-latest">
+				<h2 class="cat-more__title"><?php esc_html_e( 'Lo último', 'diario-del-norte' ); ?></h2>
+				<div class="cat-grid cat-grid--3">
+					<?php
+					while ( $ddn_latest->have_posts() ) :
+						$ddn_latest->the_post();
+						get_template_part( 'template-parts/article-latest-item' );
+					endwhile;
+					wp_reset_postdata();
+					?>
+				</div>
+			</section>
+		<?php endif; ?>
 
 	</article>
 	<?php

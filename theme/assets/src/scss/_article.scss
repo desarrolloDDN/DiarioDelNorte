@@ -280,6 +280,18 @@
 }
 
 .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2.5rem 0; }
+.tags__label {
+  // Ocupa toda la fila del flex-wrap: las etiquetas empiezan en la
+  // siguiente línea, debajo.
+  flex: 1 0 100%;
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.3rem;
+}
 .tags a {
   font-family: var(--sans);
   font-size: 0.76rem;
@@ -290,6 +302,12 @@
   color: var(--ink-soft);
 }
 .tags a:hover { border-color: var(--red); color: var(--red); }
+
+// --- «Lo último» al pie de la nota ---
+// La cuadrícula y las tarjetas reutilizan .cat-grid / .cat-card / .cat-ph
+// (portada de sección, ver _category.scss): mismo lenguaje visual, foto y
+// titular, sin kicker de categoría ni fecha.
+.article-latest { margin: 2.5rem 0 1rem; }
 
 @media (max-width: 700px) {
   .article__meta { justify-content: center; }
