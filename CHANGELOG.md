@@ -5,6 +5,23 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.29] — 2026-09-13
+
+### Cambiado
+- **Portada de sección — nota destacada**: el titular de la nota principal
+  ya no compite en tamaño con el título de la sección; ahora es
+  proporcional a que comparte espacio con la lista lateral de 6 notas.
+- **Portada de sección — «Más leídas»**: número de orden y titular más
+  grandes, con más presencia visual.
+- **Portada de sección — nota grande + dos tarjetas**: las dos fotos de la
+  derecha ahora se estiran para ocupar, entre las dos, el mismo alto que
+  la foto principal (antes la columna quedaba más alta y dejaba un hueco
+  en blanco bajo la nota grande).
+- **Portada de sección — «Más noticias»**: en vez de la paginación
+  numerada, un botón «Cargar más noticias» trae el siguiente lote sin
+  recargar la página (REST propio del tema); el lector puede seguir
+  cargando hasta agotar las noticias de la sección.
+
 ## [0.1.28] — 2026-09-09
 
 ### Corregido

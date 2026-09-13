@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte;
 
+use DiarioDelNorte\Content\CategoryMoreNews;
 use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
@@ -46,6 +47,7 @@ final class Theme {
 		( new PhotoCredit() )->register();
 		( new InlineRelated() )->register();
 		( new SocialMeta() )->register();
+		( new CategoryMoreNews() )->register();
 		( new GitHubUpdater( DDN_THEME_VERSION ) )->register();
 
 		// Editor clásico para las noticias (entradas). Las páginas conservan
@@ -67,8 +69,10 @@ final class Theme {
 
 	/**
 	 * Sube el número de entradas por página en el archivo de categoría para
-	 * alimentar la portada de sección. Aplica a todas las categorías,
-	 * presentes y futuras.
+	 * alimentar la portada de sección: 25 entradas para los bloques fijos +
+	 * 12 para el primer lote de «Más noticias» (el resto se trae con
+	 * «Cargar más noticias», ver Content\CategoryMoreNews). Aplica a todas
+	 * las categorías, presentes y futuras.
 	 *
 	 * @param \WP_Query $query
 	 */
@@ -77,7 +81,7 @@ final class Theme {
 			return;
 		}
 
-		$query->set( 'posts_per_page', 36 );
+		$query->set( 'posts_per_page', 37 );
 	}
 
 	public function setup(): void {

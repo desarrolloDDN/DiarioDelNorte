@@ -121,6 +121,55 @@ function initMoreNews() {
   });
 }
 
+// «Cargar más noticias» del archivo de categoría: pide el siguiente lote
+// por REST y lo agrega al final de la cuadrícula, sin recargar la página.
+// El botón desaparece solo cuando el servidor avisa que no queda nada más.
+function initCategoryMore() {
+  const wrap = document.querySelector('[data-cat-more]');
+  if (!wrap) return;
+
+  const grid = wrap.querySelector('[data-cat-more-grid]');
+  const btn = wrap.querySelector('[data-cat-more-btn]');
+  if (!grid || !btn) return;
+
+  let offset = parseInt(btn.dataset.offset, 10) || 0;
+  let busy = false;
+  const restUrl = btn.dataset.restUrl;
+  const termId = btn.dataset.termId;
+  const labelDefault = btn.textContent;
+  const labelLoading = btn.dataset.labelLoading || labelDefault;
+
+  btn.addEventListener('click', async () => {
+    if (busy) return;
+    busy = true;
+    btn.disabled = true;
+    btn.textContent = labelLoading;
+
+    try {
+      const url = restUrl + '?term_id=' + encodeURIComponent(termId) + '&offset=' + encodeURIComponent(String(offset));
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+
+      if (data.html) grid.insertAdjacentHTML('beforeend', data.html);
+      offset += Number(data.count) || 0;
+
+      if (data.has_more) {
+        btn.disabled = false;
+        btn.textContent = labelDefault;
+      } else {
+        btn.remove();
+      }
+    } catch (e) {
+      // Sin conexión o el REST no respondió: se deja reintentar.
+      btn.disabled = false;
+      btn.textContent = labelDefault;
+    } finally {
+      busy = false;
+    }
+  });
+}
+
 function loadScriptOnce(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector('script[data-src="' + src + '"]')) { resolve(); return; }
@@ -373,6 +422,7 @@ function boot() {
   initHeroSlider();
   initCardSliders();
   initMoreNews();
+  initCategoryMore();
   initEditionReader();
   initShareCopy();
 }

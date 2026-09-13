@@ -1,10 +1,11 @@
 <?php
 /**
  * Portada de sección (archivo de categoría). Una sola consulta principal
- * (36 entradas/página, vía Theme::category_posts_per_page) se reparte en
- * varios bloques en la primera página; a partir de la segunda es una
- * cuadrícula corrida de «Más noticias». Mismo diseño para todas las
- * categorías, presentes y futuras.
+ * (37 entradas, vía Theme::category_posts_per_page) alimenta los bloques
+ * fijos (25) y el primer lote de «Más noticias» (12); de ahí en adelante,
+ * el lector pide más con el botón «Cargar más noticias» (REST, ver
+ * Content\CategoryMoreNews) sin recargar la página. Mismo diseño para
+ * todas las categorías, presentes y futuras.
  *
  * @package DiarioDelNorte
  */
@@ -182,31 +183,53 @@ $ddn_paged = is_paged();
 		<?php endif; /* ! $ddn_paged */ ?>
 
 		<?php
-		// --- Más noticias de la sección: el resto del lote --------------
-		$ddn_rest = $ddn_paged ? $ddn_posts : $ddn_take( count( $ddn_posts ) );
+		// --- Más noticias de la sección ----------------------------------
+		// Página 1: lote fijo de 12; el resto se trae con «Cargar más
+		// noticias» sin recargar la página (REST, ver
+		// Content\CategoryMoreNews). Enlace directo a una página siguiente
+		// (sin botón en la interfaz): el resto del lote de WordPress, con
+		// paginación clásica como red de seguridad.
+		$ddn_rest = $ddn_paged ? $ddn_posts : $ddn_take( 12 );
 		if ( $ddn_rest ) :
 			?>
-			<section class="cat-block cat-more">
+			<section class="cat-block cat-more" data-cat-more>
 				<h2 class="cat-more__title">
 					<?php
 					/* translators: %s: nombre de la sección. */
 					printf( esc_html__( 'Más noticias de %s', 'diario-del-norte' ), esc_html( $ddn_name ) );
 					?>
 				</h2>
-				<div class="cat-grid cat-grid--3">
+				<div class="cat-grid cat-grid--3" data-cat-more-grid>
 					<?php $ddn_loop( $ddn_rest, 'card', array( 'byline' => true ) ); ?>
 				</div>
+				<?php if ( ! $ddn_paged && $ddn_term instanceof WP_Term && (int) $wp_query->found_posts > $ddn_cursor ) : ?>
+					<div class="cat-more__action">
+						<button
+							type="button"
+							class="btn btn--ghost cat-more__btn"
+							data-cat-more-btn
+							data-term-id="<?php echo esc_attr( (string) $ddn_term->term_id ); ?>"
+							data-offset="<?php echo esc_attr( (string) $ddn_cursor ); ?>"
+							data-rest-url="<?php echo esc_url( rest_url( 'diario-del-norte/v1/category-more' ) ); ?>"
+							data-label-loading="<?php echo esc_attr__( 'Cargando…', 'diario-del-norte' ); ?>"
+						>
+							<?php esc_html_e( 'Cargar más noticias', 'diario-del-norte' ); ?>
+						</button>
+					</div>
+				<?php endif; ?>
 			</section>
 		<?php endif; ?>
 
-		<?php
-		the_posts_pagination(
-			array(
-				'mid_size'           => 1,
-				'screen_reader_text' => __( 'Navegación de entradas', 'diario-del-norte' ),
-			)
-		);
-		?>
+		<?php if ( $ddn_paged ) : ?>
+			<?php
+			the_posts_pagination(
+				array(
+					'mid_size'           => 1,
+					'screen_reader_text' => __( 'Navegación de entradas', 'diario-del-norte' ),
+				)
+			);
+			?>
+		<?php endif; ?>
 
 	<?php endif; ?>
 </div>

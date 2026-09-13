@@ -48,6 +48,31 @@
   gap: 1.75rem;
 }
 
+// Bloque «nota grande + dos tarjetas»: estira la columna lateral a la
+// misma altura que la foto principal y reparte esa altura entre las dos
+// fotos pequeñas (en vez de que cada una crezca suelta por su propio
+// aspect-ratio y la columna termine más alta o más baja que la nota).
+.cat-lead--wide { align-items: stretch; }
+.cat-lead--wide .cat-lead__side--cards {
+  display: flex;
+  flex-direction: column;
+}
+.cat-lead--wide .cat-lead__side--cards .cat-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+}
+.cat-lead--wide .cat-lead__side--cards .cat-card__media {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.cat-lead--wide .cat-lead__side--cards .cat-card__media img,
+.cat-lead--wide .cat-lead__side--cards .cat-card__media .cat-ph {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
 // Nota principal con distintivo sobre la imagen (bloque 1)
 .cat-feature__media {
   position: relative;
@@ -73,8 +98,8 @@
 .cat-feature__title {
   font-family: var(--display);
   font-weight: 600;
-  font-size: var(--step-3);
-  line-height: 1.14;
+  font-size: var(--step-2);
+  line-height: 1.2;
   color: var(--headline);
   margin: 0;
 }
@@ -219,7 +244,7 @@
   display: block;
   font-family: var(--display);
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: var(--step-3);
   line-height: 1;
   color: var(--red);
   margin-bottom: 0.4rem;
@@ -232,7 +257,7 @@
 .cat-ranked__title {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 0.86rem;
+  font-size: var(--step-0);
   line-height: 1.32;
 }
 
@@ -248,6 +273,8 @@
   border-bottom: 1px solid var(--rule);
   margin: 0 0 1.6rem;
 }
+.cat-more__action { text-align: center; margin-top: 2rem; }
+.cat-more__btn:disabled { opacity: 0.6; cursor: default; }
 
 // --- Responsive ---
 @media (max-width: 1000px) {
@@ -256,6 +283,13 @@
 }
 @media (max-width: 900px) {
   .cat-lead { grid-template-columns: 1fr; }
+  // Apiladas en una sola columna ya no comparten fila con la foto
+  // grande: cada tarjeta vuelve a su propio aspect-ratio en vez de
+  // estirarse a una altura que aquí no existe.
+  .cat-lead--wide .cat-lead__side--cards .cat-card { flex: initial; }
+  .cat-lead--wide .cat-lead__side--cards .cat-card__media { flex: initial; }
+  .cat-lead--wide .cat-lead__side--cards .cat-card__media img,
+  .cat-lead--wide .cat-lead__side--cards .cat-card__media .cat-ph { height: auto; aspect-ratio: 3 / 2; }
   .cat-lead__side--cards { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 760px) {
@@ -268,7 +302,7 @@
   .cat-grid--5,
   .cat-grid--2 { grid-template-columns: repeat(2, 1fr); }
   .cat-ranked { grid-template-columns: repeat(2, 1fr); }
-  .cat-feature__title { font-size: var(--step-2); }
+  .cat-feature__title { font-size: var(--step-1); }
 }
 @media (max-width: 420px) {
   .cat-grid--4,
