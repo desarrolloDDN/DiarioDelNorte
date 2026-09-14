@@ -418,7 +418,10 @@ function boot() {
     ['[data-drawer-toggle]', 'topbar-drawer'],
     ['[data-search-toggle]', 'topbar-search'],
   ]);
-  initBarPanels('.masthead', [['[data-search-toggle]', 'masthead-search']]);
+  initBarPanels('.masthead', [
+    ['[data-search-toggle]', 'masthead-search'],
+    ['[data-account-toggle]', 'masthead-account'],
+  ]);
   initHeroSlider();
   initCardSliders();
   initMoreNews();

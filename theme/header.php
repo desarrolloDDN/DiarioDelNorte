@@ -59,17 +59,34 @@ $ddn_dateline = sprintf(
 				// si no está activo, los filtros no existen y aquí no se
 				// imprime nada. Sin sesión, lleva a crear la cuenta (el
 				// propio formulario ofrece «¿Ya tienes cuenta? Inicia
-				// sesión»); con sesión, a la cuenta ya creada.
-				$ddn_mi_cuenta_url = is_user_logged_in()
-					? (string) apply_filters( 'ddn/account_url', '' )
-					: (string) apply_filters( 'ddn/register_url', '' );
-				if ( '' !== $ddn_mi_cuenta_url ) :
+				// sesión»); con sesión, se abre un menú con «Ver perfil» y
+				// «Cerrar sesión» en vez de un enlace directo.
+				$ddn_logged_in    = is_user_logged_in();
+				$ddn_account_url  = $ddn_logged_in ? (string) apply_filters( 'ddn/account_url', '' ) : '';
+				$ddn_register_url = $ddn_logged_in ? '' : (string) apply_filters( 'ddn/register_url', '' );
+				$ddn_account_icon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c1.6-4 5-6 8-6s6.4 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+				if ( $ddn_logged_in && '' !== $ddn_account_url ) :
 					?>
-					<a class="masthead__account" href="<?php echo esc_url( $ddn_mi_cuenta_url ); ?>">
-						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-							<circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
-							<path d="M4 20c1.6-4 5-6 8-6s6.4 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-						</svg>
+					<div class="masthead__account-menu">
+						<button
+							type="button"
+							class="masthead__account"
+							data-account-toggle
+							aria-controls="masthead-account"
+							aria-expanded="false"
+						>
+							<?php echo $ddn_account_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fijo, no viene de entrada de usuario. ?>
+							<span class="masthead__account-label"><?php esc_html_e( 'Mi cuenta', 'diario-del-norte' ); ?></span>
+						</button>
+						<div class="masthead-account" id="masthead-account" hidden>
+							<a href="<?php echo esc_url( $ddn_account_url ); ?>"><?php esc_html_e( 'Ver perfil', 'diario-del-norte' ); ?></a>
+							<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Cerrar sesión', 'diario-del-norte' ); ?></a>
+						</div>
+					</div>
+				<?php elseif ( '' !== $ddn_register_url ) : ?>
+					<a class="masthead__account" href="<?php echo esc_url( $ddn_register_url ); ?>">
+						<?php echo $ddn_account_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fijo, no viene de entrada de usuario. ?>
 						<span class="masthead__account-label"><?php esc_html_e( 'Mi cuenta', 'diario-del-norte' ); ?></span>
 					</a>
 				<?php endif; ?>

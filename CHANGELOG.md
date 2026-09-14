@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.35] — 2026-09-14
+
+### Añadido
+- **Cabecera — menú de «Mi cuenta»**: con sesión iniciada, el enlace se
+  convierte en un menú desplegable con «Ver perfil» y «Cerrar sesión»
+  (mismo mecanismo accesible que la lupa de búsqueda).
+
 ## [0.1.34] — 2026-09-13
 
 ### Cambiado

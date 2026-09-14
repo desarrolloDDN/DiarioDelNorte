@@ -45,19 +45,50 @@
   gap: 1rem;
 }
 
+.masthead__account-menu { position: relative; }
+
+// Es un <a> (sin sesión, va directo a Registro) o un <button> (con
+// sesión, abre el menú «Ver perfil / Cerrar sesión») — mismo aspecto.
 .masthead__account {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: none;
   font-family: var(--sans);
   font-weight: 700;
   font-size: 0.76rem;
   letter-spacing: 0.03em;
   color: var(--slate);
   white-space: nowrap;
+  cursor: pointer;
 }
 .masthead__account:hover { color: var(--red); }
+.masthead__account[aria-expanded="true"] { color: var(--red); }
 .masthead__account svg { width: 1.05rem; height: 1.05rem; fill: none; }
+
+// Menú «Ver perfil / Cerrar sesión», colgado bajo el botón.
+.masthead-account {
+  position: absolute;
+  z-index: 200;
+  top: 2.4rem;
+  right: 0;
+  width: 11rem;
+  padding: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  box-shadow: 0 18px 46px rgba(17, 17, 17, 0.28);
+}
+.masthead-account[hidden] { display: none; }
+.masthead-account a {
+  display: block;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  color: var(--ink);
+}
+.masthead-account a:hover { background: var(--sand); color: var(--red); }
 
 .masthead__search-toggle {
   display: inline-flex;
