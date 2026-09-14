@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.37] — 2026-09-14
+
+### Cambiado
+- **Mi cuenta**: reorganizada en tres pestañas — Mi cuenta, Noticias
+  guardadas, Noticias leídas — sin recargar la página al cambiar entre
+  ellas. El servidor abre la pestaña que corresponde al aviso mostrado
+  (p. ej. «Borrar historial» abre «Noticias leídas»).
+
 ## [0.1.36] — 2026-09-14
 
 ### Añadido

@@ -74,6 +74,41 @@ final class AccountController {
 		$profile_status = isset( $_GET['ddn_profile'] ) ? sanitize_key( wp_unslash( $_GET['ddn_profile'] ) ) : '';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- idem.
 		$delete_status = isset( $_GET['ddn_delete'] ) ? sanitize_key( wp_unslash( $_GET['ddn_delete'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- idem.
+		$history_status = isset( $_GET['ddn_history'] ) ? sanitize_key( wp_unslash( $_GET['ddn_history'] ) ) : '';
+
+		// El servidor ya deja abierta la pestaña que corresponde al aviso
+		// que se está mostrando (p. ej. tras «Borrar historial», abre
+		// «Noticias leídas» en vez de quedarse en «Mi cuenta» por
+		// defecto); el JS solo añade el cambio de pestaña sin recargar.
+		$active_tab = 'cuenta';
+		if ( '' !== $history_status ) {
+			$active_tab = 'leidas';
+		}
+
+		$tabs = array(
+			'cuenta'    => __( 'Mi cuenta', 'ddn-suite' ),
+			'guardadas' => __( 'Noticias guardadas', 'ddn-suite' ),
+			'leidas'    => __( 'Noticias leídas', 'ddn-suite' ),
+		);
+
+		echo '<div class="ddn-tabs" data-ddn-tabs>';
+		echo '<div class="ddn-tabs__nav" role="tablist">';
+		foreach ( $tabs as $ddn_tab_key => $ddn_tab_label ) {
+			printf(
+				'<button type="button" class="ddn-tabs__btn%1$s" role="tab" aria-selected="%2$s" aria-controls="ddn-tab-%3$s" id="ddn-tab-%3$s-btn" data-ddn-tab="%3$s">%4$s</button>',
+				$ddn_tab_key === $active_tab ? ' is-active' : '',
+				$ddn_tab_key === $active_tab ? 'true' : 'false',
+				esc_attr( $ddn_tab_key ),
+				esc_html( $ddn_tab_label )
+			);
+		}
+		echo '</div>';
+
+		printf(
+			'<div class="ddn-tabs__panel" role="tabpanel" id="ddn-tab-cuenta" aria-labelledby="ddn-tab-cuenta-btn"%s>',
+			'cuenta' === $active_tab ? '' : ' hidden'
+		);
 
 		echo '<h2>' . esc_html__( 'Mi información', 'ddn-suite' ) . '</h2>';
 
@@ -156,26 +191,6 @@ final class AccountController {
 			<p><button type="submit" class="btn"><?php esc_html_e( 'Guardar cambios', 'ddn-suite' ); ?></button></p>
 		</form>
 
-		<h2><?php esc_html_e( 'Artículos guardados', 'ddn-suite' ); ?></h2>
-		<?php $this->render_reading_list( $this->saved->post_ids( $user_id, 30 ), 'saved' ); ?>
-
-		<h2><?php esc_html_e( 'Noticias leídas', 'ddn-suite' ); ?></h2>
-		<?php
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo decide qué aviso mostrar, no cambia estado.
-		$history_status = isset( $_GET['ddn_history'] ) ? sanitize_key( wp_unslash( $_GET['ddn_history'] ) ) : '';
-		if ( 'cleared' === $history_status ) {
-			printf( '<p class="ddn-form-notice ddn-form-notice--ok">%s</p>', esc_html__( 'Se borró tu historial de lectura.', 'ddn-suite' ) );
-		}
-		$read_ids = $this->history->post_ids( $user_id, 30 );
-		$this->render_reading_list( $read_ids, 'history' );
-		if ( array() !== $read_ids ) :
-			?>
-			<form class="ddn-history-clear" method="post" action="">
-				<?php wp_nonce_field( self::HISTORY_NONCE_ACTION, 'ddn_history_nonce' ); ?>
-				<button type="submit" class="btn btn--ghost"><?php esc_html_e( 'Borrar historial de lectura', 'ddn-suite' ); ?></button>
-			</form>
-		<?php endif; ?>
-
 		<h2><?php esc_html_e( 'Eliminar mi cuenta', 'ddn-suite' ); ?></h2>
 		<?php if ( '' !== $delete_status ) : ?>
 			<p class="ddn-form-notice ddn-form-notice--error"><?php echo esc_html( Messages::delete_account( $delete_status ) ); ?></p>
@@ -198,6 +213,31 @@ final class AccountController {
 			</p>
 			<p><button type="submit" id="ddn-delete-account-btn" class="btn btn--ghost" disabled><?php esc_html_e( 'Eliminar mi cuenta', 'ddn-suite' ); ?></button></p>
 		</form>
+
+		</div><!-- #ddn-tab-cuenta -->
+
+		<?php // El servidor nunca la abre por defecto (no hay aviso de formulario que la señale); si alguien enlaza directo a #guardadas, el JS la abre solo. ?>
+		<div class="ddn-tabs__panel" role="tabpanel" id="ddn-tab-guardadas" aria-labelledby="ddn-tab-guardadas-btn" hidden>
+			<?php $this->render_reading_list( $this->saved->post_ids( $user_id, 30 ), 'saved' ); ?>
+		</div>
+
+		<div class="ddn-tabs__panel" role="tabpanel" id="ddn-tab-leidas" aria-labelledby="ddn-tab-leidas-btn"<?php echo 'leidas' === $active_tab ? '' : ' hidden'; ?>>
+			<?php
+			if ( 'cleared' === $history_status ) {
+				printf( '<p class="ddn-form-notice ddn-form-notice--ok">%s</p>', esc_html__( 'Se borró tu historial de lectura.', 'ddn-suite' ) );
+			}
+			$read_ids = $this->history->post_ids( $user_id, 30 );
+			$this->render_reading_list( $read_ids, 'history' );
+			if ( array() !== $read_ids ) :
+				?>
+				<form class="ddn-history-clear" method="post" action="">
+					<?php wp_nonce_field( self::HISTORY_NONCE_ACTION, 'ddn_history_nonce' ); ?>
+					<button type="submit" class="btn btn--ghost"><?php esc_html_e( 'Borrar historial de lectura', 'ddn-suite' ); ?></button>
+				</form>
+			<?php endif; ?>
+		</div>
+
+		</div><!-- .ddn-tabs -->
 		<?php
 	}
 

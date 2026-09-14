@@ -1,6 +1,30 @@
 /* Registro / Ingresar / Mi cuenta · DDN Suite. Autocontenido (no depende
    de las variables CSS del tema activo), igual que assets/radio/radio.css. */
 
+/* Pestañas de «Mi cuenta»: Mi cuenta / Noticias guardadas / Noticias leídas. */
+.ddn-tabs__nav {
+	display: flex;
+	gap: 0.25rem;
+	border-bottom: 1px solid #e4e4e4;
+	margin: 0 0 1.75rem;
+	overflow-x: auto;
+}
+.ddn-tabs__btn {
+	padding: 0.75rem 1rem;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	background: none;
+	color: #666;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+	font-weight: 700;
+	font-size: 0.88rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.ddn-tabs__btn:hover { color: #1a1a1a; }
+.ddn-tabs__btn.is-active { color: #bf0202; border-bottom-color: #bf0202; }
+.ddn-tabs__panel[hidden] { display: none; }
+
 /* Tarjeta centrada de Registro / Ingresar. */
 .ddn-auth-card {
 	max-width: 30rem;
