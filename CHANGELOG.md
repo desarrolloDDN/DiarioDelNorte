@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.36] — 2026-09-14
+
+### Añadido
+- **Suscriptores: solo para la web, nunca wp-admin.** Cualquier intento de
+  entrar a una pantalla de wp-admin (fuera de admin-post.php/admin-ajax.php,
+  que usa el propio módulo) rebota a «Mi cuenta»; sin barra de
+  administración en la web. Al personal de redacción no le afecta.
+- **Guardar artículos**: botón «Guardar»/«Guardado» en cada nota, sin
+  recargar la página; listado en Mi cuenta.
+- **Historial de lectura**: cada nota que lee un suscriptor con sesión
+  iniciada queda registrada (excluye a redacción); en Mi cuenta puede
+  quitar una nota suelta o borrar todo el historial, por privacidad.
+
 ## [0.1.35] — 2026-09-14
 
 ### Añadido

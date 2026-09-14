@@ -53,13 +53,29 @@ final class Subscribers {
 
 		$rate_limiter = new RateLimiter( new TransientRateLimitStore() );
 
+		// Los perfiles de suscriptor son solo para la web, nunca para
+		// wp-admin: no publican ni borran nada del sitio.
+		( new RestrictAdminAccess() )->register();
+
+		$saved_repo   = new SavedArticlesRepository();
+		$history_repo = new ReadingHistoryRepository();
+
+		( new ReadingHistoryRecorder( $history_repo ) )->register();
+		( new ReadingHistoryController( $history_repo ) )->register();
+
+		$saved_controller = new SavedArticlesController( $saved_repo );
+		$saved_controller->register();
+
+		$saved_view = new SavedArticlesView( $saved_repo );
+		add_action( 'ddn/article_save_button', array( $saved_view, 'render_button' ) );
+
 		$registration = new RegistrationController( $profiles, $oauth );
 		$registration->register();
 
 		$login = new LoginController( $rate_limiter, $oauth );
 		$login->register();
 
-		$account = new AccountController( $profiles );
+		$account = new AccountController( $profiles, $saved_repo, $history_repo, $saved_view );
 		$account->register();
 
 		add_action( 'ddn/subscribers_register', array( $registration, 'render' ) );
@@ -86,22 +102,32 @@ final class Subscribers {
 	}
 
 	public function enqueue(): void {
-		if ( ! is_page( array( PageInstaller::SLUG_REGISTER, PageInstaller::SLUG_LOGIN, PageInstaller::SLUG_ACCOUNT ) ) ) {
-			return;
+		$auth_pages = array( PageInstaller::SLUG_REGISTER, PageInstaller::SLUG_LOGIN, PageInstaller::SLUG_ACCOUNT );
+
+		if ( is_page( $auth_pages ) ) {
+			$this->enqueue_asset( 'ddn-suite-subscribers', 'subscribers.css', 'subscribers.js' );
 		}
 
-		$css = DDN_SUITE_DIR . 'assets/subscribers/subscribers.css';
+		// Botón «Guardar»: en la nota, y de nuevo (con las listas) en Mi
+		// cuenta.
+		if ( is_singular( 'post' ) || is_page( PageInstaller::SLUG_ACCOUNT ) ) {
+			$this->enqueue_asset( 'ddn-suite-saved-reading', 'saved-reading.css', 'saved-reading.js' );
+		}
+	}
+
+	private function enqueue_asset( string $handle, string $css_file, string $js_file ): void {
+		$css = DDN_SUITE_DIR . 'assets/subscribers/' . $css_file;
 		wp_enqueue_style(
-			'ddn-suite-subscribers',
-			DDN_SUITE_URL . 'assets/subscribers/subscribers.css',
+			$handle,
+			DDN_SUITE_URL . 'assets/subscribers/' . $css_file,
 			array(),
 			file_exists( $css ) ? (string) filemtime( $css ) : DDN_SUITE_VERSION
 		);
 
-		$js = DDN_SUITE_DIR . 'assets/subscribers/subscribers.js';
+		$js = DDN_SUITE_DIR . 'assets/subscribers/' . $js_file;
 		wp_enqueue_script(
-			'ddn-suite-subscribers',
-			DDN_SUITE_URL . 'assets/subscribers/subscribers.js',
+			$handle,
+			DDN_SUITE_URL . 'assets/subscribers/' . $js_file,
 			array(),
 			file_exists( $js ) ? (string) filemtime( $js ) : DDN_SUITE_VERSION,
 			true

@@ -69,6 +69,9 @@ while ( have_posts() ) :
 			<?php
 			get_template_part( 'template-parts/article-byline' );
 			get_template_part( 'template-parts/share' );
+			// Contrato con el plugin DDN Suite (módulo de suscriptores):
+			// botón «Guardar»/«Guardado». Sin sesión, no imprime nada.
+			do_action( 'ddn/article_save_button', get_the_ID() );
 			?>
 		</div>
 

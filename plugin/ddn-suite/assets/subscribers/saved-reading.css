@@ -1,0 +1,62 @@
+/* Botón «Guardar» (nota) + listas «Guardados»/«Leídas» (Mi cuenta) ·
+   DDN Suite. Autocontenido, igual que subscribers.css. */
+
+.ddn-save-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.45rem 0.9rem;
+	border: 1px solid #d8d8d6;
+	border-radius: 4px;
+	background: #fff;
+	color: #40403f;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+	font-weight: 700;
+	font-size: 0.82rem;
+	cursor: pointer;
+}
+.ddn-save-btn:hover { border-color: #bf0202; color: #bf0202; }
+.ddn-save-btn.is-saved { background: #bf0202; border-color: #bf0202; color: #fff; }
+.ddn-save-btn svg { flex-shrink: 0; }
+.ddn-save-btn:disabled { opacity: 0.6; cursor: default; }
+
+.ddn-reading-list { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 1rem; }
+.ddn-reading-item {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #ececec;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.ddn-reading-item__media {
+	flex-shrink: 0;
+	width: 84px;
+	height: 56px;
+	border-radius: 4px;
+	overflow: hidden;
+	background: #f4f4f5;
+}
+.ddn-reading-item__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ddn-reading-item__body { flex: 1 1 auto; min-width: 0; }
+.ddn-reading-item__title { margin: 0 0 0.25rem; font-size: 0.94rem; font-weight: 700; line-height: 1.3; }
+.ddn-reading-item__title a { color: #1a1a1a; text-decoration: none; }
+.ddn-reading-item__title a:hover { color: #bf0202; }
+.ddn-reading-item__meta { margin: 0; font-size: 0.78rem; color: #888; }
+.ddn-reading-item .ddn-save-btn { flex-shrink: 0; padding: 0.4rem 0.7rem; font-size: 0.76rem; }
+.ddn-history-remove {
+	flex-shrink: 0;
+	padding: 0.4rem 0.7rem;
+	border: 1px solid #d8d8d6;
+	border-radius: 4px;
+	background: #fff;
+	color: #888;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+	font-size: 0.76rem;
+	font-weight: 700;
+	cursor: pointer;
+}
+.ddn-history-remove:hover { border-color: #bf0202; color: #bf0202; }
+.ddn-history-remove:disabled { opacity: 0.6; cursor: default; }
+.ddn-reading-empty { color: #888; font-size: 0.92rem; margin: 0 0 1.5rem; }
+.ddn-history-clear { margin: 0 0 2rem; }

@@ -27,6 +27,7 @@ require $root . 'Support/RateLimiter.php';
 require $root . 'Support/Validator.php';
 require $root . 'Support/UsernameGenerator.php';
 require $root . 'Support/FormDispatch.php';
+require $root . 'Support/AdminAccessRule.php';
 require $root . 'AccountController.php';
 
 // Stubs mínimos de WordPress: solo lo que Admin\XlsxWriter necesita para

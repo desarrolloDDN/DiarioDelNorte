@@ -28,6 +28,7 @@ use DiarioDelNorte\Suite\Subscribers\Install\PageInstaller;
 use DiarioDelNorte\Suite\Subscribers\Support\FormDispatch;
 use DiarioDelNorte\Suite\Subscribers\Support\Messages;
 use DiarioDelNorte\Suite\Subscribers\Support\Validator;
+use WP_Post;
 use WP_User;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -38,12 +39,19 @@ final class AccountController {
 
 	private const PROFILE_NONCE_ACTION = 'ddn_subscriber_profile_update';
 	private const DELETE_NONCE_ACTION  = 'ddn_subscriber_delete_account';
+	private const HISTORY_NONCE_ACTION = 'ddn_subscriber_clear_history';
 
-	public function __construct( private readonly ProfileRepository $profiles ) {}
+	public function __construct(
+		private readonly ProfileRepository $profiles,
+		private readonly SavedArticlesRepository $saved,
+		private readonly ReadingHistoryRepository $history,
+		private readonly SavedArticlesView $saved_view,
+	) {}
 
 	public function register(): void {
 		add_action( 'template_redirect', array( $this, 'handle_profile_update' ) );
 		add_action( 'template_redirect', array( $this, 'handle_delete_account' ) );
+		add_action( 'template_redirect', array( $this, 'handle_clear_history' ) );
 	}
 
 	/** Renderiza los dos formularios; lo llama theme/page-mi-cuenta.php. */
@@ -147,6 +155,26 @@ final class AccountController {
 
 			<p><button type="submit" class="btn"><?php esc_html_e( 'Guardar cambios', 'ddn-suite' ); ?></button></p>
 		</form>
+
+		<h2><?php esc_html_e( 'Artículos guardados', 'ddn-suite' ); ?></h2>
+		<?php $this->render_reading_list( $this->saved->post_ids( $user_id, 30 ), 'saved' ); ?>
+
+		<h2><?php esc_html_e( 'Noticias leídas', 'ddn-suite' ); ?></h2>
+		<?php
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo decide qué aviso mostrar, no cambia estado.
+		$history_status = isset( $_GET['ddn_history'] ) ? sanitize_key( wp_unslash( $_GET['ddn_history'] ) ) : '';
+		if ( 'cleared' === $history_status ) {
+			printf( '<p class="ddn-form-notice ddn-form-notice--ok">%s</p>', esc_html__( 'Se borró tu historial de lectura.', 'ddn-suite' ) );
+		}
+		$read_ids = $this->history->post_ids( $user_id, 30 );
+		$this->render_reading_list( $read_ids, 'history' );
+		if ( array() !== $read_ids ) :
+			?>
+			<form class="ddn-history-clear" method="post" action="">
+				<?php wp_nonce_field( self::HISTORY_NONCE_ACTION, 'ddn_history_nonce' ); ?>
+				<button type="submit" class="btn btn--ghost"><?php esc_html_e( 'Borrar historial de lectura', 'ddn-suite' ); ?></button>
+			</form>
+		<?php endif; ?>
 
 		<h2><?php esc_html_e( 'Eliminar mi cuenta', 'ddn-suite' ); ?></h2>
 		<?php if ( '' !== $delete_status ) : ?>
@@ -284,6 +312,85 @@ final class AccountController {
 		$login_url = PageInstaller::url( PageInstaller::SLUG_LOGIN );
 		wp_safe_redirect( add_query_arg( 'ddn_account', 'deleted', '' !== $login_url ? $login_url : home_url( '/' ) ) );
 		exit;
+	}
+
+	public function handle_clear_history(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- solo mira si este POST es de ESTE formulario; el nonce se verifica más abajo.
+		if ( ! FormDispatch::targets( $_POST, 'ddn_history_nonce' ) ) {
+			return; // El envío es de otro formulario de esta página: se deja intacto.
+		}
+		if ( ! is_page( PageInstaller::SLUG_ACCOUNT ) || ! is_user_logged_in() ) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+		$back    = $this->back_url();
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST['ddn_history_nonce'] ) );
+		if ( ! wp_verify_nonce( $nonce, self::HISTORY_NONCE_ACTION ) ) {
+			$this->redirect_with( $back, 'ddn_history', 'invalid_request' );
+		}
+
+		$this->history->clear( $user_id );
+
+		$this->redirect_with( $back, 'ddn_history', 'cleared' );
+	}
+
+	/** @param int[] $post_ids */
+	private function render_reading_list( array $post_ids, string $kind ): void {
+		if ( array() === $post_ids ) {
+			printf(
+				'<p class="ddn-reading-empty">%s</p>',
+				esc_html(
+					'saved' === $kind
+						? __( 'Todavía no has guardado ninguna nota.', 'ddn-suite' )
+						: __( 'Todavía no has leído ninguna nota con tu cuenta iniciada.', 'ddn-suite' )
+				)
+			);
+			return;
+		}
+
+		echo '<ul class="ddn-reading-list">';
+		foreach ( $post_ids as $post_id ) {
+			$post = get_post( $post_id );
+			if ( ! $post instanceof WP_Post || 'publish' !== $post->post_status ) {
+				continue;
+			}
+
+			printf( '<li class="ddn-reading-item" data-ddn-reading-item="%s">', esc_attr( $kind ) );
+
+			echo '<a class="ddn-reading-item__media" href="' . esc_url( (string) get_permalink( $post ) ) . '" tabindex="-1" aria-hidden="true">';
+			if ( has_post_thumbnail( $post ) ) {
+				echo get_the_post_thumbnail( $post, 'thumbnail', array( 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML de imagen generado/escapado por WordPress.
+			}
+			echo '</a>';
+
+			echo '<div class="ddn-reading-item__body">';
+			printf(
+				'<h3 class="ddn-reading-item__title"><a href="%s">%s</a></h3>',
+				esc_url( (string) get_permalink( $post ) ),
+				esc_html( get_the_title( $post ) )
+			);
+			printf( '<p class="ddn-reading-item__meta">%s</p>', esc_html( get_the_date( '', $post ) ) );
+			echo '</div>';
+
+			if ( 'saved' === $kind ) {
+				$this->saved_view->button_markup( $post_id, true );
+			} else {
+				// Por privacidad: el suscriptor puede quitar una nota suelta
+				// del historial, además de borrarlo entero más abajo.
+				printf(
+					'<button type="button" class="ddn-history-remove" data-ddn-history-remove data-post-id="%1$d" data-rest-url="%2$s" data-nonce="%3$s">%4$s</button>',
+					absint( $post_id ),
+					esc_url( rest_url( 'ddn-suite/v1/history/remove' ) ),
+					esc_attr( wp_create_nonce( 'wp_rest' ) ),
+					esc_html__( 'Quitar', 'ddn-suite' )
+				);
+			}
+
+			echo '</li>';
+		}
+		echo '</ul>';
 	}
 
 	/**

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '7';
+	private const DB_VERSION = '8';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -63,11 +63,13 @@ final class Installer {
 	private static function migrate(): void {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		$charset     = Db::charset_collate();
-		$campaigns   = Db::table( Db::CAMPAIGNS );
-		$events      = Db::table( Db::EVENTS );
-		$pageviews   = Db::table( Db::PAGEVIEWS );
-		$radio_plays = Db::table( Db::RADIO_PLAYS );
+		$charset         = Db::charset_collate();
+		$campaigns       = Db::table( Db::CAMPAIGNS );
+		$events          = Db::table( Db::EVENTS );
+		$pageviews       = Db::table( Db::PAGEVIEWS );
+		$radio_plays     = Db::table( Db::RADIO_PLAYS );
+		$saved_articles  = Db::table( Db::SAVED_ARTICLES );
+		$reading_history = Db::table( Db::READING_HISTORY );
 
 		dbDelta(
 			"CREATE TABLE {$campaigns} (
@@ -138,6 +140,26 @@ final class Installer {
 		if ( ! wp_next_scheduled( 'ddn_suite_prune_pageviews' ) ) {
 			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'ddn_suite_prune_pageviews' );
 		}
+
+		// v8: artículos guardados e historial de lectura por suscriptor.
+		dbDelta(
+			"CREATE TABLE {$saved_articles} (
+				user_id BIGINT UNSIGNED NOT NULL,
+				post_id BIGINT UNSIGNED NOT NULL,
+				saved_at DATETIME NOT NULL,
+				PRIMARY KEY  (user_id, post_id),
+				KEY user_saved (user_id, saved_at)
+			) {$charset};"
+		);
+		dbDelta(
+			"CREATE TABLE {$reading_history} (
+				user_id BIGINT UNSIGNED NOT NULL,
+				post_id BIGINT UNSIGNED NOT NULL,
+				read_at DATETIME NOT NULL,
+				PRIMARY KEY  (user_id, post_id),
+				KEY user_read (user_id, read_at)
+			) {$charset};"
+		);
 
 		update_option( self::OPTION, self::DB_VERSION, false );
 	}
