@@ -39,6 +39,26 @@
   fill: currentColor;
 }
 
+.masthead__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.masthead__account {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
+  color: var(--slate);
+  white-space: nowrap;
+}
+.masthead__account:hover { color: var(--red); }
+.masthead__account svg { width: 1.05rem; height: 1.05rem; fill: none; }
+
 .masthead__search-toggle {
   display: inline-flex;
   align-items: center;
@@ -197,6 +217,20 @@
 // En móvil la barra es una sola fila que se desplaza en horizontal:
 // las 19 secciones (incluidas las de «Más») quedan en línea, sin
 // desplegable ni bloque de varias filas.
+// La barra de arriba (redes + Mi cuenta + lupa) aprieta en un celular
+// angosto: se deja solo el icono de «Mi cuenta», con la etiqueta
+// disponible igual para lectores de pantalla.
+@media (max-width: 420px) {
+  .masthead__account-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 760px) {
   .mainnav__inner { padding-inline: 0; }
   .mainnav__menu {

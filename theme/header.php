@@ -53,19 +53,37 @@ $ddn_dateline = sprintf(
 				echo '<span></span>';
 			}
 			?>
-			<button
-				type="button"
-				class="masthead__search-toggle"
-				data-search-toggle
-				aria-controls="masthead-search"
-				aria-expanded="false"
-			>
-				<span class="screen-reader-text"><?php esc_attr_e( 'Buscar', 'diario-del-norte' ); ?></span>
-				<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-					<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
-					<path d="m20 20-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-				</svg>
-			</button>
+			<div class="masthead__actions">
+				<?php
+				// Contrato con el plugin DDN Suite (módulo de suscriptores):
+				// si no está activo, el filtro no existe y aquí no se
+				// imprime nada.
+				$ddn_account_url = (string) apply_filters( 'ddn/account_url', '' );
+				if ( '' !== $ddn_account_url ) :
+					?>
+					<a class="masthead__account" href="<?php echo esc_url( $ddn_account_url ); ?>">
+						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+							<path d="M4 20c1.6-4 5-6 8-6s6.4 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+						</svg>
+						<span class="masthead__account-label"><?php esc_html_e( 'Mi cuenta', 'diario-del-norte' ); ?></span>
+					</a>
+				<?php endif; ?>
+
+				<button
+					type="button"
+					class="masthead__search-toggle"
+					data-search-toggle
+					aria-controls="masthead-search"
+					aria-expanded="false"
+				>
+					<span class="screen-reader-text"><?php esc_attr_e( 'Buscar', 'diario-del-norte' ); ?></span>
+					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+						<path d="m20 20-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+					</svg>
+				</button>
+			</div>
 		</div>
 
 		<div class="masthead-search" id="masthead-search" hidden>

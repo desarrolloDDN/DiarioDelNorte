@@ -66,6 +66,11 @@ final class Subscribers {
 		add_action( 'ddn/subscribers_login', array( $login, 'render' ) );
 		add_action( 'ddn/subscribers_account', array( $account, 'render' ) );
 
+		// Contrato con el tema: la URL de «Mi cuenta» para el enlace de la
+		// cabecera. Si el plugin no está activo, el filtro no existe y el
+		// tema simplemente no imprime el enlace — no hay error.
+		add_filter( 'ddn/account_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_ACCOUNT ) );
+
 		if ( is_admin() ) {
 			$repo = new SubscribersRepository( $profiles );
 			( new SubscribersPage( $repo ) )->register();

@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.33] — 2026-09-13
+
+### Añadido
+- **Cabecera — «Mi cuenta»**: enlace junto al botón de buscar hacia la
+  cuenta del suscriptor (contrato `ddn/account_url` con el módulo de
+  suscriptores de DDN Suite; sin el plugin activo, no se imprime nada).
+
 ## [0.1.32] — 2026-09-13
 
 ### Añadido
