@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.32] — 2026-09-13
+
+### Añadido
+- **Google Analytics**: etiqueta `gtag.js` encolada en el `<head>` (async).
+  ID de medición editable en Personalizar → Analítica (Google); en blanco
+  no se imprime nada.
+
 ## [0.1.31] — 2026-09-13
 
 ### Añadido

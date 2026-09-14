@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte;
 
+use DiarioDelNorte\Content\Analytics;
 use DiarioDelNorte\Content\CategoryMoreNews;
 use DiarioDelNorte\Content\ContactForm;
 use DiarioDelNorte\Content\ContactPageInstaller;
@@ -50,6 +51,7 @@ final class Theme {
 		( new PhotoCredit() )->register();
 		( new InlineRelated() )->register();
 		( new SocialMeta() )->register();
+		( new Analytics() )->register();
 		( new CategoryMoreNews() )->register();
 		( new ContactForm() )->register();
 		( new GitHubUpdater( DDN_THEME_VERSION ) )->register();

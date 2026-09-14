@@ -25,6 +25,7 @@
 | Personalizador | `inc/Customizer/SiteOptions.php` (pie, contacto, redes, edición impresa) |
 | Perfil de autor | `inc/Users/AuthorProfile.php` (foto + cargo para la firma; filtra `get_avatar_data`). Sin foto propia → `ddn_author_default_photo` (Personalizador) → `assets/img/autor.svg`. Nunca Gravatar ni `data:` URI. |
 | Compartir en redes | `inc/Content/SocialMeta.php` (Open Graph + Twitter Card en `wp_head`: imagen destacada, titular, resumen; tamaño `ddn-og` 1200×630; se inhibe si hay plugin SEO). Filtro `ddn/social_meta`. |
+| Analítica | `inc/Content/Analytics.php` (gtag.js de Google Analytics, `wp_enqueue_scripts`, async). ID de medición en Personalizar → Analítica (`ddn_ga_id`); en blanco no se encola nada. |
 | Helpers de plantilla | `inc/Support/Format.php`, `inc/Support/Ads.php` |
 | Fuentes | Autoalojadas en `assets/fonts/`, declaradas en `assets/src/scss/_fonts.scss`. Sin Google Fonts. |
 | Plantillas | `front-page.php`, `single.php`, `archive.php`, `search.php`, `page.php`, `404.php`, `index.php` |

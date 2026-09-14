@@ -118,6 +118,17 @@ final class SiteOptions {
 			)
 		);
 
+		// --- Analítica (Google) --------------------------------------------
+		$wp_customize->add_section(
+			'ddn_analytics',
+			array(
+				'title'       => __( 'Analítica (Google)', 'diario-del-norte' ),
+				'description' => __( 'Etiqueta de Google Analytics (gtag.js). En blanco no se imprime nada.', 'diario-del-norte' ),
+				'priority'    => 124,
+			)
+		);
+		$this->text( $wp_customize, 'ddn_ga_id', __( 'ID de medición', 'diario-del-norte' ), 'G-K5BYSDHR57', 'sanitize_text_field', 'ddn_analytics', __( 'Formato G-XXXXXXXXXX, de Google Analytics.', 'diario-del-norte' ) );
+
 		// --- Autores -----------------------------------------------------
 		$wp_customize->add_section(
 			'ddn_authors',
