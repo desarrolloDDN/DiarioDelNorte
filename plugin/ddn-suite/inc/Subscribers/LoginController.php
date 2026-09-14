@@ -1,9 +1,12 @@
 <?php
 /**
- * Login propio de suscriptores: página del tema (page-ingresar.php),
- * NUNCA wp-login.php — se redirige cualquier visita a wp-login.php (y se
- * reescribe wp_login_url()) hacia aquí. Recuperar contraseña sigue
- * siendo el flujo nativo de WordPress (fuera de alcance de este módulo).
+ * Login propio de suscriptores: página del tema (page-ingresar.php), no
+ * wp-login.php — se redirige la visita a wp-login.php (y se reescribe
+ * wp_login_url()) hacia aquí. Excepto cuando el destino es wp-admin
+ * (Support\AdminAccessRule::targets_admin()): eso es personal de
+ * redacción entrando a trabajar, no un lector, y se deja el login nativo
+ * de WordPress sin tocar. Recuperar contraseña sigue siendo el flujo
+ * nativo de WordPress (fuera de alcance de este módulo).
  *
  * Límite de intentos: 5 fallos en 15 minutos, contados por la IP real de
  * la conexión (nunca por usuario — así nadie bloquea la cuenta de otra
@@ -23,6 +26,7 @@ namespace DiarioDelNorte\Suite\Subscribers;
 
 use DiarioDelNorte\Suite\Subscribers\Install\PageInstaller;
 use DiarioDelNorte\Suite\Subscribers\OAuth\OAuthController;
+use DiarioDelNorte\Suite\Subscribers\Support\AdminAccessRule;
 use DiarioDelNorte\Suite\Subscribers\Support\Messages;
 use DiarioDelNorte\Suite\Subscribers\Support\RateLimiter;
 use WP_Error;
@@ -46,7 +50,7 @@ final class LoginController {
 		add_action( 'admin_post_nopriv_' . self::ACTION, array( $this, 'handle' ) );
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle' ) );
 
-		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 1 );
+		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 3 );
 		add_action( 'login_init', array( $this, 'redirect_wp_login' ) );
 
 		// Universal: corre para cualquier intento de autenticación, sea por
@@ -102,7 +106,18 @@ final class LoginController {
 		return self::ACTION;
 	}
 
-	public function filter_login_url( string $login_url ): string {
+	/**
+	 * @param string $redirect A dónde va tras iniciar sesión. WordPress lo
+	 *                         arma solo al mandar aquí a alguien sin sesión
+	 *                         desde /wp-admin/ (auth_redirect()): en ese
+	 *                         caso no se secuestra, es personal entrando a
+	 *                         trabajar, no un lector.
+	 */
+	public function filter_login_url( string $login_url, string $redirect = '', bool $force_reauth = false ): string { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		if ( AdminAccessRule::targets_admin( $redirect ) ) {
+			return $login_url;
+		}
+
 		$own = PageInstaller::url( PageInstaller::SLUG_LOGIN );
 
 		return '' !== $own ? $own : $login_url;
@@ -110,13 +125,22 @@ final class LoginController {
 
 	/**
 	 * wp-login.php sigue existiendo (lo necesitan «olvidé mi contraseña»,
-	 * «cerrar sesión», etc.); solo se redirige la pantalla de login en sí.
+	 * «cerrar sesión», etc., y el acceso de administradores/redacción a
+	 * wp-admin, que WordPress manda aquí con `redirect_to` cuando no hay
+	 * sesión); solo se redirige la pantalla de login en sí, y solo cuando
+	 * el destino no es wp-admin.
 	 */
 	public function redirect_wp_login(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo decide si redirige, no cambia estado.
 		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'login';
 
 		if ( 'login' !== $action || 'GET' !== ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo decide si redirige, no cambia estado.
+		$redirect_to = isset( $_GET['redirect_to'] ) ? (string) wp_unslash( $_GET['redirect_to'] ) : '';
+		if ( AdminAccessRule::targets_admin( $redirect_to ) ) {
 			return;
 		}
 

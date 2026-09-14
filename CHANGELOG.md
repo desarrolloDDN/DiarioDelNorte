@@ -5,6 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.38] — 2026-09-14
+
+### Corregido
+- **`/wp-admin/` mandaba a cualquiera (administradores incluidos) al login
+  de suscriptores** en vez del login nativo de WordPress. WordPress arma
+  internamente su propia URL de login apuntando de vuelta a wp-admin
+  cuando alguien sin sesión entra ahí; el módulo de suscriptores la
+  reescribía igual que cualquier otra. Ahora se deja intacta cuando el
+  destino es wp-admin — el acceso de redacción vuelve a ser el de
+  siempre, sin tocar el login de lectores.
+
 ## [0.1.37] — 2026-09-14
 
 ### Cambiado

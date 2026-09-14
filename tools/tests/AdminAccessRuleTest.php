@@ -50,3 +50,25 @@ ddn_test(
 		);
 	}
 );
+
+ddn_test(
+	'AdminAccessRule::targets_admin: detecta cuando WordPress manda a wp-admin (bug real: /wp-admin/ no debe caer en el login de suscriptores)',
+	static function (): void {
+		ddn_assert(
+			AdminAccessRule::targets_admin( 'https://diariodelnorte.net/wp-admin/' ),
+			'redirect_to hacia /wp-admin/: se detecta'
+		);
+		ddn_assert(
+			AdminAccessRule::targets_admin( 'https://diariodelnorte.net/wp-admin/edit.php' ),
+			'una pantalla concreta de wp-admin también'
+		);
+		ddn_assert(
+			! AdminAccessRule::targets_admin( 'https://diariodelnorte.net/mi-cuenta/' ),
+			'un destino normal de la web: no es wp-admin'
+		);
+		ddn_assert(
+			! AdminAccessRule::targets_admin( '' ),
+			'sin destino: no es wp-admin'
+		);
+	}
+);

@@ -31,4 +31,16 @@ final class AdminAccessRule {
 
 		return ! in_array( $pagenow, array( 'admin-post.php', 'admin-ajax.php' ), true );
 	}
+
+	/**
+	 * ¿Esta URL de destino (típicamente el `redirect_to` que WordPress ya
+	 * trae armado, p. ej. al mandar a alguien sin sesión desde /wp-admin/
+	 * a iniciar sesión) apunta a wp-admin? Si apunta ahí, el login propio
+	 * de suscriptores (página del tema, nunca wp-login.php) no debe
+	 * interponerse: es personal de redacción entrando a trabajar, no un
+	 * lector — se deja el login nativo de WordPress.
+	 */
+	public static function targets_admin( string $redirect_to ): bool {
+		return '' !== $redirect_to && str_contains( $redirect_to, '/wp-admin' );
+	}
 }
