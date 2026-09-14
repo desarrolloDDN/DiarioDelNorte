@@ -94,8 +94,9 @@ final class OAuthController {
 		echo '<div class="ddn-social-login">';
 		foreach ( $providers as $provider ) {
 			printf(
-				'<a class="btn btn--ghost ddn-social-login__btn" href="%s">%s</a>',
+				'<a class="ddn-social-login__btn" href="%s">%s<span>%s</span></a>',
 				esc_url( self::start_url( $provider->id(), $redirect_to ) ),
+				$provider->icon(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fijo del proveedor, no viene de entrada de usuario.
 				/* translators: %s: nombre del proveedor (Google, Facebook). */
 				esc_html( sprintf( __( 'Continuar con %s', 'ddn-suite' ), $provider->label() ) )
 			);

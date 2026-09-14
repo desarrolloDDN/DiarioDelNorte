@@ -19,9 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 <div class="wrap layout-page">
-	<header class="page-head">
-		<h1 class="page-head__title"><?php the_title(); ?></h1>
-	</header>
 	<?php do_action( 'ddn/subscribers_register' ); ?>
 </div>
 <?php

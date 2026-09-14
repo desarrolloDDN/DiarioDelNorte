@@ -148,6 +148,10 @@ final class LoginController {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- se reenvía tal cual al formulario, no se usa para nada más.
 		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : '';
 
+		echo '<div class="ddn-auth-card">';
+		echo '<h1 class="ddn-auth-card__title">' . esc_html__( 'Ingresar', 'ddn-suite' ) . '</h1>';
+		echo '<p class="ddn-auth-card__subtitle">' . esc_html__( 'Entra con tu cuenta para ver tus preferencias y los artículos exclusivos para suscriptores.', 'ddn-suite' ) . '</p>';
+
 		if ( 'deleted' === $account_status ) {
 			printf( '<p class="ddn-form-notice ddn-form-notice--ok">%s</p>', esc_html__( 'Tu cuenta se eliminó correctamente.', 'ddn-suite' ) );
 		} elseif ( '' !== $status ) {
@@ -156,6 +160,8 @@ final class LoginController {
 
 		$this->oauth->render_buttons( $redirect_to );
 		?>
+		<div class="ddn-divider"><span><?php esc_html_e( 'O ingresa con tu correo', 'ddn-suite' ); ?></span></div>
+
 		<form class="ddn-form" method="post" action="<?php echo esc_url( self::action_url() ); ?>">
 			<input type="hidden" name="action" value="<?php echo esc_attr( self::action_name() ); ?>">
 			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
@@ -178,10 +184,21 @@ final class LoginController {
 				<label><input type="checkbox" name="ddn_remember" value="1"> <?php esc_html_e( 'Mantener sesión iniciada', 'ddn-suite' ); ?></label>
 			</p>
 
-			<p><button type="submit" class="btn"><?php esc_html_e( 'Ingresar', 'ddn-suite' ); ?></button></p>
-			<p><a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( '¿Olvidaste tu contraseña?', 'ddn-suite' ); ?></a></p>
+			<p><button type="submit" class="btn ddn-form-submit"><?php esc_html_e( 'Ingresar', 'ddn-suite' ); ?></button></p>
 		</form>
+
+		<p class="ddn-auth-card__foot"><a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( '¿Olvidaste tu contraseña?', 'ddn-suite' ); ?></a></p>
+		<p class="ddn-auth-card__foot">
+			<?php
+			printf(
+				/* translators: %s: enlace «Crea una». */
+				esc_html__( '¿No tienes cuenta? %s', 'ddn-suite' ),
+				'<a href="' . esc_url( PageInstaller::url( PageInstaller::SLUG_REGISTER ) ) . '"><strong>' . esc_html__( 'Crea una', 'ddn-suite' ) . '</strong></a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
+			);
+			?>
+		</p>
 		<?php
+		echo '</div>';
 	}
 
 	public function handle(): void {

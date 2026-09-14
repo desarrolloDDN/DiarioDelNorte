@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Validator {
 
 	/**
-	 * Registro directo: nombre, celular, correo y contraseña son
-	 * obligatorios; ubicación e identificación son opcionales salvo que
-	 * tipo y número de documento deben venir juntos o ninguno; los dos
-	 * consentimientos de aceptación son obligatorios.
+	 * Registro directo: nombre, celular, correo, contraseña y su
+	 * confirmación son obligatorios; ubicación e identificación son
+	 * opcionales salvo que tipo y número de documento deben venir juntos
+	 * o ninguno; los dos consentimientos de aceptación son obligatorios.
 	 *
 	 * @param array<string,mixed> $data              Campos ya extraídos de $_POST (sin sanear todavía).
 	 * @param string[]            $valid_departments Lista cerrada de departamentos válidos.
@@ -45,8 +45,12 @@ final class Validator {
 			$errors[] = 'email_invalid';
 		}
 
-		if ( strlen( (string) ( $data['password'] ?? '' ) ) < 8 ) {
+		$password         = (string) ( $data['password'] ?? '' );
+		$password_confirm = (string) ( $data['password_confirm'] ?? '' );
+		if ( strlen( $password ) < 8 ) {
 			$errors[] = 'password_too_short';
+		} elseif ( $password !== $password_confirm ) {
+			$errors[] = 'password_mismatch';
 		}
 
 		if ( empty( $data['accept_terms'] ) ) {

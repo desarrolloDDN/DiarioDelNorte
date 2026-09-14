@@ -1,7 +1,49 @@
 /* Registro / Ingresar / Mi cuenta · DDN Suite. Autocontenido (no depende
    de las variables CSS del tema activo), igual que assets/radio/radio.css. */
 
+/* Tarjeta centrada de Registro / Ingresar. */
+.ddn-auth-card {
+	max-width: 30rem;
+	margin: 2.5rem auto;
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.ddn-auth-card__title {
+	margin: 0 0 0.6rem;
+	text-align: center;
+	font-family: Georgia, "Times New Roman", serif;
+	font-size: 2.1rem;
+	font-weight: 600;
+	color: #1a1a1a;
+}
+.ddn-auth-card__subtitle {
+	margin: 0 0 1.5rem;
+	text-align: center;
+	color: #666;
+	font-size: 0.96rem;
+	line-height: 1.4;
+}
+.ddn-auth-card__foot { margin: 1.5rem 0 0; text-align: center; font-size: 0.92rem; color: #40403f; }
+
+.ddn-divider {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	margin: 1.5rem 0;
+	color: #999;
+	font-weight: 700;
+	font-size: 0.7rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.ddn-divider::before,
+.ddn-divider::after { content: ""; flex: 1 1 auto; height: 1px; background: #e4e4e4; }
+
+.ddn-form-rule { border: 0; border-top: 1px solid #e4e4e4; margin: 1.4rem 0; }
+
 .ddn-form { max-width: 32rem; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.ddn-auth-card .ddn-form { max-width: none; }
+.ddn-field-row { display: flex; gap: 1rem; }
+.ddn-field-row .ddn-field { flex: 1 1 0; min-width: 0; }
 .ddn-field { margin: 0 0 1.1rem; }
 .ddn-field label {
 	display: block;
@@ -77,9 +119,29 @@
 .ddn-form-notice--ok { border-left-color: #2e7d32; }
 .ddn-form-notice--error { border-left-color: #8c0000; color: #8c0000; }
 
-.ddn-social-login { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0 0 1.4rem; }
+.ddn-social-login { display: flex; flex-direction: column; gap: 0.6rem; margin: 0 0 0.4rem; }
+.ddn-social-login__btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+	width: 100%;
+	padding: 0.65rem 1rem;
+	background: #fff;
+	border: 1px solid #d8d8d6;
+	border-radius: 4px;
+	color: #1a1a1a;
+	font-weight: 700;
+	font-size: 0.92rem;
+	text-decoration: none;
+}
+.ddn-social-login__btn:hover { border-color: #bf0202; }
+.ddn-social-login__btn svg { flex-shrink: 0; }
+
+.ddn-form-submit { display: block; width: 100%; text-align: center; text-transform: uppercase; letter-spacing: 0.03em; }
 
 @media (max-width: 480px) {
+	.ddn-field-row { flex-direction: column; gap: 0; }
 	.ddn-field--pair { width: 100%; }
 	.ddn-field--pair:nth-of-type(odd) { margin-right: 0; }
 }

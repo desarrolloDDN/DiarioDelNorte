@@ -43,6 +43,41 @@ ddn_test(
 );
 
 ddn_test(
+	'Validator::registration exige que la contraseña y su confirmación coincidan',
+	static function () use ( $ddn_departments, $ddn_doc_types ): void {
+		$distintas = Validator::registration(
+			array(
+				'full_name'       => 'Ana Pérez',
+				'phone'           => '3001234567',
+				'email'           => 'ana@example.com',
+				'password'        => 'contraseña123',
+				'password_confirm' => 'otradistinta',
+				'accept_terms'    => '1',
+				'accept_privacy'  => '1',
+			),
+			$ddn_departments,
+			$ddn_doc_types
+		);
+		ddn_assert( in_array( 'password_mismatch', $distintas, true ), 'confirmación distinta: rechazado' );
+
+		$iguales = Validator::registration(
+			array(
+				'full_name'       => 'Ana Pérez',
+				'phone'           => '3001234567',
+				'email'           => 'ana@example.com',
+				'password'        => 'contraseña123',
+				'password_confirm' => 'contraseña123',
+				'accept_terms'    => '1',
+				'accept_privacy'  => '1',
+			),
+			$ddn_departments,
+			$ddn_doc_types
+		);
+		ddn_assert( ! in_array( 'password_mismatch', $iguales, true ), 'confirmación igual: válido' );
+	}
+);
+
+ddn_test(
 	'Validator: tipo y número de documento van juntos o ninguno',
 	static function () use ( $ddn_departments, $ddn_doc_types ): void {
 		$solo_tipo = Validator::profile(

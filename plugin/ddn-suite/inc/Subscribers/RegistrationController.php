@@ -76,6 +76,10 @@ final class RegistrationController {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- idem.
 		$errors = isset( $_GET['ddn_errors'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_GET['ddn_errors'] ) ) ) : array();
 
+		echo '<div class="ddn-auth-card">';
+		echo '<h1 class="ddn-auth-card__title">' . esc_html__( 'Crear cuenta', 'ddn-suite' ) . '</h1>';
+		echo '<p class="ddn-auth-card__subtitle">' . esc_html__( 'Crea tu cuenta gratis para guardar tus preferencias y acceder a los artículos exclusivos para suscriptores.', 'ddn-suite' ) . '</p>';
+
 		if ( 'success' === $status ) {
 			printf(
 				'<p class="ddn-form-notice ddn-form-notice--ok">%s <a href="%s">%s</a></p>',
@@ -83,6 +87,7 @@ final class RegistrationController {
 				esc_url( PageInstaller::url( PageInstaller::SLUG_LOGIN ) ),
 				esc_html__( 'Ingresar', 'ddn-suite' )
 			);
+			echo '</div>';
 			return;
 		}
 
@@ -95,9 +100,9 @@ final class RegistrationController {
 		}
 
 		$this->oauth->render_buttons();
-
-		$legal = LegalLinks::links();
 		?>
+		<div class="ddn-divider"><span><?php esc_html_e( 'O crea tu cuenta con tu correo', 'ddn-suite' ); ?></span></div>
+
 		<form class="ddn-form" method="post" action="<?php echo esc_url( self::action_url() ); ?>">
 			<input type="hidden" name="action" value="<?php echo esc_attr( self::action_name() ); ?>">
 			<?php wp_nonce_field( self::ACTION, 'ddn_reg_nonce' ); ?>
@@ -112,94 +117,103 @@ final class RegistrationController {
 				<input type="text" id="ddn_full_name" name="full_name" required>
 			</p>
 			<p class="ddn-field">
-				<label for="ddn_phone"><?php esc_html_e( 'Celular', 'ddn-suite' ); ?></label>
-				<input type="tel" id="ddn_phone" name="phone" required>
-			</p>
-			<p class="ddn-field">
 				<label for="ddn_email"><?php esc_html_e( 'Correo electrónico', 'ddn-suite' ); ?></label>
 				<input type="email" id="ddn_email" name="email" required>
 			</p>
 			<p class="ddn-field">
-				<label for="ddn_password"><?php esc_html_e( 'Contraseña (mínimo 8 caracteres)', 'ddn-suite' ); ?></label>
-				<input type="password" id="ddn_password" name="password" minlength="8" required>
+				<label for="ddn_phone"><?php esc_html_e( 'Celular (WhatsApp)', 'ddn-suite' ); ?></label>
+				<input type="tel" id="ddn_phone" name="phone" required>
 			</p>
 
-			<p class="ddn-field">
-				<label for="ddn_department"><?php esc_html_e( 'Departamento', 'ddn-suite' ); ?></label>
-				<select id="ddn_department" name="department">
-					<option value=""><?php esc_html_e( 'Selecciona (opcional)', 'ddn-suite' ); ?></option>
-					<?php foreach ( Options::departments() as $ddn_dep ) : ?>
-						<option value="<?php echo esc_attr( $ddn_dep ); ?>"><?php echo esc_html( $ddn_dep ); ?></option>
-					<?php endforeach; ?>
-				</select>
-			</p>
-			<p class="ddn-field">
-				<label for="ddn_city"><?php esc_html_e( 'Ciudad', 'ddn-suite' ); ?></label>
-				<input type="text" id="ddn_city" name="city">
-			</p>
+			<div class="ddn-field-row">
+				<p class="ddn-field">
+					<label for="ddn_department"><?php esc_html_e( 'Departamento', 'ddn-suite' ); ?></label>
+					<select id="ddn_department" name="department">
+						<option value=""><?php esc_html_e( 'Selecciona…', 'ddn-suite' ); ?></option>
+						<?php foreach ( Options::departments() as $ddn_dep ) : ?>
+							<option value="<?php echo esc_attr( $ddn_dep ); ?>"><?php echo esc_html( $ddn_dep ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p class="ddn-field">
+					<label for="ddn_city"><?php esc_html_e( 'Ciudad o municipio', 'ddn-suite' ); ?></label>
+					<input type="text" id="ddn_city" name="city">
+				</p>
+			</div>
+
 			<p class="ddn-field">
 				<label for="ddn_address"><?php esc_html_e( 'Dirección', 'ddn-suite' ); ?></label>
 				<input type="text" id="ddn_address" name="address">
 			</p>
 
-			<p class="ddn-field ddn-field--pair">
-				<label for="ddn_doc_type"><?php esc_html_e( 'Tipo de documento', 'ddn-suite' ); ?></label>
-				<select id="ddn_doc_type" name="doc_type">
-					<option value=""><?php esc_html_e( 'Selecciona (opcional)', 'ddn-suite' ); ?></option>
-					<?php foreach ( Options::document_types() as $ddn_code => $ddn_label ) : ?>
-						<option value="<?php echo esc_attr( $ddn_code ); ?>"><?php echo esc_html( $ddn_label ); ?></option>
-					<?php endforeach; ?>
-				</select>
-			</p>
-			<p class="ddn-field ddn-field--pair">
-				<label for="ddn_doc_number"><?php esc_html_e( 'Número de documento', 'ddn-suite' ); ?></label>
-				<input type="text" id="ddn_doc_number" name="doc_number">
-			</p>
-			<p class="description"><?php esc_html_e( 'Si llenas uno de los dos campos de documento, el otro también es obligatorio.', 'ddn-suite' ); ?></p>
+			<div class="ddn-field-row">
+				<p class="ddn-field">
+					<label for="ddn_doc_type"><?php esc_html_e( 'Tipo de identificación', 'ddn-suite' ); ?></label>
+					<select id="ddn_doc_type" name="doc_type">
+						<option value=""><?php esc_html_e( 'Selecciona…', 'ddn-suite' ); ?></option>
+						<?php foreach ( Options::document_types() as $ddn_code => $ddn_label ) : ?>
+							<option value="<?php echo esc_attr( $ddn_code ); ?>"><?php echo esc_html( $ddn_label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p class="ddn-field">
+					<label for="ddn_doc_number"><?php esc_html_e( 'Número de identificación', 'ddn-suite' ); ?></label>
+					<input type="text" id="ddn_doc_number" name="doc_number">
+				</p>
+			</div>
+			<p class="description"><?php esc_html_e( 'Si llenas uno de los dos campos de identificación, el otro también es obligatorio.', 'ddn-suite' ); ?></p>
+
+			<div class="ddn-field-row">
+				<p class="ddn-field">
+					<label for="ddn_password"><?php esc_html_e( 'Contraseña', 'ddn-suite' ); ?></label>
+					<input type="password" id="ddn_password" name="password" minlength="8" required>
+				</p>
+				<p class="ddn-field">
+					<label for="ddn_password_confirm"><?php esc_html_e( 'Confirmar contraseña', 'ddn-suite' ); ?></label>
+					<input type="password" id="ddn_password_confirm" name="password_confirm" minlength="8" required>
+				</p>
+			</div>
 
 			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="consent_email" value="1"> <?php esc_html_e( 'Quiero recibir correos de Diario del Norte.', 'ddn-suite' ); ?></label>
+				<label><input type="checkbox" name="consent_email" value="1"> <?php esc_html_e( 'Quiero recibir correos con información y noticias destacadas.', 'ddn-suite' ); ?></label>
 			</p>
 			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="consent_whatsapp" value="1"> <?php esc_html_e( 'Quiero recibir WhatsApp de Diario del Norte.', 'ddn-suite' ); ?></label>
-			</p>
-			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="accept_terms" value="1" required>
-					<?php
-					printf(
-						/* translators: %s: enlace a Términos y Condiciones. */
-						esc_html__( 'Acepto los %s.', 'ddn-suite' ),
-						'<a href="' . esc_url( $legal['terms'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Términos y Condiciones', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
-					);
-					?>
-				</label>
-			</p>
-			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="accept_privacy" value="1" required>
-					<?php
-					printf(
-						/* translators: %s: enlace a la Política de tratamiento de datos. */
-						esc_html__( 'Acepto la %s.', 'ddn-suite' ),
-						'<a href="' . esc_url( $legal['privacy'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Política de tratamiento de datos', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
-					);
-					?>
-				</label>
+				<label><input type="checkbox" name="consent_whatsapp" value="1"> <?php esc_html_e( 'Quiero recibir mensajes por WhatsApp con información y noticias destacadas.', 'ddn-suite' ); ?></label>
 			</p>
 
-			<p><button type="submit" class="btn"><?php esc_html_e( 'Crear cuenta', 'ddn-suite' ); ?></button></p>
+			<hr class="ddn-form-rule">
+
+			<?php $this->render_legal_checkboxes(); ?>
+
+			<p><button type="submit" class="btn ddn-form-submit"><?php esc_html_e( 'Crear mi cuenta', 'ddn-suite' ); ?></button></p>
 		</form>
+
+		<p class="ddn-auth-card__foot">
+			<?php
+			printf(
+				/* translators: %s: enlace «Inicia sesión». */
+				esc_html__( '¿Ya tienes cuenta? %s', 'ddn-suite' ),
+				'<a href="' . esc_url( PageInstaller::url( PageInstaller::SLUG_LOGIN ) ) . '"><strong>' . esc_html__( 'Inicia sesión', 'ddn-suite' ) . '</strong></a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
+			);
+			?>
+		</p>
 		<?php
+		echo '</div>';
 	}
 
 	/**
 	 * @param array{provider:string,profile:array{email:string,name:string,avatar:string,provider_user_id:string},redirect_to:string} $pending
 	 */
 	private function render_social_confirm( string $token, array $pending ): void {
-		$legal   = LegalLinks::links();
 		$profile = $pending['profile'];
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo decide qué mensaje mostrar, no cambia estado.
 		$errors = isset( $_GET['ddn_errors'] ) ? explode( ',', sanitize_text_field( wp_unslash( $_GET['ddn_errors'] ) ) ) : array();
+
+		echo '<div class="ddn-auth-card">';
+		echo '<h1 class="ddn-auth-card__title">' . esc_html__( 'Crear cuenta', 'ddn-suite' ) . '</h1>';
+		echo '<p class="ddn-auth-card__subtitle">' . esc_html__( 'Ya casi terminas: confirma que aceptas lo siguiente para crear tu cuenta.', 'ddn-suite' ) . '</p>';
+
 		if ( array() !== $errors ) {
 			echo '<div class="ddn-form-notice ddn-form-notice--error"><ul>';
 			foreach ( $errors as $code ) {
@@ -208,38 +222,45 @@ final class RegistrationController {
 			echo '</ul></div>';
 		}
 		?>
-		<p><?php esc_html_e( 'Ya casi terminas: confirma que aceptas lo siguiente para crear tu cuenta.', 'ddn-suite' ); ?></p>
 		<p><strong><?php echo esc_html( $profile['name'] ); ?></strong> — <?php echo esc_html( $profile['email'] ); ?></p>
 		<form class="ddn-form" method="post" action="<?php echo esc_url( self::action_url() ); ?>">
 			<input type="hidden" name="action" value="<?php echo esc_attr( self::SOCIAL_ACTION ); ?>">
 			<input type="hidden" name="ddn_social_token" value="<?php echo esc_attr( $token ); ?>">
 			<?php wp_nonce_field( self::SOCIAL_ACTION, 'ddn_social_nonce' ); ?>
 
-			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="accept_terms" value="1" required>
-					<?php
-					printf(
-						/* translators: %s: enlace a Términos y Condiciones. */
-						esc_html__( 'Acepto los %s.', 'ddn-suite' ),
-						'<a href="' . esc_url( $legal['terms'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Términos y Condiciones', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
-					);
-					?>
-				</label>
-			</p>
-			<p class="ddn-field ddn-field--check">
-				<label><input type="checkbox" name="accept_privacy" value="1" required>
-					<?php
-					printf(
-						/* translators: %s: enlace a la Política de tratamiento de datos. */
-						esc_html__( 'Acepto la %s.', 'ddn-suite' ),
-						'<a href="' . esc_url( $legal['privacy'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Política de tratamiento de datos', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
-					);
-					?>
-				</label>
-			</p>
+			<?php $this->render_legal_checkboxes(); ?>
 
-			<p><button type="submit" class="btn"><?php esc_html_e( 'Crear mi cuenta', 'ddn-suite' ); ?></button></p>
+			<p><button type="submit" class="btn ddn-form-submit"><?php esc_html_e( 'Crear mi cuenta', 'ddn-suite' ); ?></button></p>
 		</form>
+		<?php
+		echo '</div>';
+	}
+
+	private function render_legal_checkboxes(): void {
+		$legal = LegalLinks::links();
+		?>
+		<p class="ddn-field ddn-field--check">
+			<label><input type="checkbox" name="accept_terms" value="1" required>
+				<?php
+				printf(
+					/* translators: %s: enlace a Términos y Condiciones. */
+					esc_html__( 'He leído y acepto los %s.', 'ddn-suite' ),
+					'<a href="' . esc_url( $legal['terms'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Términos y Condiciones', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
+				);
+				?>
+			</label>
+		</p>
+		<p class="ddn-field ddn-field--check">
+			<label><input type="checkbox" name="accept_privacy" value="1" required>
+				<?php
+				printf(
+					/* translators: %s: enlace a la Política de Tratamiento de Datos. */
+					esc_html__( 'He leído y acepto la %s.', 'ddn-suite' ),
+					'<a href="' . esc_url( $legal['privacy'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Política de Tratamiento de Datos', 'ddn-suite' ) . '</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado arriba.
+				);
+				?>
+			</label>
+		</p>
 		<?php
 	}
 
@@ -265,6 +286,7 @@ final class RegistrationController {
 			'phone'            => sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) ),
 			'email'            => sanitize_email( wp_unslash( $_POST['email'] ?? '' ) ),
 			'password'         => (string) ( $_POST['password'] ?? '' ),
+			'password_confirm' => (string) ( $_POST['password_confirm'] ?? '' ),
 			'department'       => sanitize_text_field( wp_unslash( $_POST['department'] ?? '' ) ),
 			'city'             => sanitize_text_field( wp_unslash( $_POST['city'] ?? '' ) ),
 			'address'          => sanitize_text_field( wp_unslash( $_POST['address'] ?? '' ) ),

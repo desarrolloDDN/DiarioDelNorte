@@ -17,6 +17,9 @@ interface ProviderInterface {
 
 	public function label(): string;
 
+	/** SVG de confianza (no viene de entrada de usuario) para el botón «Continuar con…». */
+	public function icon(): string;
+
 	public function authorize_url( string $state, string $redirect_uri ): string;
 
 	/**

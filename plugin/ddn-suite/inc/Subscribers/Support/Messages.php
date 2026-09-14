@@ -71,6 +71,7 @@ final class Messages {
 			'email_invalid'      => __( 'Escribe un correo válido.', 'ddn-suite' ),
 			'email_taken'        => __( 'Ya existe una cuenta con ese correo.', 'ddn-suite' ),
 			'password_too_short' => __( 'La contraseña debe tener al menos 8 caracteres.', 'ddn-suite' ),
+			'password_mismatch'  => __( 'La contraseña y su confirmación no coinciden.', 'ddn-suite' ),
 			'department_invalid' => __( 'Elige un departamento de la lista.', 'ddn-suite' ),
 			'doc_type_invalid'   => __( 'Elige un tipo de documento de la lista.', 'ddn-suite' ),
 			'doc_incomplete'     => __( 'Si indicas el tipo de documento, indica también el número (o deja los dos en blanco).', 'ddn-suite' ),

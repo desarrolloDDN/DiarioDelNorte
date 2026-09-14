@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.34] — 2026-09-13
+
+### Cambiado
+- **Registro e Ingresar (suscriptores)**: formulario rediseñado como
+  tarjeta centrada (título, bajada, botones sociales con ícono real de
+  Google/Facebook, divisor, campos en pareja) y nuevo campo «Confirmar
+  contraseña» en el registro directo (validado). El enlace «Mi cuenta»
+  de la cabecera lleva a Registro si no hay sesión iniciada.
+
 ## [0.1.33] — 2026-09-13
 
 ### Añadido

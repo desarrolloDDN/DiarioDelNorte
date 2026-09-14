@@ -31,12 +31,14 @@ final class Analytics {
 			return;
 		}
 
-		// async y en el <head> (no en el pie): como recomienda Google.
+		// async y en el <head> (no en el pie): como recomienda Google. Sin
+		// versión a propósito: es un script externo con su propia caché de
+		// Google, no de las nuestras — un «?ver=» de WordPress ahí no pinta nada.
 		wp_enqueue_script(
 			'ddn-ga',
 			'https://www.googletagmanager.com/gtag/js?id=' . rawurlencode( $id ),
 			array(),
-			null,
+			null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			array(
 				'strategy'  => 'async',
 				'in_footer' => false,
