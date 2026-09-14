@@ -16,7 +16,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.1"
-          extensions: mbstring
+          extensions: mbstring, sodium, zip
           coverage: none
           tools: composer:v2
       - name: composer install

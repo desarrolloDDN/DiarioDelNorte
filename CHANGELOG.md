@@ -5,6 +5,28 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.31] — 2026-09-13
+
+### Añadido
+- **Cuentas de suscriptor (nuevo módulo, DDN Suite)**: registro directo
+  (correo + contraseña, con departamento/ciudad/dirección/identificación
+  opcionales), inicio de sesión propio del sitio (ya no wp-login.php),
+  inicio de sesión con Google y Facebook, «Mi cuenta» (editar datos,
+  cambiar contraseña, eliminar la cuenta) y un panel «Suscriptores» en
+  wp-admin con búsqueda, filtros y exportación a CSV/Excel de todo lo que
+  cumpla el filtro activo. Las páginas (Registro, Ingresar, Mi cuenta) se
+  crean solas, igual que las secciones.
+  - Límite de 5 intentos fallidos de inicio de sesión en 15 minutos por
+    IP real de la conexión (nunca por usuario ni por cabeceras como
+    X-Forwarded-For), aplicado a cualquier forma de intentar entrar al
+    sitio, no solo al formulario propio.
+  - El registro social exige aceptar Términos y Política antes de crear
+    la cuenta, igual que el registro directo.
+  - El número de identificación se guarda cifrado.
+  - Requiere configurar las credenciales de Google/Facebook en
+    **DDN Suite → Suscriptores → Inicio social** para que aparezcan esos
+    botones.
+
 ## [0.1.30] — 2026-09-13
 
 ### Añadido

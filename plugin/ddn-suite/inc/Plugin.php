@@ -30,6 +30,7 @@ use DiarioDelNorte\Suite\Radio\RadioMeta;
 use DiarioDelNorte\Suite\Radio\RadioPlayer;
 use DiarioDelNorte\Suite\Radio\RadioSettings;
 use DiarioDelNorte\Suite\Radio\RadioStats;
+use DiarioDelNorte\Suite\Subscribers\Subscribers;
 use DiarioDelNorte\Suite\Updater\GitHubUpdater;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,6 +65,8 @@ final class Plugin {
 
 		( new EditionPostType() )->register();
 		( new EditionRepository() )->register();
+
+		( new Subscribers() )->boot();
 
 		$radio_settings = new RadioSettings();
 		$radio_stats    = new RadioStats();
