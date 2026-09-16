@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class PhotoCredit {
 
-	private const META  = '_ddn_photo_credit';
+	private const META = '_ddn_photo_credit';
 	// Distinto del name="" del campo de texto (ver render()): si
 	// coincidieran, el navegador manda los dos bajo la misma clave y el
 	// valor del campo pisa el del nonce en $_POST — wp_verify_nonce()

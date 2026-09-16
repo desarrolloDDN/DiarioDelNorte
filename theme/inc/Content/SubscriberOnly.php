@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class SubscriberOnly {
 
-	private const META  = '_ddn_subscribers_only';
+	private const META = '_ddn_subscribers_only';
 	// Distinto del name="" de la casilla (ver render()): si coincidieran,
 	// el navegador manda los dos campos bajo la misma clave y el valor de
 	// la casilla pisa el del nonce en $_POST — wp_verify_nonce() falla

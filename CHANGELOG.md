@@ -5,6 +5,27 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.42] — 2026-09-16
+
+### Añadido
+- **Actividad (DDN Suite → Actividad, solo Administrador).** Bitácora de
+  eventos clave de todos los usuarios de la web — personal (redacción,
+  autores, administradores) y suscriptores por igual, porque todos pasan
+  por los mismos mecanismos nativos de WordPress: inicio y cierre de
+  sesión, notas publicadas/editadas/enviadas a la papelera/borradas, y
+  alta, cambio de rol o baja de un usuario. Cada fila guarda una foto de
+  quién hizo qué (usuario, rol, IP, fecha) y sobre qué (nota o usuario),
+  filtrable por evento, usuario y rango de fechas; se conserva 180 días
+  y se poda sola.
+- Segunda pestaña **«Publicaciones por autor»**: cuántas notas publicó
+  cada autor en un rango de fechas, con acceso directo al listado
+  filtrado de sus notas.
+
+Medir con precisión cuánto tiempo pasa cada visitante en la web queda
+fuera de este alcance — requeriría un mecanismo de «heartbeat» aparte;
+esta bitácora registra hechos puntuales (cuándo entra y sale cada
+quien), no la duración de la sesión.
+
 ## [0.1.41] — 2026-09-16
 
 ### Corregido

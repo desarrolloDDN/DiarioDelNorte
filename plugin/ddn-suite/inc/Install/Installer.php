@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Installer {
 
 	private const OPTION     = 'ddn_suite_db_version';
-	private const DB_VERSION = '8';
+	private const DB_VERSION = '9';
 
 	/** Hook de activación del plugin. */
 	public static function activate(): void {
@@ -70,6 +70,7 @@ final class Installer {
 		$radio_plays     = Db::table( Db::RADIO_PLAYS );
 		$saved_articles  = Db::table( Db::SAVED_ARTICLES );
 		$reading_history = Db::table( Db::READING_HISTORY );
+		$activity_log    = Db::table( Db::ACTIVITY_LOG );
 
 		dbDelta(
 			"CREATE TABLE {$campaigns} (
@@ -160,6 +161,30 @@ final class Installer {
 				KEY user_read (user_id, read_at)
 			) {$charset};"
 		);
+
+		// v9: bitácora de eventos clave (inicios de sesión, publicaciones,
+		// altas/bajas/cambios de rol de usuarios) para el panel «Actividad».
+		dbDelta(
+			"CREATE TABLE {$activity_log} (
+				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+				event_type VARCHAR(40) NOT NULL,
+				user_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+				user_login VARCHAR(60) NOT NULL DEFAULT '',
+				user_role VARCHAR(60) NOT NULL DEFAULT '',
+				object_type VARCHAR(20) NOT NULL DEFAULT '',
+				object_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+				object_label VARCHAR(191) NOT NULL DEFAULT '',
+				ip VARCHAR(45) NOT NULL DEFAULT '',
+				created_at DATETIME NOT NULL,
+				PRIMARY KEY  (id),
+				KEY event_created (event_type, created_at),
+				KEY user_created (user_id, created_at)
+			) {$charset};"
+		);
+
+		if ( ! wp_next_scheduled( 'ddn_suite_prune_activity_log' ) ) {
+			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'ddn_suite_prune_activity_log' );
+		}
 
 		update_option( self::OPTION, self::DB_VERSION, false );
 	}

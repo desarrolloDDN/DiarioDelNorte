@@ -22,6 +22,7 @@ final class Db {
 	public const RADIO_PLAYS     = 'ddn_radio_plays';
 	public const SAVED_ARTICLES  = 'ddn_saved_articles';
 	public const READING_HISTORY = 'ddn_reading_history';
+	public const ACTIVITY_LOG    = 'ddn_activity_log';
 
 	public static function table( string $name ): string {
 		global $wpdb;

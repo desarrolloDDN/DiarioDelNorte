@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite\Admin;
 
+use DiarioDelNorte\Suite\Activity\Admin\ActivityPage;
+use DiarioDelNorte\Suite\Activity\Install\CapabilityInstaller as ActivityCapabilityInstaller;
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
 use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller as AdsCapabilityInstaller;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
@@ -25,6 +27,7 @@ final class Menu {
 		private readonly CalendarPage $calendar,
 		private readonly CampaignsPage $campaigns,
 		private readonly RadioPage $radio,
+		private readonly ActivityPage $activity,
 	) {}
 
 	public function register(): void {
@@ -72,6 +75,15 @@ final class Menu {
 			RadioCapabilityInstaller::CAP,
 			RadioPage::SLUG,
 			array( $this->radio, 'render' )
+		);
+
+		add_submenu_page(
+			CalendarPage::SLUG,
+			__( 'Actividad', 'ddn-suite' ),
+			__( 'Actividad', 'ddn-suite' ),
+			ActivityCapabilityInstaller::CAP,
+			ActivityPage::SLUG,
+			array( $this->activity, 'render' )
 		);
 	}
 }

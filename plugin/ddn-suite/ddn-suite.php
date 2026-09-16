@@ -3,7 +3,7 @@
  * Plugin Name:       DDN Suite
  * Plugin URI:        https://github.com/desarrolloDDN/DiarioDelNorte
  * Description:        Gestor de publicidad y calendario de noticias publicadas para Diario del Norte. Complementa al tema; el tema solo marca las zonas de anuncio.
- * Version:           0.1.41
+ * Version:           0.1.42
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Sistema Cardenal S.A.S.
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DDN_SUITE_VERSION', '0.1.41' );
+define( 'DDN_SUITE_VERSION', '0.1.42' );
 define( 'DDN_SUITE_FILE', __FILE__ );
 define( 'DDN_SUITE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DDN_SUITE_URL', plugin_dir_url( __FILE__ ) );
@@ -37,6 +37,7 @@ register_deactivation_hook(
 	__FILE__,
 	static function (): void {
 		wp_clear_scheduled_hook( 'ddn_suite_prune_pageviews' );
+		wp_clear_scheduled_hook( 'ddn_suite_prune_activity_log' );
 		flush_rewrite_rules();
 	}
 );
