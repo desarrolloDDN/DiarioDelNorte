@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite;
 
-use DiarioDelNorte\Suite\Activity\Admin\ActivityListTable;
 use DiarioDelNorte\Suite\Activity\Admin\ActivityPage;
 use DiarioDelNorte\Suite\Activity\ActivityRecorder;
 use DiarioDelNorte\Suite\Activity\ActivityRepository;
@@ -94,7 +93,7 @@ final class Plugin {
 			$calendar_page  = new CalendarPage( new CalendarRepository() );
 			$campaigns_page = new CampaignsPage( $campaigns, $stats );
 			$radio_page     = new RadioPage( $radio_settings, $radio_stats );
-			$activity_page  = new ActivityPage( new ActivityListTable( $activity_repo ), new AuthorReportRepository() );
+			$activity_page  = new ActivityPage( $activity_repo, new AuthorReportRepository() );
 			( new Menu( $calendar_page, $campaigns_page, $radio_page, $activity_page ) )->register();
 		}
 	}

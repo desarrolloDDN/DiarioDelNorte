@@ -5,6 +5,18 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.43] — 2026-09-16
+
+### Corregido
+- **Error crítico al actualizar a la v0.1.42** (`ddn-suite` quedaba
+  inutilizable en todo el sitio, no solo en el panel de Actividad). La
+  tabla de la bitácora se construía demasiado pronto — al arrancar el
+  plugin, antes de que WordPress cargara `convert_to_screen()` (una
+  función que `WP_List_Table` necesita y que solo existe una vez que
+  WordPress está de verdad dibujando una pantalla de administración).
+  Ahora se construye, como el resto de tablas del plugin, solo dentro de
+  su propia pantalla.
+
 ## [0.1.42] — 2026-09-16
 
 ### Añadido

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite\Activity\Admin;
 
+use DiarioDelNorte\Suite\Activity\ActivityRepository;
 use DiarioDelNorte\Suite\Activity\AuthorReportRepository;
 use DiarioDelNorte\Suite\Activity\Install\CapabilityInstaller;
 
@@ -22,7 +23,7 @@ final class ActivityPage {
 	public const SLUG = 'ddn-suite-actividad';
 
 	public function __construct(
-		private readonly ActivityListTable $table,
+		private readonly ActivityRepository $activity,
 		private readonly AuthorReportRepository $authors,
 	) {}
 
@@ -55,11 +56,15 @@ final class ActivityPage {
 	}
 
 	private function render_events(): void {
-		$this->table->prepare_items();
+		// La tabla se crea aquí, no en el constructor: WP_List_Table
+		// necesita convert_to_screen(), que WordPress solo ha cargado ya
+		// cuando de verdad está dibujando una pantalla de administración.
+		$table = new ActivityListTable( $this->activity );
+		$table->prepare_items();
 		?>
 		<form method="get">
 			<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
-			<?php $this->table->display(); ?>
+			<?php $table->display(); ?>
 		</form>
 		<?php
 	}
