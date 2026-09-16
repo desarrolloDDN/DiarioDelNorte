@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite\Radio\Admin;
 
+use DiarioDelNorte\Suite\Radio\Install\CapabilityInstaller;
 use DiarioDelNorte\Suite\Radio\RadioSettings;
 use DiarioDelNorte\Suite\Radio\RadioStats;
 
@@ -67,7 +68,7 @@ final class RadioPage {
 
 	public function handle_save(): void {
 		check_admin_referer( self::NONCE );
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( CapabilityInstaller::CAP ) ) {
 			wp_die( esc_html__( 'Acción no permitida.', 'ddn-suite' ) );
 		}
 
@@ -78,7 +79,7 @@ final class RadioPage {
 	}
 
 	public function render(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( CapabilityInstaller::CAP ) ) {
 			wp_die( esc_html__( 'Sin permisos suficientes.', 'ddn-suite' ) );
 		}
 

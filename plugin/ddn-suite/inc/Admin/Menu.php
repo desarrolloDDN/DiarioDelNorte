@@ -13,6 +13,7 @@ use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
 use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller as AdsCapabilityInstaller;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
 use DiarioDelNorte\Suite\Radio\Admin\RadioPage;
+use DiarioDelNorte\Suite\Radio\Install\CapabilityInstaller as RadioCapabilityInstaller;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -68,7 +69,7 @@ final class Menu {
 			CalendarPage::SLUG,
 			__( 'Radio en vivo', 'ddn-suite' ),
 			__( 'Radio', 'ddn-suite' ),
-			'manage_options',
+			RadioCapabilityInstaller::CAP,
 			RadioPage::SLUG,
 			array( $this->radio, 'render' )
 		);

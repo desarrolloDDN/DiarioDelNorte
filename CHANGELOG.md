@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.40] — 2026-09-15
+
+### Seguridad
+- **Radio, atada al rol Administrador.** El módulo de Radio (activar el
+  reproductor, emisoras, resumen de escuchas) deja de depender de
+  `manage_options` y pasa a exigir una capacidad propia
+  (`ddn_manage_radio`) que solo tiene el rol Administrador — el mismo
+  tratamiento que ya tenían Publicidad y, desde su creación, el panel de
+  Suscriptores.
+
 ## [0.1.39] — 2026-09-15
 
 ### Añadido

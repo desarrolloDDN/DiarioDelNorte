@@ -26,6 +26,7 @@ use DiarioDelNorte\Suite\Install\Installer;
 use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
 use DiarioDelNorte\Suite\PrintEdition\EditionRepository;
 use DiarioDelNorte\Suite\Radio\Admin\RadioPage;
+use DiarioDelNorte\Suite\Radio\Install\CapabilityInstaller as RadioCapabilityInstaller;
 use DiarioDelNorte\Suite\Radio\RadioController;
 use DiarioDelNorte\Suite\Radio\RadioMeta;
 use DiarioDelNorte\Suite\Radio\RadioPlayer;
@@ -53,8 +54,9 @@ final class Plugin {
 
 		( new GitHubUpdater( DDN_SUITE_VERSION ) )->register();
 
-		// Los módulos de Publicidad solo se abren al rol Administrador.
+		// Los módulos de Publicidad y Radio solo se abren al rol Administrador.
 		( new AdsCapabilityInstaller() )->ensure();
+		( new RadioCapabilityInstaller() )->ensure();
 
 		$campaigns = new CampaignRepository();
 		$stats     = new StatsRepository();
