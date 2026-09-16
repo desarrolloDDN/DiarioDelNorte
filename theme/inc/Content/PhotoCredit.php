@@ -19,7 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class PhotoCredit {
 
 	private const META  = '_ddn_photo_credit';
-	private const NONCE = 'ddn_photo_credit';
+	// Distinto del name="" del campo de texto (ver render()): si
+	// coincidieran, el navegador manda los dos bajo la misma clave y el
+	// valor del campo pisa el del nonce en $_POST — wp_verify_nonce()
+	// falla siempre y save() no llega a guardar nada.
+	private const NONCE = 'ddn_photo_credit_nonce';
 
 	public function register(): void {
 		add_action( 'add_meta_boxes_post', array( $this, 'add_box' ) );

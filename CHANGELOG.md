@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.41] — 2026-09-16
+
+### Corregido
+- **La casilla «Exclusiva para suscriptores» no se guardaba.** El campo
+  oculto del nonce y la casilla usaban el mismo `name` en el formulario;
+  el navegador mandaba los dos bajo esa única clave y el valor de la
+  casilla pisaba el del nonce, así que la verificación fallaba siempre y
+  la entrada nunca llegaba a guardarse. De paso se encontró y corrigió el
+  mismo problema en «Créditos de la foto» (bajo la imagen principal),
+  que llevaba el mismo defecto desde su creación — ahí pasaba
+  inadvertido porque un crédito que no se guarda simplemente se ve en
+  blanco, sin ningún aviso.
+
 ## [0.1.40] — 2026-09-15
 
 ### Seguridad

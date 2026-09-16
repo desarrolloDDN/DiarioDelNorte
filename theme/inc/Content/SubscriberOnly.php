@@ -19,7 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class SubscriberOnly {
 
 	private const META  = '_ddn_subscribers_only';
-	private const NONCE = 'ddn_subscribers_only';
+	// Distinto del name="" de la casilla (ver render()): si coincidieran,
+	// el navegador manda los dos campos bajo la misma clave y el valor de
+	// la casilla pisa el del nonce en $_POST — wp_verify_nonce() falla
+	// siempre y save() no llega a guardar nada.
+	private const NONCE = 'ddn_subscribers_only_nonce';
 
 	public function register(): void {
 		add_action( 'add_meta_boxes_post', array( $this, 'add_box' ) );
