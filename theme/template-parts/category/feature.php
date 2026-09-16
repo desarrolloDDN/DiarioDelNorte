@@ -10,6 +10,8 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\SubscriberOnly;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -31,5 +33,8 @@ $ddn_label = isset( $args['label'] ) && '' !== (string) $args['label']
 	</a>
 	<h2 class="cat-feature__title">
 		<a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+		<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+			<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
+		<?php endif; ?>
 	</h2>
 </article>

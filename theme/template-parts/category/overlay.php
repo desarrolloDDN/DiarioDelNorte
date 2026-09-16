@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Format;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,7 +34,12 @@ $ddn_cat  = Format::primary_category();
 			<?php if ( $ddn_cat ) : ?>
 				<span class="cat-overlay__kicker"><?php echo esc_html( $ddn_cat->name ); ?></span>
 			<?php endif; ?>
-			<span class="cat-overlay__title"><?php the_title(); ?></span>
+			<span class="cat-overlay__title">
+				<?php the_title(); ?>
+				<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+					<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
+				<?php endif; ?>
+			</span>
 		</span>
 	</a>
 </article>

@@ -34,6 +34,39 @@
   background: var(--red);
 }
 
+.badge-subscribers {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ink-deep);
+  padding: 0.18rem 0.55rem;
+  border-radius: 2px;
+  margin-left: 0.6ch;
+  vertical-align: middle;
+}
+
+.subscriber-paywall {
+  margin: 1.6rem 0;
+  padding: 1.4rem;
+  background: var(--sand);
+  border-left: 3px solid var(--red);
+}
+.subscriber-paywall__text {
+  font-family: var(--sans);
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+}
+.subscriber-paywall__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .article__title {
   font-family: var(--display);
   font-size: clamp(1.35rem, 1.02rem + 1.35vw, 1.9rem);

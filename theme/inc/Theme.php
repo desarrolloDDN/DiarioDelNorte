@@ -19,6 +19,7 @@ use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Content\InlineRelated;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Content\SocialMeta;
+use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Customizer\SiteOptions;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller;
 use DiarioDelNorte\Updater\GitHubUpdater;
@@ -49,6 +50,7 @@ final class Theme {
 		( new AuthorProfile() )->register();
 		( new DatelineField() )->register();
 		( new PhotoCredit() )->register();
+		( new SubscriberOnly() )->register();
 		( new InlineRelated() )->register();
 		( new SocialMeta() )->register();
 		( new Analytics() )->register();

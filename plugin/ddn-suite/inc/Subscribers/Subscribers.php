@@ -88,6 +88,7 @@ final class Subscribers {
 		// simplemente no imprime el enlace — no hay error.
 		add_filter( 'ddn/account_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_ACCOUNT ) );
 		add_filter( 'ddn/register_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_REGISTER ) );
+		add_filter( 'ddn/login_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_LOGIN ) );
 
 		if ( is_admin() ) {
 			$repo = new SubscribersRepository( $profiles );

@@ -19,6 +19,7 @@ use DiarioDelNorte\Suite\Ads\AdZone;
 use DiarioDelNorte\Suite\Ads\Campaign;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
 use DiarioDelNorte\Suite\Ads\CampaignType;
+use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller;
 use DiarioDelNorte\Suite\Ads\StatsRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -101,7 +102,7 @@ final class CampaignsPage {
 	}
 
 	private function guard(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( CapabilityInstaller::CAP ) ) {
 			wp_die( esc_html__( 'Acción no permitida.', 'ddn-suite' ) );
 		}
 	}
@@ -114,7 +115,7 @@ final class CampaignsPage {
 	// -- Vistas -----------------------------------------------------------
 
 	public function render(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( CapabilityInstaller::CAP ) ) {
 			wp_die( esc_html__( 'Sin permisos suficientes.', 'ddn-suite' ) );
 		}
 

@@ -11,6 +11,7 @@
 declare(strict_types=1);
 
 use DiarioDelNorte\Content\PhotoCredit;
+use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Ads;
 use DiarioDelNorte\Support\Format;
 
@@ -34,6 +35,9 @@ while ( have_posts() ) :
 		<header class="article__header">
 			<?php if ( $ddn_cat ) : ?>
 				<a class="kicker" href="<?php echo esc_url( get_category_link( $ddn_cat ) ); ?>"><?php echo esc_html( $ddn_cat->name ); ?></a>
+			<?php endif; ?>
+			<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+				<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
 			<?php endif; ?>
 
 			<h1 class="article__title"><?php the_title(); ?></h1>
@@ -79,7 +83,12 @@ while ( have_posts() ) :
 
 		<div class="article__body">
 			<div class="prose">
-				<?php the_content(); ?>
+				<?php if ( SubscriberOnly::reader_can_view( get_the_ID() ) ) : ?>
+					<?php the_content(); ?>
+				<?php else : ?>
+					<?php echo wp_kses_post( wpautop( get_the_excerpt() ) ); ?>
+					<?php get_template_part( 'template-parts/subscriber-paywall' ); ?>
+				<?php endif; ?>
 			</div>
 
 			<?php Ads::zone( 'in-article-bottom' ); ?>

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DiarioDelNorte\Suite\Admin;
 
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
+use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller as AdsCapabilityInstaller;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
 use DiarioDelNorte\Suite\Radio\Admin\RadioPage;
 
@@ -58,7 +59,7 @@ final class Menu {
 			CalendarPage::SLUG,
 			__( 'Publicidad', 'ddn-suite' ),
 			__( 'Publicidad', 'ddn-suite' ),
-			'manage_options',
+			AdsCapabilityInstaller::CAP,
 			CampaignsPage::SLUG,
 			array( $this->campaigns, 'render' )
 		);

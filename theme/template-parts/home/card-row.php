@@ -12,6 +12,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Format;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,7 +37,12 @@ $ddn_cat       = Format::primary_category();
 		<?php if ( $ddn_label && $ddn_cat ) : ?>
 			<span class="h-row__label"><?php echo esc_html( $ddn_cat->name ); ?></span>
 		<?php endif; ?>
-		<h3 class="h-row__title"><a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+		<h3 class="h-row__title">
+			<a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+			<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+				<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
+			<?php endif; ?>
+		</h3>
 		<span class="meta"><?php echo esc_html( $ddn_full_date ? Format::published_label() : Format::time_ago() ); ?></span>
 	</div>
 </article>

@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Format;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,6 +33,9 @@ $ddn_cat = Format::primary_category();
 		<?php endif; ?>
 		<h3 class="cat-row__title">
 			<a class="headline-link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+			<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+				<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
+			<?php endif; ?>
 		</h3>
 	</div>
 </article>

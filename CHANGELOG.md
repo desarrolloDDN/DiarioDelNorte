@@ -5,6 +5,23 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.39] — 2026-09-15
+
+### Añadido
+- **Notas exclusivas para suscriptores.** Casilla «Exclusiva para
+  suscriptores» en el editor de la entrada (cuadro «Acceso»). Marcada,
+  el visitante sin sesión ve la bajada y una invitación a iniciar sesión
+  o crear cuenta gratis; con sesión iniciada (suscriptor o redacción) ve
+  la nota completa, igual que siempre. Un distintivo «Suscriptores» avisa
+  en la propia nota y en las tarjetas de portada, sección y listados.
+
+### Seguridad
+- **Publicidad, atada al rol Administrador.** Los módulos de Publicidad
+  (campañas, informes, evidencia) dejan de depender de `manage_options`
+  y pasan a exigir una capacidad propia (`ddn_manage_ads`) que solo tiene
+  el rol Administrador — así ninguna capacidad que otro plugin llegue a
+  conceder a otro rol abre por accidente el acceso a Publicidad.
+
 ## [0.1.38] — 2026-09-14
 
 ### Corregido

@@ -17,6 +17,7 @@ use DiarioDelNorte\Suite\Ads\AdRenderer;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
 use DiarioDelNorte\Suite\Ads\CampaignSelector;
 use DiarioDelNorte\Suite\Ads\ClickController;
+use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller as AdsCapabilityInstaller;
 use DiarioDelNorte\Suite\Ads\StatsRepository;
 use DiarioDelNorte\Suite\Ads\ZoneController;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
@@ -51,6 +52,9 @@ final class Plugin {
 		add_action( 'init', array( Installer::class, 'maybe_upgrade' ) );
 
 		( new GitHubUpdater( DDN_SUITE_VERSION ) )->register();
+
+		// Los módulos de Publicidad solo se abren al rol Administrador.
+		( new AdsCapabilityInstaller() )->ensure();
 
 		$campaigns = new CampaignRepository();
 		$stats     = new StatsRepository();
