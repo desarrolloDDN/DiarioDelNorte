@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.48] — 2026-09-19
+
+### Cambiado
+- **El acceso a la cuenta vive solo en la barra roja de secciones.** Se
+  eliminó el enlace «Mi cuenta» de la barra superior. Sin sesión, el botón
+  de la barra roja dice «Suscríbete» y lleva al registro; con sesión
+  cambia a «Mi cuenta» y abre el menú «Ver perfil / Cerrar sesión».
+- En pantallas anchas (≥ 1360 px) el botón flota fuera del flujo del menú
+  y las secciones conservan su centrado; en pantallas más angostas
+  comparte la fila con el menú (en móvil, el menú se desplaza en
+  horizontal y el botón queda fijo a la derecha), así ya no se pierde el
+  acceso a la cuenta en tabletas y celulares.
+
 ## [0.1.47] — 2026-09-19
 
 ### Añadido

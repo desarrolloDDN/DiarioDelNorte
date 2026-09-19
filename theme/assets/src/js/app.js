@@ -420,8 +420,8 @@ function boot() {
   ]);
   initBarPanels('.masthead', [
     ['[data-search-toggle]', 'masthead-search'],
-    ['[data-account-toggle]', 'masthead-account'],
   ]);
+  initBarPanels('.mainnav', [['[data-account-toggle]', 'mainnav-account']]);
   initHeroSlider();
   initCardSliders();
   initMoreNews();
