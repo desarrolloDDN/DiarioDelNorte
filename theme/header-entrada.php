@@ -20,6 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $ddn_cat  = Format::primary_category();
 $ddn_name = get_bloginfo( 'name' );
+
+// Contrato con el plugin DDN Suite (módulo de suscriptores): sin el plugin
+// los filtros no existen y no se imprime el botón de cuenta.
+$ddn_logged_in    = is_user_logged_in();
+$ddn_account_url  = $ddn_logged_in ? (string) apply_filters( 'ddn/account_url', '' ) : '';
+$ddn_register_url = $ddn_logged_in ? '' : (string) apply_filters( 'ddn/register_url', '' );
+$ddn_account_icon = '<svg class="topbar__cta-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c1.6-4 5-6 8-6s6.4 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -60,6 +67,26 @@ $ddn_name = get_bloginfo( 'name' );
 		<a class="topbar__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 			<?php echo esc_html( $ddn_name ); ?>
 		</a>
+
+		<?php if ( $ddn_logged_in && '' !== $ddn_account_url ) : ?>
+			<div class="topbar__account">
+				<button type="button" class="mainnav__cta topbar__cta" data-account-toggle aria-controls="topbar-account" aria-expanded="false">
+					<?php echo $ddn_account_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fijo, no viene de entrada de usuario. ?>
+					<span class="topbar__cta-label"><?php esc_html_e( 'Mi cuenta', 'diario-del-norte' ); ?></span>
+				</button>
+				<div class="mainnav-account" id="topbar-account" hidden>
+					<a href="<?php echo esc_url( $ddn_account_url ); ?>"><?php esc_html_e( 'Ver perfil', 'diario-del-norte' ); ?></a>
+					<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Cerrar sesión', 'diario-del-norte' ); ?></a>
+				</div>
+			</div>
+		<?php elseif ( ! $ddn_logged_in && '' !== $ddn_register_url ) : ?>
+			<div class="topbar__account">
+				<a class="mainnav__cta topbar__cta" href="<?php echo esc_url( $ddn_register_url ); ?>">
+					<?php echo $ddn_account_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG fijo, no viene de entrada de usuario. ?>
+					<span class="topbar__cta-label"><?php esc_html_e( 'Suscríbete', 'diario-del-norte' ); ?></span>
+				</a>
+			</div>
+		<?php endif; ?>
 
 		<button
 			type="button"

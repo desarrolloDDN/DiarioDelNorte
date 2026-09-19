@@ -39,6 +39,17 @@
 .topbar__menu { margin-left: -9px; }
 .topbar__search-toggle { margin-left: auto; margin-right: -9px; }
 
+// «Suscríbete» / «Mi cuenta» (mismo botón que la barra de secciones del
+// home, ver .mainnav__cta), entre la marca y la lupa. En celular queda solo
+// el icono de persona, como los demás iconos de la barra.
+.topbar__account {
+  position: relative;
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+.topbar__account + .topbar__search-toggle { margin-left: 0; }
+.topbar__cta-icon { display: none; }
+
 // Separadores «|» antes de la sección y de la marca.
 .topbar__cat::before,
 .topbar__brand::before {
@@ -113,6 +124,27 @@
 }
 
 @media (max-width: 560px) {
+  .topbar__account { margin-right: 0; }
+  .topbar__cta {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+    background: none;
+    color: #fff;
+  }
+  .topbar__cta:hover,
+  .topbar__cta[aria-expanded="true"] { background: none; color: rgba(255, 255, 255, 0.72); }
+  button.topbar__cta::after { display: none; }
+  .topbar__cta-icon { display: block; width: 22px; height: 22px; }
+  .topbar__cta-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
   .topbar__cat { font-size: 0.68rem; letter-spacing: 0.07em; }
   .topbar__cat::before,
   .topbar__brand::before { margin: 0 0.5rem; }
@@ -122,4 +154,9 @@
   .topbar__brand { letter-spacing: 0.03em; }
   .topbar__cat::before,
   .topbar__brand::before { margin: 0 0.4rem; }
+}
+
+// Celulares muy angostos (320 px): con el icono de cuenta la fila no cabe.
+@media (max-width: 340px) {
+  .topbar__brand { font-size: 0.85rem; letter-spacing: 0.02em; }
 }

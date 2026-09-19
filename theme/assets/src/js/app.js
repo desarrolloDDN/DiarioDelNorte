@@ -417,6 +417,7 @@ function boot() {
   initBarPanels('.topbar', [
     ['[data-drawer-toggle]', 'topbar-drawer'],
     ['[data-search-toggle]', 'topbar-search'],
+    ['[data-account-toggle]', 'topbar-account'],
   ]);
   initBarPanels('.masthead', [
     ['[data-search-toggle]', 'masthead-search'],

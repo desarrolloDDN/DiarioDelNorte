@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.49] — 2026-09-19
+
+### Añadido
+- **Botón «Suscríbete» / «Mi cuenta» también en la cabecera de la nota**
+  (la barra roja compacta), entre «DIARIO DEL NORTE» y la lupa. Mismo
+  comportamiento que en el home: sin sesión lleva al registro; con sesión
+  abre «Ver perfil / Cerrar sesión». En celular queda solo el icono de
+  persona, como los demás iconos de la barra, y cabe hasta en pantallas de
+  320 px.
+
 ## [0.1.48] — 2026-09-19
 
 ### Cambiado
