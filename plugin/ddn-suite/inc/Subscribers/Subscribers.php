@@ -89,6 +89,22 @@ final class Subscribers {
 		add_filter( 'ddn/account_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_ACCOUNT ) );
 		add_filter( 'ddn/register_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_REGISTER ) );
 		add_filter( 'ddn/login_url', static fn (): string => PageInstaller::url( PageInstaller::SLUG_LOGIN ) );
+		// Enlace para «Continuar con Google» (vacío si Google no está
+		// configurado): lo usa el llamado a suscribirse al final de cada nota.
+		add_filter(
+			'ddn/google_signup_url',
+			static function ( string $url, string $redirect_to = '' ) use ( $oauth ): string {
+				foreach ( $oauth->available_providers() as $provider ) {
+					if ( 'google' === $provider->id() ) {
+						return OAuthController::start_url( 'google', $redirect_to );
+					}
+				}
+
+				return $url;
+			},
+			10,
+			2
+		);
 
 		if ( is_admin() ) {
 			$repo = new SubscribersRepository( $profiles );

@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.44] — 2026-09-19
+
+### Añadido
+- **Llamado a suscribirse al final de cada nota**, solo para visitantes
+  sin sesión: «Suscríbete gratis», botones «Continuar con Google» (solo
+  si Google está configurado) y «Crear cuenta gratis», y «¿Ya tienes
+  cuenta? Inicia sesión». Con la identidad del periódico (fondo tinta,
+  Rojo Norte, titular en Lora). En notas exclusivas para suscriptores no
+  se repite: ya sale el aviso propio del muro.
+
 ## [0.1.43] — 2026-09-16
 
 ### Corregido

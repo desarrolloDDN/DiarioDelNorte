@@ -103,6 +103,14 @@ while ( have_posts() ) :
 					?>
 				</div>
 			<?php endif; ?>
+
+			<?php
+			// Sin sesión: invitación a suscribirse. Si la nota es exclusiva ya
+			// sale el aviso propio del muro, no se repite.
+			if ( ! is_user_logged_in() && ! SubscriberOnly::is_restricted( get_the_ID() ) ) {
+				get_template_part( 'template-parts/subscribe-cta' );
+			}
+			?>
 		</div>
 
 		<?php
