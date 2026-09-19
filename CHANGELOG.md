@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.45] — 2026-09-19
+
+### Cambiado
+- **Llamado a suscribirse**: rediseñado sobre fondo claro (gris casi
+  blanco con borde y filete superior en Rojo Norte), kicker con el
+  cuadrito rojo del periódico, titular en Lora oscuro, «Continuar con
+  Google» en botón blanco con borde y «Crear cuenta gratis» en rojo.
+
 ## [0.1.44] — 2026-09-19
 
 ### Añadido
