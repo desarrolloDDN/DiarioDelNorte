@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<article <?php post_class( 'cat-card' ); ?>>
+<article <?php post_class( ! empty( $args['extra'] ) ? array( 'cat-card', 'article-latest__extra' ) : 'cat-card' ); ?>>
 	<a class="cat-card__media" href="<?php the_permalink(); ?>" tabindex="-1" aria-hidden="true">
 		<?php
 		if ( has_post_thumbnail() ) {

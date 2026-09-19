@@ -114,10 +114,11 @@ while ( have_posts() ) :
 		</div>
 
 		<?php
-		// --- Lo último: las 3 noticias más recientes, sin repetir esta ---
+		// --- Lo último: las más recientes, sin repetir esta. Son 4 para que el móvil
+		// (2 columnas) cierre en 2 filas; la 4.ª se oculta en escritorio ---
 		$ddn_latest = new WP_Query(
 			array(
-				'posts_per_page'      => 3,
+				'posts_per_page'      => 4,
 				'post__not_in'        => array( get_the_ID() ),
 				'ignore_sticky_posts' => true,
 				'no_found_rows'       => true,
@@ -131,7 +132,11 @@ while ( have_posts() ) :
 					<?php
 					while ( $ddn_latest->have_posts() ) :
 						$ddn_latest->the_post();
-						get_template_part( 'template-parts/article-latest-item' );
+						get_template_part(
+							'template-parts/article-latest-item',
+							null,
+							array( 'extra' => $ddn_latest->current_post >= 3 )
+						);
 					endwhile;
 					wp_reset_postdata();
 					?>

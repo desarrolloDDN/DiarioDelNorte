@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.46] — 2026-09-19
+
+### Cambiado
+- **«Lo último» al final de la nota**: en móvil (cuadrícula de 2
+  columnas, hasta 760 px) muestra cuatro noticias en vez de tres, para
+  cerrar en dos filas completas; en escritorio siguen siendo tres.
+
 ## [0.1.45] — 2026-09-19
 
 ### Cambiado

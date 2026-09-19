@@ -341,6 +341,12 @@
 // (portada de sección, ver _category.scss): mismo lenguaje visual, foto y
 // titular, sin kicker de categoría ni fecha.
 .article-latest { margin: 2.5rem 0 1rem; }
+// La 4.ª nota solo se muestra donde la cuadrícula pasa a 2 columnas
+// (2 filas completas); en escritorio quedan las 3 de siempre.
+.article-latest__extra { display: none; }
+@media (max-width: 760px) {
+  .article-latest__extra { display: block; }
+}
 
 @media (max-width: 700px) {
   .article__meta { justify-content: center; }
