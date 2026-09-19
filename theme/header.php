@@ -149,7 +149,15 @@ $ddn_dateline = sprintf(
 	} else {
 		DiarioDelNorte\Nav\SectionMenu::render();
 	}
-	?>
+
+	// Sin sesión: botón «Suscríbete» en el extremo derecho de la
+	// barra. Va posicionado aparte del menú, así que no lo desplaza ni
+	// cambia su centrado; solo aparece en pantallas con espacio libre a
+	// los lados (ver .mainnav__cta).
+	if ( ! $ddn_logged_in && '' !== $ddn_register_url ) :
+		?>
+		<a class="mainnav__cta" href="<?php echo esc_url( $ddn_register_url ); ?>"><?php esc_html_e( 'Suscríbete', 'diario-del-norte' ); ?></a>
+	<?php endif; ?>
 </nav>
 
 <main id="contenido" class="site-main">

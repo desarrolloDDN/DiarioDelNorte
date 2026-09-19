@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.47] — 2026-09-19
+
+### Añadido
+- **Botón «Suscríbete» en la barra roja de secciones** (solo sin sesión,
+  a partir de 1360 px de ancho): blanco con texto rojo, en el extremo
+  derecho. Va fuera del flujo del menú, así que las secciones conservan
+  exactamente su centrado y espaciado (medido: mismos márgenes a ambos
+  lados con y sin el botón). En pantallas más angostas no se muestra y
+  queda el enlace de la barra superior.
+
 ## [0.1.46] — 2026-09-19
 
 ### Cambiado
