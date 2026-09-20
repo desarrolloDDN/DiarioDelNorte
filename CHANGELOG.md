@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.50] — 2026-09-20
+
+### Cambiado
+- **Contacto**: el formulario ahora llega a `gerenciageneral@gamezeditores.com`
+  y ese mismo correo es el que se muestra en «Datos de contacto» (antes
+  llegaba al correo de redacción). Sigue siendo editable en Personalizar →
+  Contacto → «Correo del formulario de contacto»; en blanco usa el de
+  gerencia. El correo de redacción del pie de página no cambia.
+
 ## [0.1.49] — 2026-09-19
 
 ### Añadido

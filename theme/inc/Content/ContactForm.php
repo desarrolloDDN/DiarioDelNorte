@@ -17,11 +17,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class ContactForm {
 
-	private const ACTION = 'ddn_contact_submit';
+	private const ACTION     = 'ddn_contact_submit';
+	private const DEFAULT_TO = 'gerenciageneral@gamezeditores.com';
 
 	public function register(): void {
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle' ) );
 		add_action( 'admin_post_nopriv_' . self::ACTION, array( $this, 'handle' ) );
+	}
+
+	/** Correo que recibe el formulario y que se muestra en «Datos de contacto». */
+	public static function recipient(): string {
+		$to = (string) get_theme_mod( 'ddn_contact_form_email', '' );
+
+		return '' !== $to ? $to : self::DEFAULT_TO;
 	}
 
 	public static function action_url(): string {
@@ -61,10 +69,7 @@ final class ContactForm {
 			$this->redirect_with( (string) $redirect, 'error' );
 		}
 
-		$to = (string) get_theme_mod( 'ddn_contact_form_email', '' );
-		if ( '' === $to ) {
-			$to = (string) get_theme_mod( 'ddn_email', get_option( 'admin_email' ) );
-		}
+		$to = self::recipient();
 
 		$subject_line = '' !== $subject ? $subject : __( 'Sin asunto', 'diario-del-norte' );
 		$body         = sprintf(

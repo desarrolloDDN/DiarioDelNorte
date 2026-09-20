@@ -27,7 +27,7 @@ $ddn_status = isset( $_GET['ddn_contact'] ) ? sanitize_key( wp_unslash( $_GET['d
 $ddn_address = (string) get_theme_mod( 'ddn_address', 'Riohacha, La Guajira, Colombia' );
 $ddn_phone   = (string) get_theme_mod( 'ddn_phone', '' );
 $ddn_wa      = (string) get_theme_mod( 'ddn_whatsapp', '' );
-$ddn_email   = (string) get_theme_mod( 'ddn_email', 'redaccion@diariodelnorte.net' );
+$ddn_email   = ContactForm::recipient();
 
 /**
  * Teléfonos por dependencia, editables en Personalizar → Contacto.
