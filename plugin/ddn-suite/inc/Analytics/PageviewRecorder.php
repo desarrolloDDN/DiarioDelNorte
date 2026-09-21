@@ -56,14 +56,14 @@ final class PageviewRecorder {
 		);
 	}
 
-	/** Borra los cubos de más de 8 días (WP-Cron diario). */
+	/** Borra los cubos de más de 400 días (WP-Cron diario); alimentan «Estadísticas». */
 	public function prune(): void {
 		global $wpdb;
 		$wpdb->query(
 			$wpdb->prepare(
 				'DELETE FROM %i WHERE bucket < %s',
 				Db::table( Db::PAGEVIEWS ),
-				gmdate( 'Y-m-d H:00:00', time() - 8 * DAY_IN_SECONDS )
+				gmdate( 'Y-m-d H:00:00', time() - 400 * DAY_IN_SECONDS )
 			)
 		);
 	}

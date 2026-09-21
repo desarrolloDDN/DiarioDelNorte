@@ -5,6 +5,23 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.51] — 2026-09-21
+
+### Añadido
+- **Estadísticas de lectura (DDN Suite → Estadísticas, solo Administrador).**
+  Para el rango de fechas elegido (Hoy, 7, 30, 90 días, 12 meses o fechas
+  a mano): lecturas totales, notas leídas, lecturas por nota, **autor más
+  leído**, gráfico de lecturas por día, las **20 notas más leídas** (con
+  autor, sección y fecha) y el **ranking de autores** (notas, lecturas y
+  promedio por nota). Cuenta lectores reales: no incluye al personal de
+  redacción ni a robots, y solo notas publicadas.
+
+### Cambiado
+- El registro de lecturas por hora ahora se conserva **400 días** (antes 8)
+  para que existan estadísticas de meses. Los datos de antes de esta
+  versión no se recuperan: el histórico empieza a acumularse desde ahora
+  (de lo anterior solo quedan los últimos días).
+
 ## [0.1.50] — 2026-09-20
 
 ### Cambiado

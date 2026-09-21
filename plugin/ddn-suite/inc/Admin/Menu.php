@@ -11,6 +11,8 @@ namespace DiarioDelNorte\Suite\Admin;
 
 use DiarioDelNorte\Suite\Activity\Admin\ActivityPage;
 use DiarioDelNorte\Suite\Activity\Install\CapabilityInstaller as ActivityCapabilityInstaller;
+use DiarioDelNorte\Suite\Analytics\Admin\ReadershipPage;
+use DiarioDelNorte\Suite\Analytics\Install\CapabilityInstaller as StatsCapabilityInstaller;
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
 use DiarioDelNorte\Suite\Ads\Install\CapabilityInstaller as AdsCapabilityInstaller;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
@@ -28,6 +30,7 @@ final class Menu {
 		private readonly CampaignsPage $campaigns,
 		private readonly RadioPage $radio,
 		private readonly ActivityPage $activity,
+		private readonly ReadershipPage $readership,
 	) {}
 
 	public function register(): void {
@@ -84,6 +87,15 @@ final class Menu {
 			ActivityCapabilityInstaller::CAP,
 			ActivityPage::SLUG,
 			array( $this->activity, 'render' )
+		);
+
+		add_submenu_page(
+			CalendarPage::SLUG,
+			__( 'Estadísticas de lectura', 'ddn-suite' ),
+			__( 'Estadísticas', 'ddn-suite' ),
+			StatsCapabilityInstaller::CAP,
+			ReadershipPage::SLUG,
+			array( $this->readership, 'render' )
 		);
 	}
 }
