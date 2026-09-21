@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.56] — 2026-09-21
+
+### Corregido
+- **Notas antiguas (p. ej. de 2021) aparecían en los rankings como si
+  fueran recientes**, solo porque recibían visitas hoy.
+  - **Estadísticas de lectura**: nuevo selector «Notas». Por defecto el
+    ranking general cuenta solo notas **publicadas dentro del rango de
+    fechas**; con «Todas (incluye antiguas)» se ven también las viejas que
+    siguen recibiendo lecturas. Al elegir un autor se listan todas sus
+    notas (como antes), y se puede cambiar.
+  - **«Más leídas» del sitio (home y secciones)**: ahora solo incluye
+    notas publicadas en los últimos 7 días.
+
 ## [0.1.55] — 2026-09-21
 
 ### Cambiado

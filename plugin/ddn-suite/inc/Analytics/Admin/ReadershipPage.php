@@ -39,6 +39,7 @@ final class ReadershipPage {
 		$raw_to    = isset( $_GET['ddn_to'] ) ? sanitize_text_field( wp_unslash( $_GET['ddn_to'] ) ) : '';
 		$author_id = isset( $_GET['ddn_author'] ) ? absint( wp_unslash( $_GET['ddn_author'] ) ) : 0;
 		$role      = isset( $_GET['ddn_role'] ) ? sanitize_key( wp_unslash( $_GET['ddn_role'] ) ) : '';
+		$scope_raw = isset( $_GET['ddn_scope'] ) ? sanitize_key( wp_unslash( $_GET['ddn_scope'] ) ) : '';
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$today = current_time( 'Y-m-d' );
@@ -52,6 +53,12 @@ final class ReadershipPage {
 		}
 
 		$author_names = $this->repo->authors_with_posts( $role );
+
+		// Por defecto el ranking general solo cuenta notas PUBLICADAS en el
+		// rango (si no, entran notas viejas que reciben visitas hoy); al ver
+		// a un autor se listan todas sus notas. `ddn_scope` lo cambia.
+		$scope    = in_array( $scope_raw, array( 'range', 'all' ), true ) ? $scope_raw : ( $author_id > 0 ? 'all' : 'range' );
+		$in_range = 'range' === $scope;
 		if ( ! isset( $author_names[ $author_id ] ) ) {
 			$author_id = 0;
 		}
@@ -60,16 +67,16 @@ final class ReadershipPage {
 		$page       = isset( $_GET['ddn_page'] ) ? max( 1, absint( wp_unslash( $_GET['ddn_page'] ) ) ) : 1;
 		$post_count = 0;
 
-		$totals = $this->repo->totals( $from, $to, $author_id, $role );
+		$totals = $this->repo->totals( $from, $to, $author_id, $role, $in_range );
 		if ( $author_id > 0 ) {
-			$listing    = $this->repo->author_posts( $from, $to, $author_id, self::PER_PAGE, $page );
+			$listing    = $this->repo->author_posts( $from, $to, $author_id, self::PER_PAGE, $page, $in_range );
 			$posts      = $listing['rows'];
 			$post_count = $listing['total'];
 		} else {
-			$posts = $this->repo->top_posts( $from, $to, self::TOP_POSTS, 0, $role );
+			$posts = $this->repo->top_posts( $from, $to, self::TOP_POSTS, 0, $role, $in_range );
 		}
-		$authors = $this->repo->top_authors( $from, $to, 1000, $role );
-		$daily   = $this->repo->daily( $from, $to, $author_id, $role );
+		$authors = $this->repo->top_authors( $from, $to, 1000, $role, $in_range );
+		$daily   = $this->repo->daily( $from, $to, $author_id, $role, $in_range );
 
 		$average = $totals['posts'] > 0 ? $totals['views'] / $totals['posts'] : 0;
 		$top     = $authors[0] ?? null;
@@ -85,7 +92,7 @@ final class ReadershipPage {
 					break;
 				}
 			}
-			$site_views = $this->repo->totals( $from, $to, 0, $role )['views'];
+			$site_views = $this->repo->totals( $from, $to, 0, $role, $in_range )['views'];
 			$share      = $site_views > 0 ? $totals['views'] / $site_views * 100 : 0.0;
 			$published  = $this->repo->published_count( $from, $to, $author_id );
 		}
@@ -100,7 +107,7 @@ final class ReadershipPage {
 				<?php endif; ?>
 			</h1>
 
-			<?php $this->filters( $from, $to, $today, $author_id, $author_names, $role, $roles ); ?>
+			<?php $this->filters( $from, $to, $today, $author_id, $author_names, $role, $roles, $scope ); ?>
 
 			<?php if ( 0 === $totals['views'] ) : ?>
 				<div class="notice notice-info inline"><p><?php esc_html_e( 'Todavía no hay lecturas registradas en ese rango.', 'ddn-suite' ); ?></p></div>
@@ -205,6 +212,7 @@ final class ReadershipPage {
 												array(
 													'ddn_author' => $author_id,
 													'ddn_role'   => $role,
+													'ddn_scope'  => $scope,
 													'ddn_from' => $from,
 													'ddn_to'   => $to,
 												),
@@ -252,6 +260,7 @@ final class ReadershipPage {
 											array(
 												'ddn_author' => $ddn_author['author_id'],
 												'ddn_role' => $role,
+												'ddn_scope' => $scope,
 												'ddn_from' => $from,
 												'ddn_to'   => $to,
 											),
@@ -292,7 +301,7 @@ final class ReadershipPage {
 	 * @param array<int,string>    $author_names
 	 * @param array<string,string> $roles
 	 */
-	private function filters( string $from, string $to, string $today, int $author_id, array $author_names, string $role, array $roles ): void {
+	private function filters( string $from, string $to, string $today, int $author_id, array $author_names, string $role, array $roles, string $scope ): void {
 		$base    = admin_url( 'admin.php?page=' . self::SLUG );
 		$presets = array(
 			__( 'Hoy', 'ddn-suite' )      => 1,
@@ -314,6 +323,7 @@ final class ReadershipPage {
 						'ddn_to'     => $today,
 						'ddn_author' => $author_id,
 						'ddn_role'   => $role,
+						'ddn_scope'  => $scope,
 					);
 					?>
 					<a class="button<?php echo $ddn_active ? ' button-primary' : ''; ?>" href="<?php echo esc_url( add_query_arg( $ddn_query, $base ) ); ?>"><?php echo esc_html( $ddn_label ); ?></a>
@@ -321,6 +331,12 @@ final class ReadershipPage {
 			</nav>
 			<form method="get" class="ddn-stats__range">
 				<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
+				<label><?php esc_html_e( 'Notas', 'ddn-suite' ); ?>
+					<select name="ddn_scope">
+						<option value="range" <?php selected( $scope, 'range' ); ?>><?php esc_html_e( 'Publicadas en el rango', 'ddn-suite' ); ?></option>
+						<option value="all" <?php selected( $scope, 'all' ); ?>><?php esc_html_e( 'Todas (incluye antiguas)', 'ddn-suite' ); ?></option>
+					</select>
+				</label>
 				<label><?php esc_html_e( 'Tipo de usuario', 'ddn-suite' ); ?>
 					<select name="ddn_role">
 						<option value=""><?php esc_html_e( 'Todos', 'ddn-suite' ); ?></option>

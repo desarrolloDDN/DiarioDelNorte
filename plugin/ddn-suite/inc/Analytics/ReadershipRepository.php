@@ -21,10 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class ReadershipRepository {
 
 	/** @return array{views:int,posts:int} */
-	public function totals( string $from, string $to, int $author_id = 0, string $role = '' ): array {
+	public function totals( string $from, string $to, int $author_id = 0, string $role = '', bool $in_range = false ): array {
 		global $wpdb;
 
-		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
+		[$role_flag, $cap_key, $role_like]    = $this->role_filter( $role );
+		[$scope_flag, $scope_from, $scope_to] = $this->scope_filter( $from, $to, $in_range );
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
@@ -32,6 +33,7 @@ final class ReadershipRepository {
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
+				   AND ( %d = 0 OR ( p.post_date >= %s AND p.post_date <= %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s",
 				Db::table( Db::PAGEVIEWS ),
 				$author_id,
@@ -39,6 +41,9 @@ final class ReadershipRepository {
 				$role_flag,
 				$cap_key,
 				$role_like,
+				$scope_flag,
+				$scope_from,
+				$scope_to,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -54,10 +59,11 @@ final class ReadershipRepository {
 	/**
 	 * @return array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>
 	 */
-	public function top_posts( string $from, string $to, int $limit, int $author_id = 0, string $role = '' ): array {
+	public function top_posts( string $from, string $to, int $limit, int $author_id = 0, string $role = '', bool $in_range = false ): array {
 		global $wpdb;
 
-		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
+		[$role_flag, $cap_key, $role_like]    = $this->role_filter( $role );
+		[$scope_flag, $scope_from, $scope_to] = $this->scope_filter( $from, $to, $in_range );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
@@ -65,6 +71,7 @@ final class ReadershipRepository {
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
+				   AND ( %d = 0 OR ( p.post_date >= %s AND p.post_date <= %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY v.post_id
 				 ORDER BY views DESC, v.post_id DESC
@@ -75,6 +82,9 @@ final class ReadershipRepository {
 				$role_flag,
 				$cap_key,
 				$role_like,
+				$scope_flag,
+				$scope_from,
+				$scope_to,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -91,13 +101,19 @@ final class ReadershipRepository {
 	 *
 	 * @return array{rows:array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>,total:int}
 	 */
-	public function author_posts( string $from, string $to, int $author_id, int $per_page, int $page ): array {
+	public function author_posts( string $from, string $to, int $author_id, int $per_page, int $page, bool $in_range = false ): array {
 		global $wpdb;
+
+		[$scope_flag, $scope_from, $scope_to] = $this->scope_filter( $from, $to, $in_range );
 
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_author = %d",
-				$author_id
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_author = %d
+				 AND ( %d = 0 OR ( post_date >= %s AND post_date <= %s ) )",
+				$author_id,
+				$scope_flag,
+				$scope_from,
+				$scope_to
 			)
 		);
 
@@ -107,6 +123,7 @@ final class ReadershipRepository {
 				 FROM {$wpdb->posts} p
 				 LEFT JOIN %i v ON v.post_id = p.ID AND v.bucket >= %s AND v.bucket <= %s
 				 WHERE p.post_type = 'post' AND p.post_status = 'publish' AND p.post_author = %d
+				   AND ( %d = 0 OR ( p.post_date >= %s AND p.post_date <= %s ) )
 				 GROUP BY p.ID
 				 ORDER BY views DESC, p.post_date DESC
 				 LIMIT %d OFFSET %d",
@@ -114,6 +131,9 @@ final class ReadershipRepository {
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$author_id,
+				$scope_flag,
+				$scope_from,
+				$scope_to,
 				$per_page,
 				max( 0, ( $page - 1 ) * $per_page )
 			),
@@ -160,10 +180,11 @@ final class ReadershipRepository {
 	/**
 	 * @return array<int,array{author_id:int,name:string,role:string,views:int,posts:int}>
 	 */
-	public function top_authors( string $from, string $to, int $limit, string $role = '' ): array {
+	public function top_authors( string $from, string $to, int $limit, string $role = '', bool $in_range = false ): array {
 		global $wpdb;
 
-		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
+		[$role_flag, $cap_key, $role_like]    = $this->role_filter( $role );
+		[$scope_flag, $scope_from, $scope_to] = $this->scope_filter( $from, $to, $in_range );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
@@ -171,6 +192,7 @@ final class ReadershipRepository {
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
+				   AND ( %d = 0 OR ( p.post_date >= %s AND p.post_date <= %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY p.post_author
 				 ORDER BY views DESC
@@ -181,6 +203,9 @@ final class ReadershipRepository {
 				$role_flag,
 				$cap_key,
 				$role_like,
+				$scope_flag,
+				$scope_from,
+				$scope_to,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -244,10 +269,11 @@ final class ReadershipRepository {
 	}
 
 	/** @return array<string,int> día (Y-m-d) => lecturas; solo los días con datos. */
-	public function daily( string $from, string $to, int $author_id = 0, string $role = '' ): array {
+	public function daily( string $from, string $to, int $author_id = 0, string $role = '', bool $in_range = false ): array {
 		global $wpdb;
 
-		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
+		[$role_flag, $cap_key, $role_like]    = $this->role_filter( $role );
+		[$scope_flag, $scope_from, $scope_to] = $this->scope_filter( $from, $to, $in_range );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
@@ -255,6 +281,7 @@ final class ReadershipRepository {
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
+				   AND ( %d = 0 OR ( p.post_date >= %s AND p.post_date <= %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY DATE(v.bucket)
 				 ORDER BY day ASC",
@@ -264,6 +291,9 @@ final class ReadershipRepository {
 				$role_flag,
 				$cap_key,
 				$role_like,
+				$scope_flag,
+				$scope_from,
+				$scope_to,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -309,5 +339,13 @@ final class ReadershipRepository {
 		$slug  = array() !== $user->roles ? (string) $user->roles[0] : '';
 
 		return $names[ $slug ] ?? $slug;
+	}
+
+	/**
+	 * @return array{0:int,1:string,2:string} marcador de «solo notas publicadas
+	 *         en el rango» y los límites de fecha de publicación.
+	 */
+	private function scope_filter( string $from, string $to, bool $in_range ): array {
+		return array( $in_range ? 1 : 0, $from . ' 00:00:00', $to . ' 23:59:59' );
 	}
 }

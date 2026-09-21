@@ -1,7 +1,7 @@
 <?php
 /**
  * Lectura de las páginas vistas: entradas más leídas en una ventana de
- * tiempo. Se expone al tema por el filtro `ddn/most_read`.
+ * tiempo (solo notas publicadas en los últimos 7 días). Se expone al tema por el filtro `ddn/most_read`.
  *
  * @package DiarioDelNorte\Suite
  */
@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class PageviewRepository {
+
+	/** «Más leídas» del sitio solo incluye notas publicadas en estos últimos días. */
+	private const MAX_AGE_DAYS = 7;
 
 	public function register(): void {
 		add_filter( 'ddn/most_read', array( $this, 'most_read' ), 10, 2 );
@@ -39,12 +42,14 @@ final class PageviewRepository {
 
 		$rows = $wpdb->get_col(
 			$wpdb->prepare(
-				'SELECT post_id FROM %i
-				 WHERE bucket >= %s
-				 GROUP BY post_id
-				 ORDER BY SUM(hits) DESC
-				 LIMIT %d',
+				"SELECT v.post_id FROM %i v
+				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND p.post_date_gmt >= %s
+				 WHERE v.bucket >= %s
+				 GROUP BY v.post_id
+				 ORDER BY SUM(v.hits) DESC
+				 LIMIT %d",
 				Db::table( Db::PAGEVIEWS ),
+				gmdate( 'Y-m-d H:i:s', time() - self::MAX_AGE_DAYS * DAY_IN_SECONDS ),
 				gmdate( 'Y-m-d H:00:00', time() - $hours * HOUR_IN_SECONDS - HOUR_IN_SECONDS ),
 				$limit * 3
 			)
