@@ -37,7 +37,7 @@ $ddn_email   = ContactForm::recipient();
 $ddn_lines = array_filter(
 	array(
 		__( 'Gerencia General', 'diario-del-norte' )       => (string) get_theme_mod( 'ddn_contact_phone_gerencia', '+57 320 542 0459' ),
-		__( 'Comercial Riohacha', 'diario-del-norte' )     => (string) get_theme_mod( 'ddn_contact_phone_comercial_rio', '+57 300 817 6610' ),
+		__( 'Comercial Riohacha', 'diario-del-norte' )     => (string) get_theme_mod( 'ddn_contact_phone_comercial_rio', '+57 321 541 8146' ),
 		__( 'Comercial Barranquilla', 'diario-del-norte' ) => (string) get_theme_mod( 'ddn_contact_phone_comercial_baq', '+57 320 565 9368' ),
 	)
 );

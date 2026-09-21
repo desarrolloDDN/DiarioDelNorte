@@ -5,6 +5,12 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.57] — 2026-09-21
+
+### Cambiado
+- **Contacto**: el teléfono de Comercial Riohacha ahora es
+  +57 321 541 8146.
+
 ## [0.1.56] — 2026-09-21
 
 ### Corregido
