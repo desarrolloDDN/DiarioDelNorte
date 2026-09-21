@@ -70,8 +70,57 @@ final class ReadershipRepository {
 			ARRAY_A
 		);
 
+		return $this->rows_to_posts( (array) $rows );
+	}
+
+	/**
+	 * TODAS las notas publicadas de un autor, de más a menos leídas en el
+	 * rango (las que no tuvieron lecturas salen al final, con 0).
+	 *
+	 * @return array{rows:array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>,total:int}
+	 */
+	public function author_posts( string $from, string $to, int $author_id, int $per_page, int $page ): array {
+		global $wpdb;
+
+		$total = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_author = %d",
+				$author_id
+			)
+		);
+
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT p.ID AS post_id, COALESCE(SUM(v.hits), 0) AS views
+				 FROM {$wpdb->posts} p
+				 LEFT JOIN %i v ON v.post_id = p.ID AND v.bucket >= %s AND v.bucket <= %s
+				 WHERE p.post_type = 'post' AND p.post_status = 'publish' AND p.post_author = %d
+				 GROUP BY p.ID
+				 ORDER BY views DESC, p.post_date DESC
+				 LIMIT %d OFFSET %d",
+				Db::table( Db::PAGEVIEWS ),
+				$from . ' 00:00:00',
+				$to . ' 23:59:59',
+				$author_id,
+				$per_page,
+				max( 0, ( $page - 1 ) * $per_page )
+			),
+			ARRAY_A
+		);
+
+		return array(
+			'rows'  => $this->rows_to_posts( (array) $rows ),
+			'total' => $total,
+		);
+	}
+
+	/**
+	 * @param array<int,array<string,mixed>> $rows filas con post_id y views.
+	 * @return array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>
+	 */
+	private function rows_to_posts( array $rows ): array {
 		$out = array();
-		foreach ( (array) $rows as $row ) {
+		foreach ( $rows as $row ) {
 			$post_id = (int) $row['post_id'];
 			$post    = get_post( $post_id );
 			if ( ! $post instanceof \WP_Post ) {

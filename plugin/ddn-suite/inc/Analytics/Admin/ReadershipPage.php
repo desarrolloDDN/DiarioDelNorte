@@ -25,6 +25,7 @@ final class ReadershipPage {
 
 	private const TOP_POSTS   = 20;
 	private const TOP_AUTHORS = 10;
+	private const PER_PAGE    = 50;
 
 	public function __construct( private readonly ReadershipRepository $repo ) {}
 
@@ -49,8 +50,18 @@ final class ReadershipPage {
 			$author_id = 0;
 		}
 
-		$totals  = $this->repo->totals( $from, $to, $author_id );
-		$posts   = $this->repo->top_posts( $from, $to, self::TOP_POSTS, $author_id );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo paginación de lectura.
+		$page       = isset( $_GET['ddn_page'] ) ? max( 1, absint( wp_unslash( $_GET['ddn_page'] ) ) ) : 1;
+		$post_count = 0;
+
+		$totals = $this->repo->totals( $from, $to, $author_id );
+		if ( $author_id > 0 ) {
+			$listing    = $this->repo->author_posts( $from, $to, $author_id, self::PER_PAGE, $page );
+			$posts      = $listing['rows'];
+			$post_count = $listing['total'];
+		} else {
+			$posts = $this->repo->top_posts( $from, $to, self::TOP_POSTS );
+		}
 		$authors = $this->repo->top_authors( $from, $to, 1000 );
 		$daily   = $this->repo->daily( $from, $to, $author_id );
 
@@ -135,7 +146,16 @@ final class ReadershipPage {
 
 			<div class="ddn-stats__tables">
 				<section>
-					<h2><?php esc_html_e( 'Notas más leídas', 'ddn-suite' ); ?></h2>
+					<h2>
+						<?php
+						if ( $author_id > 0 ) {
+							/* translators: 1: nombre del autor, 2: cantidad de notas. */
+							echo esc_html( sprintf( __( 'Notas de %1$s, de más a menos leídas (%2$s)', 'ddn-suite' ), $author_name, number_format_i18n( $post_count ) ) );
+						} else {
+							esc_html_e( 'Notas más leídas', 'ddn-suite' );
+						}
+						?>
+					</h2>
 					<table class="widefat striped">
 						<thead>
 							<tr>
@@ -152,7 +172,7 @@ final class ReadershipPage {
 							<?php endif; ?>
 							<?php foreach ( $posts as $ddn_i => $ddn_post ) : ?>
 								<tr>
-									<td class="ddn-stats__num"><?php echo (int) $ddn_i + 1; ?></td>
+									<td class="ddn-stats__num"><?php echo (int) ( ( $page - 1 ) * self::PER_PAGE + $ddn_i + 1 ); ?></td>
 									<td>
 										<a href="<?php echo esc_url( $ddn_post['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $ddn_post['title'] ); ?></a>
 										<br><small><?php echo esc_html( $ddn_post['published'] ); ?></small>
@@ -164,6 +184,35 @@ final class ReadershipPage {
 							<?php endforeach; ?>
 						</tbody>
 					</table>
+					<?php if ( $author_id > 0 && $post_count > self::PER_PAGE ) : ?>
+						<div class="tablenav"><div class="tablenav-pages">
+							<?php
+							echo wp_kses_post(
+								(string) paginate_links(
+									array(
+										'base'      => add_query_arg(
+											'ddn_page',
+											'%#%',
+											add_query_arg(
+												array(
+													'ddn_author' => $author_id,
+													'ddn_from' => $from,
+													'ddn_to'   => $to,
+												),
+												admin_url( 'admin.php?page=' . self::SLUG )
+											)
+										),
+										'format'    => '',
+										'current'   => $page,
+										'total'     => (int) ceil( $post_count / self::PER_PAGE ),
+										'prev_text' => '«',
+										'next_text' => '»',
+									)
+								)
+							);
+							?>
+						</div></div>
+					<?php endif; ?>
 				</section>
 
 				<?php if ( 0 === $author_id ) : ?>
@@ -216,6 +265,10 @@ final class ReadershipPage {
 			<?php endif; ?>
 
 			<p class="description">
+				<?php if ( $author_id > 0 ) : ?>
+					<?php esc_html_e( 'Se listan todas las notas publicadas del autor; las lecturas corresponden al rango de fechas elegido (0 = sin lecturas en ese rango).', 'ddn-suite' ); ?>
+					<br>
+				<?php endif; ?>
 				<?php esc_html_e( 'Cuenta las lecturas de visitantes: no incluye al personal de redacción ni a los robots de búsqueda. Solo notas publicadas. Los datos se guardan 400 días y empiezan a acumularse desde que se activó este módulo.', 'ddn-suite' ); ?>
 			</p>
 		</div>

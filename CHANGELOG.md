@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.53] — 2026-09-21
+
+### Cambiado
+- **Estadísticas por autor: listado completo de sus notas.** Al elegir un
+  autor, la tabla ya no se limita a las 20 más leídas: muestra **todas sus
+  notas publicadas**, de más a menos leídas en el rango de fechas (las que
+  no tuvieron lecturas salen al final, con 0), en páginas de 50 con
+  numeración continua.
+
 ## [0.1.52] — 2026-09-21
 
 ### Añadido
