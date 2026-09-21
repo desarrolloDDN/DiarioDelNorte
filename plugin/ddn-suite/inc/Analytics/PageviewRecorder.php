@@ -2,7 +2,7 @@
 /**
  * Registro de páginas vistas del lado del servidor, en cubos por hora.
  * No guarda IP ni user-agent: solo un contador por (entrada, hora).
- * Excluye al personal (usuarios con `edit_posts`), bots evidentes y
+ * Excluye al personal (usuarios con `edit_posts`), robots de búsqueda y
  * peticiones que no son la vista pública de una noticia.
  *
  * @package DiarioDelNorte\Suite
@@ -68,13 +68,15 @@ final class PageviewRecorder {
 		);
 	}
 
+	/**
+	 * Robots de búsqueda y de monitoreo. Sí cuentan, a propósito, las
+	 * visitas sin identificación de navegador, las vistas previas de Facebook
+	 * (facebookexternalhit) y Lighthouse.
+	 */
 	private function looks_like_bot(): bool {
 		$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) ) : '';
-		if ( '' === $ua ) {
-			return true;
-		}
 
-		foreach ( array( 'bot', 'crawl', 'spider', 'slurp', 'facebookexternalhit', 'preview', 'monitor', 'lighthouse', 'headless' ) as $needle ) {
+		foreach ( array( 'bot', 'crawl', 'spider', 'slurp', 'monitor', 'headless' ) as $needle ) {
 			if ( str_contains( $ua, $needle ) ) {
 				return true;
 			}

@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.55] — 2026-09-21
+
+### Cambiado
+- **Lecturas: ahora también suman** las visitas sin identificación de
+  navegador, las vistas previas de Facebook (`facebookexternalhit`) y
+  Lighthouse. Siguen sin contar los robots de búsqueda y monitoreo (los
+  que se identifican como bot, crawler, spider, slurp, monitor o
+  headless) y el personal de redacción.
+
 ## [0.1.54] — 2026-09-21
 
 ### Añadido
