@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.54] — 2026-09-21
+
+### Añadido
+- **Estadísticas de lectura: filtro por tipo de usuario** (Administrador,
+  Editor, Autor, Colaborador…). Al elegir un tipo, todo el panel se limita
+  a las notas de quienes tienen ese rol: lecturas, gráfico, notas más
+  leídas, ranking y selector de autor. El ranking de autores muestra ahora
+  el tipo de cada uno. Se combina con el selector de autor y las fechas.
+
 ## [0.1.53] — 2026-09-21
 
 ### Cambiado

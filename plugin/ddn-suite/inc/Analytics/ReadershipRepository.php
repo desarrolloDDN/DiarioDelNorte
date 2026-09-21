@@ -21,18 +21,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class ReadershipRepository {
 
 	/** @return array{views:int,posts:int} */
-	public function totals( string $from, string $to, int $author_id = 0 ): array {
+	public function totals( string $from, string $to, int $author_id = 0, string $role = '' ): array {
 		global $wpdb;
+
+		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT COALESCE(SUM(v.hits), 0) AS views, COUNT(DISTINCT v.post_id) AS posts
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
+				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s",
 				Db::table( Db::PAGEVIEWS ),
 				$author_id,
 				$author_id,
+				$role_flag,
+				$cap_key,
+				$role_like,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -48,14 +54,17 @@ final class ReadershipRepository {
 	/**
 	 * @return array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>
 	 */
-	public function top_posts( string $from, string $to, int $limit, int $author_id = 0 ): array {
+	public function top_posts( string $from, string $to, int $limit, int $author_id = 0, string $role = '' ): array {
 		global $wpdb;
+
+		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT v.post_id, SUM(v.hits) AS views
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
+				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY v.post_id
 				 ORDER BY views DESC, v.post_id DESC
@@ -63,6 +72,9 @@ final class ReadershipRepository {
 				Db::table( Db::PAGEVIEWS ),
 				$author_id,
 				$author_id,
+				$role_flag,
+				$cap_key,
+				$role_like,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -146,16 +158,19 @@ final class ReadershipRepository {
 	}
 
 	/**
-	 * @return array<int,array{author_id:int,name:string,views:int,posts:int}>
+	 * @return array<int,array{author_id:int,name:string,role:string,views:int,posts:int}>
 	 */
-	public function top_authors( string $from, string $to, int $limit ): array {
+	public function top_authors( string $from, string $to, int $limit, string $role = '' ): array {
 		global $wpdb;
+
+		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT p.post_author, SUM(v.hits) AS views, COUNT(DISTINCT v.post_id) AS posts
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
+				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY p.post_author
 				 ORDER BY views DESC
@@ -163,6 +178,9 @@ final class ReadershipRepository {
 				Db::table( Db::PAGEVIEWS ),
 				0,
 				0,
+				$role_flag,
+				$cap_key,
+				$role_like,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -178,6 +196,7 @@ final class ReadershipRepository {
 			$out[] = array(
 				'author_id' => $author_id,
 				'name'      => $author instanceof WP_User ? $author->display_name : __( '(usuario borrado)', 'ddn-suite' ),
+				'role'      => $author instanceof WP_User ? $this->role_label( $author ) : '',
 				'views'     => (int) $row['views'],
 				'posts'     => (int) $row['posts'],
 			);
@@ -205,9 +224,10 @@ final class ReadershipRepository {
 	}
 
 	/** @return array<int,string> id de autor => nombre, de quienes tienen notas publicadas. */
-	public function authors_with_posts(): array {
+	public function authors_with_posts( string $role = '' ): array {
 		$users = get_users(
 			array(
+				'role'                => $role,
 				'has_published_posts' => array( 'post' ),
 				'orderby'             => 'display_name',
 				'order'               => 'ASC',
@@ -224,20 +244,26 @@ final class ReadershipRepository {
 	}
 
 	/** @return array<string,int> día (Y-m-d) => lecturas; solo los días con datos. */
-	public function daily( string $from, string $to, int $author_id = 0 ): array {
+	public function daily( string $from, string $to, int $author_id = 0, string $role = '' ): array {
 		global $wpdb;
+
+		[$role_flag, $cap_key, $role_like] = $this->role_filter( $role );
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT DATE(v.bucket) AS day, SUM(v.hits) AS views
 				 FROM %i v
 				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
+				   AND ( %s = '' OR EXISTS ( SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id = p.post_author AND um.meta_key = %s AND um.meta_value LIKE %s ) )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY DATE(v.bucket)
 				 ORDER BY day ASC",
 				Db::table( Db::PAGEVIEWS ),
 				$author_id,
 				$author_id,
+				$role_flag,
+				$cap_key,
+				$role_like,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -250,5 +276,38 @@ final class ReadershipRepository {
 		}
 
 		return $out;
+	}
+
+	/** @return array<string,string> slug de rol => nombre legible (sin suscriptores, que no escriben). */
+	public function roles(): array {
+		$out = array();
+		foreach ( wp_roles()->get_names() as $slug => $name ) {
+			if ( 'subscriber' !== $slug ) {
+				$out[ (string) $slug ] = translate_user_role( (string) $name );
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @return array{0:string,1:string,2:string} marcador de «hay filtro», clave de la
+	 *         capacidad en usermeta y patrón LIKE del rol (los tres van a la consulta).
+	 */
+	private function role_filter( string $role ): array {
+		global $wpdb;
+
+		if ( '' === $role ) {
+			return array( '', '', '' );
+		}
+
+		return array( $role, $wpdb->get_blog_prefix() . 'capabilities', '%' . $wpdb->esc_like( '"' . $role . '"' ) . '%' );
+	}
+
+	private function role_label( WP_User $user ): string {
+		$names = $this->roles();
+		$slug  = array() !== $user->roles ? (string) $user->roles[0] : '';
+
+		return $names[ $slug ] ?? $slug;
 	}
 }
