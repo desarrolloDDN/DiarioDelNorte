@@ -34,8 +34,9 @@ final class ReadershipPage {
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- filtro de solo lectura de una pantalla ya protegida por capability.
-		$raw_from = isset( $_GET['ddn_from'] ) ? sanitize_text_field( wp_unslash( $_GET['ddn_from'] ) ) : '';
-		$raw_to   = isset( $_GET['ddn_to'] ) ? sanitize_text_field( wp_unslash( $_GET['ddn_to'] ) ) : '';
+		$raw_from  = isset( $_GET['ddn_from'] ) ? sanitize_text_field( wp_unslash( $_GET['ddn_from'] ) ) : '';
+		$raw_to    = isset( $_GET['ddn_to'] ) ? sanitize_text_field( wp_unslash( $_GET['ddn_to'] ) ) : '';
+		$author_id = isset( $_GET['ddn_author'] ) ? absint( wp_unslash( $_GET['ddn_author'] ) ) : 0;
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$today = current_time( 'Y-m-d' );
@@ -43,18 +44,44 @@ final class ReadershipPage {
 		$from  = $range['from'];
 		$to    = $range['to'];
 
-		$totals  = $this->repo->totals( $from, $to );
-		$posts   = $this->repo->top_posts( $from, $to, self::TOP_POSTS );
-		$authors = $this->repo->top_authors( $from, $to, self::TOP_AUTHORS );
-		$daily   = $this->repo->daily( $from, $to );
+		$author_names = $this->repo->authors_with_posts();
+		if ( ! isset( $author_names[ $author_id ] ) ) {
+			$author_id = 0;
+		}
+
+		$totals  = $this->repo->totals( $from, $to, $author_id );
+		$posts   = $this->repo->top_posts( $from, $to, self::TOP_POSTS, $author_id );
+		$authors = $this->repo->top_authors( $from, $to, 1000 );
+		$daily   = $this->repo->daily( $from, $to, $author_id );
 
 		$average = $totals['posts'] > 0 ? $totals['views'] / $totals['posts'] : 0;
 		$top     = $authors[0] ?? null;
+
+		$rank        = 0;
+		$share       = 0.0;
+		$published   = 0;
+		$author_name = $author_names[ $author_id ] ?? '';
+		if ( $author_id > 0 ) {
+			foreach ( $authors as $ddn_i => $ddn_row ) {
+				if ( $ddn_row['author_id'] === $author_id ) {
+					$rank = $ddn_i + 1;
+					break;
+				}
+			}
+			$site_views = $this->repo->totals( $from, $to )['views'];
+			$share      = $site_views > 0 ? $totals['views'] / $site_views * 100 : 0.0;
+			$published  = $this->repo->published_count( $from, $to, $author_id );
+		}
 		?>
 		<div class="wrap ddn-stats">
-			<h1><?php esc_html_e( 'Estadísticas de lectura', 'ddn-suite' ); ?></h1>
+			<h1>
+				<?php esc_html_e( 'Estadísticas de lectura', 'ddn-suite' ); ?>
+				<?php if ( $author_id > 0 ) : ?>
+					<span class="ddn-stats__who">— <?php echo esc_html( $author_name ); ?></span>
+				<?php endif; ?>
+			</h1>
 
-			<?php $this->filters( $from, $to, $today ); ?>
+			<?php $this->filters( $from, $to, $today, $author_id, $author_names ); ?>
 
 			<?php if ( 0 === $totals['views'] ) : ?>
 				<div class="notice notice-info inline"><p><?php esc_html_e( 'Todavía no hay lecturas registradas en ese rango.', 'ddn-suite' ); ?></p></div>
@@ -73,17 +100,35 @@ final class ReadershipPage {
 					<span><?php echo esc_html( number_format_i18n( $average, 1 ) ); ?></span>
 					<?php esc_html_e( 'Lecturas por nota', 'ddn-suite' ); ?>
 				</div>
-				<div class="ddn-stats__card ddn-stats__card--author">
-					<span><?php echo esc_html( null !== $top ? $top['name'] : '—' ); ?></span>
-					<?php
-					echo esc_html(
-						null !== $top
-							/* translators: %s: número de lecturas del autor. */
-							? sprintf( __( 'Autor más leído · %s lecturas', 'ddn-suite' ), number_format_i18n( $top['views'] ) )
-							: __( 'Autor más leído', 'ddn-suite' )
-					);
-					?>
-				</div>
+				<?php if ( $author_id > 0 ) : ?>
+					<div class="ddn-stats__card">
+						<span><?php echo esc_html( number_format_i18n( $published ) ); ?></span>
+						<?php esc_html_e( 'Notas publicadas en el período', 'ddn-suite' ); ?>
+					</div>
+					<div class="ddn-stats__card ddn-stats__card--author">
+						<span><?php echo esc_html( $rank > 0 ? '#' . $rank : '—' ); ?></span>
+						<?php
+						echo esc_html(
+							$rank > 0
+								/* translators: 1: total de autores con lecturas, 2: porcentaje de las lecturas del sitio. */
+								? sprintf( __( 'Puesto de %1$s autores · %2$s%% de las lecturas', 'ddn-suite' ), number_format_i18n( count( $authors ) ), number_format_i18n( $share, 1 ) )
+								: __( 'Sin lecturas en el período', 'ddn-suite' )
+						);
+						?>
+					</div>
+				<?php else : ?>
+					<div class="ddn-stats__card ddn-stats__card--author">
+						<span><?php echo esc_html( null !== $top ? $top['name'] : '—' ); ?></span>
+						<?php
+						echo esc_html(
+							null !== $top
+								/* translators: %s: número de lecturas del autor. */
+								? sprintf( __( 'Autor más leído · %s lecturas', 'ddn-suite' ), number_format_i18n( $top['views'] ) )
+								: __( 'Autor más leído', 'ddn-suite' )
+						);
+						?>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<?php $this->chart( $from, $to, $daily ); ?>
@@ -121,6 +166,7 @@ final class ReadershipPage {
 					</table>
 				</section>
 
+				<?php if ( 0 === $author_id ) : ?>
 				<section>
 					<h2><?php esc_html_e( 'Autores más leídos', 'ddn-suite' ); ?></h2>
 					<table class="widefat striped">
@@ -137,10 +183,23 @@ final class ReadershipPage {
 							<?php if ( array() === $authors ) : ?>
 								<tr><td colspan="5"><?php esc_html_e( 'Sin datos.', 'ddn-suite' ); ?></td></tr>
 							<?php endif; ?>
-							<?php foreach ( $authors as $ddn_i => $ddn_author ) : ?>
+							<?php foreach ( array_slice( $authors, 0, self::TOP_AUTHORS ) as $ddn_i => $ddn_author ) : ?>
 								<tr>
 									<td class="ddn-stats__num"><?php echo (int) $ddn_i + 1; ?></td>
-									<td><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=post&author=' . $ddn_author['author_id'] ) ); ?>"><?php echo esc_html( $ddn_author['name'] ); ?></a></td>
+									<td><a href="
+									<?php
+									echo esc_url(
+										add_query_arg(
+											array(
+												'ddn_author' => $ddn_author['author_id'],
+												'ddn_from' => $from,
+												'ddn_to'   => $to,
+											),
+											admin_url( 'admin.php?page=' . self::SLUG )
+										)
+									);
+									?>
+													"><?php echo esc_html( $ddn_author['name'] ); ?></a></td>
 									<td class="ddn-stats__num"><?php echo esc_html( number_format_i18n( $ddn_author['posts'] ) ); ?></td>
 									<td class="ddn-stats__num"><strong><?php echo esc_html( number_format_i18n( $ddn_author['views'] ) ); ?></strong></td>
 									<td class="ddn-stats__num"><?php echo esc_html( number_format_i18n( $ddn_author['posts'] > 0 ? $ddn_author['views'] / $ddn_author['posts'] : 0, 1 ) ); ?></td>
@@ -149,7 +208,12 @@ final class ReadershipPage {
 						</tbody>
 					</table>
 				</section>
+				<?php endif; ?>
 			</div>
+
+			<?php if ( $author_id > 0 ) : ?>
+				<p><a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=post&author=' . $author_id ) ); ?>"><?php esc_html_e( 'Ver todas las notas del autor', 'ddn-suite' ); ?></a></p>
+			<?php endif; ?>
 
 			<p class="description">
 				<?php esc_html_e( 'Cuenta las lecturas de visitantes: no incluye al personal de redacción ni a los robots de búsqueda. Solo notas publicadas. Los datos se guardan 400 días y empiezan a acumularse desde que se activó este módulo.', 'ddn-suite' ); ?>
@@ -159,7 +223,10 @@ final class ReadershipPage {
 		$this->styles();
 	}
 
-	private function filters( string $from, string $to, string $today ): void {
+	/**
+	 * @param array<int,string> $author_names
+	 */
+	private function filters( string $from, string $to, string $today, int $author_id, array $author_names ): void {
 		$base    = admin_url( 'admin.php?page=' . self::SLUG );
 		$presets = array(
 			__( 'Hoy', 'ddn-suite' )      => 1,
@@ -177,8 +244,9 @@ final class ReadershipPage {
 					$ddn_start  = $end->modify( '-' . ( $ddn_days - 1 ) . ' days' )->format( 'Y-m-d' );
 					$ddn_active = ( $from === $ddn_start && $to === $today );
 					$ddn_query  = array(
-						'ddn_from' => $ddn_start,
-						'ddn_to'   => $today,
+						'ddn_from'   => $ddn_start,
+						'ddn_to'     => $today,
+						'ddn_author' => $author_id,
 					);
 					?>
 					<a class="button<?php echo $ddn_active ? ' button-primary' : ''; ?>" href="<?php echo esc_url( add_query_arg( $ddn_query, $base ) ); ?>"><?php echo esc_html( $ddn_label ); ?></a>
@@ -186,6 +254,14 @@ final class ReadershipPage {
 			</nav>
 			<form method="get" class="ddn-stats__range">
 				<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
+				<label><?php esc_html_e( 'Autor', 'ddn-suite' ); ?>
+					<select name="ddn_author">
+						<option value="0"><?php esc_html_e( 'Todos los autores', 'ddn-suite' ); ?></option>
+						<?php foreach ( $author_names as $ddn_id => $ddn_name ) : ?>
+							<option value="<?php echo (int) $ddn_id; ?>" <?php selected( $author_id, $ddn_id ); ?>><?php echo esc_html( $ddn_name ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
 				<label><?php esc_html_e( 'Desde', 'ddn-suite' ); ?> <input type="date" name="ddn_from" value="<?php echo esc_attr( $from ); ?>" max="<?php echo esc_attr( $today ); ?>"></label>
 				<label><?php esc_html_e( 'Hasta', 'ddn-suite' ); ?> <input type="date" name="ddn_to" value="<?php echo esc_attr( $to ); ?>" max="<?php echo esc_attr( $today ); ?>"></label>
 				<?php submit_button( __( 'Ver', 'ddn-suite' ), 'secondary', '', false ); ?>
@@ -242,6 +318,7 @@ final class ReadershipPage {
 		.ddn-stats__bar:hover{opacity:1}
 		.ddn-stats__tables{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:1.5rem;align-items:start;margin-bottom:1rem}
 		.ddn-stats__tables h2{margin-top:0}
+		.ddn-stats__who{font-weight:400;color:#bf0202}
 		.ddn-stats__num{text-align:right;white-space:nowrap}
 		@media (max-width:1100px){.ddn-stats__tables{grid-template-columns:1fr}}
 		</style>

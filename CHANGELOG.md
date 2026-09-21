@@ -5,6 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.52] — 2026-09-21
+
+### Añadido
+- **Estadísticas de lectura por autor.** Selector «Autor» en el panel
+  (DDN Suite → Estadísticas): al elegir a cualquier autor se ve solo lo
+  suyo — lecturas, notas leídas, notas publicadas en el período, lecturas
+  por nota, su **puesto entre los autores** y el porcentaje de las
+  lecturas del sitio, el gráfico por día y sus notas más leídas. Desde el
+  ranking de autores basta con hacer clic en un nombre para abrir su
+  detalle; el rango de fechas se conserva.
+
 ## [0.1.51] — 2026-09-21
 
 ### Añadido

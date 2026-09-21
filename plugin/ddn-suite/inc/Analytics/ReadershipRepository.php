@@ -21,16 +21,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class ReadershipRepository {
 
 	/** @return array{views:int,posts:int} */
-	public function totals( string $from, string $to ): array {
+	public function totals( string $from, string $to, int $author_id = 0 ): array {
 		global $wpdb;
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT COALESCE(SUM(v.hits), 0) AS views, COUNT(DISTINCT v.post_id) AS posts
 				 FROM %i v
-				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish'
+				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				 WHERE v.bucket >= %s AND v.bucket <= %s",
 				Db::table( Db::PAGEVIEWS ),
+				$author_id,
+				$author_id,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
@@ -46,19 +48,21 @@ final class ReadershipRepository {
 	/**
 	 * @return array<int,array{post_id:int,title:string,author:string,category:string,published:string,views:int,edit_url:string,url:string}>
 	 */
-	public function top_posts( string $from, string $to, int $limit ): array {
+	public function top_posts( string $from, string $to, int $limit, int $author_id = 0 ): array {
 		global $wpdb;
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT v.post_id, SUM(v.hits) AS views
 				 FROM %i v
-				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish'
+				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY v.post_id
 				 ORDER BY views DESC, v.post_id DESC
 				 LIMIT %d",
 				Db::table( Db::PAGEVIEWS ),
+				$author_id,
+				$author_id,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -102,12 +106,14 @@ final class ReadershipRepository {
 			$wpdb->prepare(
 				"SELECT p.post_author, SUM(v.hits) AS views, COUNT(DISTINCT v.post_id) AS posts
 				 FROM %i v
-				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish'
+				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY p.post_author
 				 ORDER BY views DESC
 				 LIMIT %d",
 				Db::table( Db::PAGEVIEWS ),
+				0,
+				0,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59',
 				$limit
@@ -131,19 +137,58 @@ final class ReadershipRepository {
 		return $out;
 	}
 
+	/** Notas publicadas en el rango (por un autor, o por todos si `$author_id` es 0). */
+	public function published_count( string $from, string $to, int $author_id = 0 ): int {
+		global $wpdb;
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				 WHERE post_type = 'post' AND post_status = 'publish'
+				   AND post_date >= %s AND post_date <= %s
+				   AND ( %d = 0 OR post_author = %d )",
+				$from . ' 00:00:00',
+				$to . ' 23:59:59',
+				$author_id,
+				$author_id
+			)
+		);
+	}
+
+	/** @return array<int,string> id de autor => nombre, de quienes tienen notas publicadas. */
+	public function authors_with_posts(): array {
+		$users = get_users(
+			array(
+				'has_published_posts' => array( 'post' ),
+				'orderby'             => 'display_name',
+				'order'               => 'ASC',
+				'fields'              => array( 'ID', 'display_name' ),
+			)
+		);
+
+		$out = array();
+		foreach ( $users as $user ) {
+			$out[ (int) $user->ID ] = (string) $user->display_name;
+		}
+
+		return $out;
+	}
+
 	/** @return array<string,int> día (Y-m-d) => lecturas; solo los días con datos. */
-	public function daily( string $from, string $to ): array {
+	public function daily( string $from, string $to, int $author_id = 0 ): array {
 		global $wpdb;
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT DATE(v.bucket) AS day, SUM(v.hits) AS views
 				 FROM %i v
-				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish'
+				 INNER JOIN {$wpdb->posts} p ON p.ID = v.post_id AND p.post_type = 'post' AND p.post_status = 'publish' AND ( %d = 0 OR p.post_author = %d )
 				 WHERE v.bucket >= %s AND v.bucket <= %s
 				 GROUP BY DATE(v.bucket)
 				 ORDER BY day ASC",
 				Db::table( Db::PAGEVIEWS ),
+				$author_id,
+				$author_id,
 				$from . ' 00:00:00',
 				$to . ' 23:59:59'
 			),
