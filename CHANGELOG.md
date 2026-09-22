@@ -5,6 +5,21 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.58] — 2026-09-22
+
+### Cambiado
+- **Registro con Google/Facebook: ahora pide los mismos datos que el
+  registro directo.** Antes, al crear la cuenta con Google (o Facebook)
+  bastaba con aceptar Términos y Política, así que quedaba sin celular,
+  ubicación ni identificación, y sin elegir si autoriza correos o
+  WhatsApp. El paso de confirmación ahora incluye también nombre
+  (editable, tal como lo indica el nombre), celular (obligatorio,
+  igual que en el registro directo), departamento/ciudad/dirección e
+  identificación (opcionales, salvo que tipo y número van juntos), y las
+  dos casillas de autorización de correo y WhatsApp — la única diferencia
+  con el registro directo es que no pide contraseña. No afecta a las
+  cuentas ya creadas: pueden completar sus datos desde «Mi perfil».
+
 ## [0.1.57] — 2026-09-21
 
 ### Cambiado

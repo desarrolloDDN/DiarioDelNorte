@@ -222,11 +222,67 @@ final class RegistrationController {
 			echo '</ul></div>';
 		}
 		?>
-		<p><strong><?php echo esc_html( $profile['name'] ); ?></strong> — <?php echo esc_html( $profile['email'] ); ?></p>
+		<p class="ddn-auth-card__social-id"><?php echo esc_html( $profile['email'] ); ?></p>
 		<form class="ddn-form" method="post" action="<?php echo esc_url( self::action_url() ); ?>">
 			<input type="hidden" name="action" value="<?php echo esc_attr( self::SOCIAL_ACTION ); ?>">
 			<input type="hidden" name="ddn_social_token" value="<?php echo esc_attr( $token ); ?>">
 			<?php wp_nonce_field( self::SOCIAL_ACTION, 'ddn_social_nonce' ); ?>
+
+			<p class="ddn-field">
+				<label for="ddn_social_full_name"><?php esc_html_e( 'Nombre completo', 'ddn-suite' ); ?></label>
+				<input type="text" id="ddn_social_full_name" name="full_name" value="<?php echo esc_attr( $profile['name'] ); ?>" required>
+			</p>
+			<p class="ddn-field">
+				<label for="ddn_social_phone"><?php esc_html_e( 'Celular (WhatsApp)', 'ddn-suite' ); ?></label>
+				<input type="tel" id="ddn_social_phone" name="phone" required>
+			</p>
+
+			<div class="ddn-field-row">
+				<p class="ddn-field">
+					<label for="ddn_social_department"><?php esc_html_e( 'Departamento', 'ddn-suite' ); ?></label>
+					<select id="ddn_social_department" name="department">
+						<option value=""><?php esc_html_e( 'Selecciona…', 'ddn-suite' ); ?></option>
+						<?php foreach ( Options::departments() as $ddn_dep ) : ?>
+							<option value="<?php echo esc_attr( $ddn_dep ); ?>"><?php echo esc_html( $ddn_dep ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p class="ddn-field">
+					<label for="ddn_social_city"><?php esc_html_e( 'Ciudad o municipio', 'ddn-suite' ); ?></label>
+					<input type="text" id="ddn_social_city" name="city">
+				</p>
+			</div>
+
+			<p class="ddn-field">
+				<label for="ddn_social_address"><?php esc_html_e( 'Dirección', 'ddn-suite' ); ?></label>
+				<input type="text" id="ddn_social_address" name="address">
+			</p>
+
+			<div class="ddn-field-row">
+				<p class="ddn-field">
+					<label for="ddn_social_doc_type"><?php esc_html_e( 'Tipo de identificación', 'ddn-suite' ); ?></label>
+					<select id="ddn_social_doc_type" name="doc_type">
+						<option value=""><?php esc_html_e( 'Selecciona…', 'ddn-suite' ); ?></option>
+						<?php foreach ( Options::document_types() as $ddn_code => $ddn_label ) : ?>
+							<option value="<?php echo esc_attr( $ddn_code ); ?>"><?php echo esc_html( $ddn_label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p class="ddn-field">
+					<label for="ddn_social_doc_number"><?php esc_html_e( 'Número de identificación', 'ddn-suite' ); ?></label>
+					<input type="text" id="ddn_social_doc_number" name="doc_number">
+				</p>
+			</div>
+			<p class="description"><?php esc_html_e( 'Si llenas uno de los dos campos de identificación, el otro también es obligatorio.', 'ddn-suite' ); ?></p>
+
+			<p class="ddn-field ddn-field--check">
+				<label><input type="checkbox" name="consent_email" value="1"> <?php esc_html_e( 'Quiero recibir correos con información y noticias destacadas.', 'ddn-suite' ); ?></label>
+			</p>
+			<p class="ddn-field ddn-field--check">
+				<label><input type="checkbox" name="consent_whatsapp" value="1"> <?php esc_html_e( 'Quiero recibir mensajes por WhatsApp con información y noticias destacadas.', 'ddn-suite' ); ?></label>
+			</p>
+
+			<hr class="ddn-form-rule">
 
 			<?php $this->render_legal_checkboxes(); ?>
 
@@ -356,7 +412,19 @@ final class RegistrationController {
 			return;
 		}
 
-		$errors = array();
+		$data = array(
+			'full_name'        => sanitize_text_field( wp_unslash( $_POST['full_name'] ?? '' ) ),
+			'phone'            => sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) ),
+			'department'       => sanitize_text_field( wp_unslash( $_POST['department'] ?? '' ) ),
+			'city'             => sanitize_text_field( wp_unslash( $_POST['city'] ?? '' ) ),
+			'address'          => sanitize_text_field( wp_unslash( $_POST['address'] ?? '' ) ),
+			'doc_type'         => sanitize_text_field( wp_unslash( $_POST['doc_type'] ?? '' ) ),
+			'doc_number'       => sanitize_text_field( wp_unslash( $_POST['doc_number'] ?? '' ) ),
+			'consent_email'    => ! empty( $_POST['consent_email'] ),
+			'consent_whatsapp' => ! empty( $_POST['consent_whatsapp'] ),
+		);
+
+		$errors = Validator::profile( $data, Options::departments(), Options::document_type_codes() );
 		if ( empty( $_POST['accept_terms'] ) ) {
 			$errors[] = 'terms_required';
 		}
@@ -365,8 +433,8 @@ final class RegistrationController {
 		}
 
 		if ( array() !== $errors ) {
-			// El token sigue vivo a propósito: puede corregir las casillas
-			// y reenviar sin repetir todo el paso con el proveedor.
+			// El token sigue vivo a propósito: puede corregir los campos y
+			// reenviar sin repetir todo el paso con el proveedor.
 			$this->back_with_errors( $back_to_token, $errors );
 			return;
 		}
@@ -386,8 +454,8 @@ final class RegistrationController {
 				'user_login'   => $username,
 				'user_email'   => $profile['email'],
 				'user_pass'    => wp_generate_password( 32, true, true ),
-				'display_name' => $profile['name'],
-				'first_name'   => $profile['name'],
+				'display_name' => $data['full_name'],
+				'first_name'   => $data['full_name'],
 				'role'         => 'subscriber',
 			)
 		);
@@ -397,6 +465,7 @@ final class RegistrationController {
 			return;
 		}
 
+		$this->profiles->save( $user_id, $data );
 		$this->profiles->record_acceptance( $user_id, $provider_id );
 		$this->profiles->link_oauth_id( $user_id, $provider_id, $profile['provider_user_id'] );
 
