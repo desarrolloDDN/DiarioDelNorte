@@ -5,6 +5,19 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.59] — 2026-09-25
+
+### Añadido
+- **Límite de 5 notas gratis para visitantes sin sesión.** Quien no tiene
+  cuenta puede leer 5 notas distintas; de ahí en adelante, el resto de la
+  nota se reemplaza por el aviso de suscribirse (con «Iniciar sesión» y
+  «Crear cuenta gratis») en lugar del contenido completo. Releer una nota
+  ya contada no gasta otro cupo. No afecta a quien tiene sesión iniciada
+  (suscriptor o personal), ni a las notas ya marcadas «exclusiva para
+  suscriptores» (esas siguen bloqueadas siempre, sin gastar cupo). El
+  cupo se lleva en una cookie del navegador (dura 30 días); borrar
+  cookies o entrar de incógnito reinicia el conteo.
+
 ## [0.1.58] — 2026-09-22
 
 ### Cambiado

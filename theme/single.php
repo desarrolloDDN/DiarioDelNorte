@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use DiarioDelNorte\Content\MeteredAccess;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Ads;
@@ -28,7 +29,9 @@ get_template_part( 'template-parts/latest-ticker' );
 
 while ( have_posts() ) :
 	the_post();
-	$ddn_cat = Format::primary_category();
+	$ddn_cat      = Format::primary_category();
+	$ddn_can_read = SubscriberOnly::reader_can_view( get_the_ID() ) && MeteredAccess::reader_can_view();
+	$ddn_paywall  = $ddn_can_read ? '' : ( SubscriberOnly::is_restricted( get_the_ID() ) ? 'exclusive' : 'metered' );
 	?>
 	<article <?php post_class( 'article' ); ?>>
 
@@ -83,11 +86,11 @@ while ( have_posts() ) :
 
 		<div class="article__body">
 			<div class="prose">
-				<?php if ( SubscriberOnly::reader_can_view( get_the_ID() ) ) : ?>
+				<?php if ( $ddn_can_read ) : ?>
 					<?php the_content(); ?>
 				<?php else : ?>
 					<?php echo wp_kses_post( wpautop( get_the_excerpt() ) ); ?>
-					<?php get_template_part( 'template-parts/subscriber-paywall' ); ?>
+					<?php get_template_part( 'template-parts/subscriber-paywall', null, array( 'reason' => $ddn_paywall ) ); ?>
 				<?php endif; ?>
 			</div>
 
@@ -105,9 +108,9 @@ while ( have_posts() ) :
 			<?php endif; ?>
 
 			<?php
-			// Sin sesión: invitación a suscribirse. Si la nota es exclusiva ya
-			// sale el aviso propio del muro, no se repite.
-			if ( ! is_user_logged_in() && ! SubscriberOnly::is_restricted( get_the_ID() ) ) {
+			// Sin sesión: invitación a suscribirse. Si ya salió el aviso del
+			// muro (exclusiva, o límite de notas gratis) no se repite.
+			if ( ! is_user_logged_in() && $ddn_can_read ) {
 				get_template_part( 'template-parts/subscribe-cta' );
 			}
 			?>

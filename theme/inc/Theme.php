@@ -17,6 +17,7 @@ use DiarioDelNorte\Content\ContactForm;
 use DiarioDelNorte\Content\ContactPageInstaller;
 use DiarioDelNorte\Content\DatelineField;
 use DiarioDelNorte\Content\InlineRelated;
+use DiarioDelNorte\Content\MeteredAccess;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Content\SocialMeta;
 use DiarioDelNorte\Content\SubscriberOnly;
@@ -51,6 +52,7 @@ final class Theme {
 		( new DatelineField() )->register();
 		( new PhotoCredit() )->register();
 		( new SubscriberOnly() )->register();
+		( new MeteredAccess() )->register();
 		( new InlineRelated() )->register();
 		( new SocialMeta() )->register();
 		( new Analytics() )->register();
