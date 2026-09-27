@@ -10,7 +10,6 @@
 
 declare(strict_types=1);
 
-use DiarioDelNorte\Content\MeteredAccess;
 use DiarioDelNorte\Content\PhotoCredit;
 use DiarioDelNorte\Content\SubscriberOnly;
 use DiarioDelNorte\Support\Ads;
@@ -29,9 +28,16 @@ get_template_part( 'template-parts/latest-ticker' );
 
 while ( have_posts() ) :
 	the_post();
-	$ddn_cat      = Format::primary_category();
-	$ddn_can_read = SubscriberOnly::reader_can_view( get_the_ID() ) && MeteredAccess::reader_can_view();
-	$ddn_paywall  = $ddn_can_read ? '' : ( SubscriberOnly::is_restricted( get_the_ID() ) ? 'exclusive' : 'metered' );
+	$ddn_cat        = Format::primary_category();
+	$ddn_restricted = SubscriberOnly::is_restricted( get_the_ID() );
+	// El límite de notas gratis se decide en el navegador (localStorage,
+	// ver MeteredAccess): el sitio tiene caché de página, así que el HTML
+	// de una nota se sirve idéntico a cualquier visitante sin sesión — el
+	// servidor no puede saber cuántas ha leído cada quien. Por eso aquí
+	// siempre se manda el contenido completo junto con el aviso (oculto
+	// por CSS), y un script mínimo en el <head> decide cuál de los dos se
+	// ve, sin depender de que esta página se vuelva a generar.
+	$ddn_metered = ! $ddn_restricted && ! is_user_logged_in();
 	?>
 	<article <?php post_class( 'article' ); ?>>
 
@@ -39,7 +45,7 @@ while ( have_posts() ) :
 			<?php if ( $ddn_cat ) : ?>
 				<a class="kicker" href="<?php echo esc_url( get_category_link( $ddn_cat ) ); ?>"><?php echo esc_html( $ddn_cat->name ); ?></a>
 			<?php endif; ?>
-			<?php if ( SubscriberOnly::is_restricted( get_the_ID() ) ) : ?>
+			<?php if ( $ddn_restricted ) : ?>
 				<?php echo SubscriberOnly::badge_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en badge_markup(). ?>
 			<?php endif; ?>
 
@@ -86,34 +92,44 @@ while ( have_posts() ) :
 
 		<div class="article__body">
 			<div class="prose">
-				<?php if ( $ddn_can_read ) : ?>
-					<?php the_content(); ?>
-				<?php else : ?>
+				<?php if ( $ddn_restricted && ! SubscriberOnly::reader_can_view( get_the_ID() ) ) : ?>
 					<?php echo wp_kses_post( wpautop( get_the_excerpt() ) ); ?>
-					<?php get_template_part( 'template-parts/subscriber-paywall', null, array( 'reason' => $ddn_paywall ) ); ?>
+					<?php get_template_part( 'template-parts/subscriber-paywall', null, array( 'reason' => 'exclusive' ) ); ?>
+				<?php elseif ( $ddn_metered ) : ?>
+					<div class="ddn-metered-paywall">
+						<?php echo wp_kses_post( wpautop( get_the_excerpt() ) ); ?>
+						<?php get_template_part( 'template-parts/subscriber-paywall', null, array( 'reason' => 'metered' ) ); ?>
+					</div>
+					<div class="ddn-metered-content"><?php the_content(); ?></div>
+				<?php else : ?>
+					<?php the_content(); ?>
 				<?php endif; ?>
 			</div>
 
-			<?php Ads::zone( 'in-article-bottom' ); ?>
+			<div class="<?php echo esc_attr( $ddn_metered ? 'ddn-metered-content' : '' ); ?>">
+				<?php Ads::zone( 'in-article-bottom' ); ?>
 
-			<?php if ( has_tag() ) : ?>
-				<div class="tags">
-					<span class="tags__label"><?php esc_html_e( 'Temas relacionados', 'diario-del-norte' ); ?></span>
-					<?php
-					foreach ( (array) get_the_tags() as $ddn_tag ) {
-						printf( '<a href="%s">%s</a>', esc_url( get_tag_link( $ddn_tag ) ), esc_html( $ddn_tag->name ) );
-					}
-					?>
-				</div>
-			<?php endif; ?>
+				<?php if ( has_tag() ) : ?>
+					<div class="tags">
+						<span class="tags__label"><?php esc_html_e( 'Temas relacionados', 'diario-del-norte' ); ?></span>
+						<?php
+						foreach ( (array) get_the_tags() as $ddn_tag ) {
+							printf( '<a href="%s">%s</a>', esc_url( get_tag_link( $ddn_tag ) ), esc_html( $ddn_tag->name ) );
+						}
+						?>
+					</div>
+				<?php endif; ?>
 
-			<?php
-			// Sin sesión: invitación a suscribirse. Si ya salió el aviso del
-			// muro (exclusiva, o límite de notas gratis) no se repite.
-			if ( ! is_user_logged_in() && $ddn_can_read ) {
-				get_template_part( 'template-parts/subscribe-cta' );
-			}
-			?>
+				<?php
+				// Sin sesión: invitación a suscribirse. Si la nota es exclusiva ya
+				// sale el aviso propio del muro, no se repite (el de notas gratis
+				// sí puede convivir: solo se oculta junto con el resto de este
+				// bloque cuando el navegador decide que corresponde).
+				if ( ! is_user_logged_in() && ! $ddn_restricted ) {
+					get_template_part( 'template-parts/subscribe-cta' );
+				}
+				?>
+			</div>
 		</div>
 
 		<?php

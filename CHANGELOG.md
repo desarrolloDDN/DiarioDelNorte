@@ -5,6 +5,22 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.60] — 2026-09-26
+
+### Corregido
+- **El límite de 5 notas gratis (v0.1.59) nunca se activaba**: el sitio
+  tiene caché de página activo, así que la nota se sirve como el mismo
+  HTML guardado a cualquier visitante sin sesión — el conteo por cookie,
+  calculado en el servidor, nunca volvía a ejecutarse.
+  - La decisión se mueve al navegador: se lleva la cuenta en
+    `localStorage` en vez de una cookie, y el propio muro («Ya leíste tus
+    notas gratis…») se resuelve con un script mínimo que corre antes de
+    pintar la nota, sin depender de que la página se genere de nuevo.
+  - El contenido completo se sigue mandando en el HTML (con el aviso
+    presente pero oculto): quien desactive JavaScript no queda bloqueado,
+    igual que ya ocurría con la cookie. Esta es la única forma de medir
+    lecturas por visitante sin cuenta cuando el sitio cachea las páginas.
+
 ## [0.1.59] — 2026-09-25
 
 ### Añadido

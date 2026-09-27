@@ -67,6 +67,14 @@
   gap: 0.75rem;
 }
 
+// --- Límite de notas gratis (visitante sin sesión) ---
+// La decisión es del navegador, no del servidor (ver MeteredAccess): los
+// dos bloques siempre se mandan y el script del <head> decide, antes de
+// pintar el cuerpo, con qué clase queda <html> — así no hay parpadeo.
+.ddn-metered-paywall { display: none; }
+html.ddn-metered-blocked .ddn-metered-paywall { display: block; }
+html.ddn-metered-blocked .ddn-metered-content { display: none; }
+
 .article__title {
   font-family: var(--display);
   font-size: clamp(1.35rem, 1.02rem + 1.35vw, 1.9rem);

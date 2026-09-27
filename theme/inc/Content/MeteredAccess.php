@@ -3,9 +3,15 @@
  * Muro de medición para visitantes sin sesión: pueden leer un número
  * limitado de notas (las que no estén ya marcadas «exclusiva para
  * suscriptores», que se bloquean aparte) antes de tener que suscribirse.
- * Se lleva la cuenta en una cookie con los IDs ya leídos — releer una
- * misma nota no consume otro cupo — sin depender de sesión ni de la
- * base de datos.
+ *
+ * La decisión se toma en el navegador (localStorage), no en el
+ * servidor: el sitio tiene caché de página activo, así que el HTML de
+ * una nota se sirve idéntico a cualquier visitante sin sesión — el
+ * servidor no puede saber cuántas notas ha leído cada quien. Por eso el
+ * contenido siempre se manda completo (ver single.php) y un script
+ * mínimo, impreso muy arriba en el `<head>` para que corra antes de que
+ * el cuerpo se pinte, decide con qué clase queda `<html>` y el CSS
+ * (`_article.scss`) enseña un bloque u otro.
  *
  * @package DiarioDelNorte
  */
@@ -23,24 +29,16 @@ final class MeteredAccess {
 	/** Notas gratis que puede leer un visitante sin sesión antes de tener que suscribirse. */
 	private const LIMIT = 5;
 
-	private const COOKIE      = 'ddn_read';
-	private const COOKIE_DAYS = 30;
-
-	// Por defecto se puede leer: solo `decide()` lo cierra, y solo cuando
-	// de verdad aplica (visitante sin sesión, en una nota no restringida
-	// aparte, y ya sin cupo).
-	private static bool $can_read = true;
-
 	public function register(): void {
-		add_action( 'template_redirect', array( $this, 'decide' ) );
+		add_action( 'wp_head', array( $this, 'print_bootstrap' ), 1 );
 	}
 
 	/**
-	 * Se decide una sola vez por petición, antes de que se envíe cualquier
-	 * salida (para poder fijar la cookie): `reader_can_view()` solo lee el
-	 * resultado ya calculado aquí.
+	 * El propio marcado (id de la nota, límite) sale igual para cualquier
+	 * visitante sin sesión — nada de esto depende de quién es, así que el
+	 * caché de página no le hace daño a esta parte.
 	 */
-	public function decide(): void {
+	public function print_bootstrap(): void {
 		if ( is_user_logged_in() || ! is_singular( 'post' ) ) {
 			return;
 		}
@@ -49,55 +47,31 @@ final class MeteredAccess {
 		if ( $post_id <= 0 || SubscriberOnly::is_restricted( $post_id ) ) {
 			return; // Ya la bloquea el muro de «exclusiva»; no consume cupo.
 		}
-
-		$read_ids = self::read_cookie();
-		if ( in_array( $post_id, $read_ids, true ) ) {
-			return; // Releer una nota ya contada no gasta cupo.
-		}
-
-		if ( count( $read_ids ) >= self::LIMIT ) {
-			self::$can_read = false;
-			return;
-		}
-
-		$read_ids[] = $post_id;
-		self::write_cookie( $read_ids );
-	}
-
-	public static function reader_can_view(): bool {
-		return self::$can_read;
-	}
-
-	/** @return int[] */
-	private static function read_cookie(): array {
-		if ( ! isset( $_COOKIE[ self::COOKIE ] ) ) {
-			return array();
-		}
-
-		$raw = substr( sanitize_text_field( wp_unslash( $_COOKIE[ self::COOKIE ] ) ), 0, 200 );
-		$ids = array_filter( array_map( 'absint', explode( ',', $raw ) ) );
-
-		// Defensa ante una cookie manipulada a mano: nunca se procesan más
-		// IDs de los que el límite permitiría guardar.
-		return array_slice( array_values( array_unique( $ids ) ), 0, self::LIMIT );
-	}
-
-	/** @param int[] $ids */
-	private static function write_cookie( array $ids ): void {
-		if ( headers_sent() ) {
-			return;
-		}
-
-		setcookie(
-			self::COOKIE,
-			implode( ',', $ids ),
-			array(
-				'expires'  => time() + self::COOKIE_DAYS * DAY_IN_SECONDS,
-				'path'     => '/',
-				'secure'   => is_ssl(),
-				'httponly' => false,
-				'samesite' => 'Lax',
-			)
-		);
+		?>
+		<script>
+		( function () {
+			try {
+				var KEY   = 'ddnReadIds';
+				var LIMIT = <?php echo (int) self::LIMIT; ?>;
+				var id    = <?php echo (int) $post_id; ?>;
+				var ids   = JSON.parse( window.localStorage.getItem( KEY ) || '[]' );
+				if ( ! Array.isArray( ids ) ) {
+					ids = [];
+				}
+				if ( ids.indexOf( id ) !== -1 ) {
+					return; // Releer una nota ya contada no gasta cupo.
+				}
+				if ( ids.length >= LIMIT ) {
+					document.documentElement.classList.add( 'ddn-metered-blocked' );
+					return;
+				}
+				ids.push( id );
+				window.localStorage.setItem( KEY, JSON.stringify( ids ) );
+			} catch ( e ) {
+				// Sin localStorage (modo privado estricto, etc.): no se bloquea.
+			}
+		}() );
+		</script>
+		<?php
 	}
 }
