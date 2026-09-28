@@ -5,6 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.61] — 2026-09-28
+
+### Corregido
+- **Aviso de suscribirse (exclusiva / notas gratis): el botón rojo se veía
+  en blanco, sin texto legible.** El aviso va dentro de `.prose` (el
+  cuerpo de la nota), y la regla pensada para los enlaces del texto de la
+  noticia (roja, subrayada) le ganaba en especificidad al botón, dejando
+  el texto en rojo sobre fondo rojo. Ahora el botón se ve blanco como
+  corresponde. De paso, el texto y los dos botones del aviso quedan
+  centrados en vez de alineados a la izquierda.
+
 ## [0.1.60] — 2026-09-26
 
 ### Corregido

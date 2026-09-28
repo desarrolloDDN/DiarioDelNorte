@@ -55,6 +55,7 @@
   padding: 1.4rem;
   background: var(--sand);
   border-left: 3px solid var(--red);
+  text-align: center;
 }
 .subscriber-paywall__text {
   font-family: var(--sans);
@@ -64,8 +65,19 @@
 .subscriber-paywall__actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem;
 }
+// Este aviso va dentro de `.prose` (dentro del cuerpo leído): sin esto,
+// `.prose a` (pensada para los enlaces del texto de la noticia, en rojo
+// y subrayados) le gana en especificidad a `.btn` y pinta el botón sólido
+// en rojo sobre rojo — texto invisible.
+.subscriber-paywall .btn {
+  text-decoration: none;
+  color: #fff;
+}
+.subscriber-paywall .btn--ghost { color: var(--red); }
+.subscriber-paywall .btn:hover { color: #fff; }
 
 // --- Límite de notas gratis (visitante sin sesión) ---
 // La decisión es del navegador, no del servidor (ver MeteredAccess): los
