@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'DDN_THEME_VERSION', '0.1.61' );
+define( 'DDN_THEME_VERSION', '0.1.62' );
 define( 'DDN_THEME_DIR', trailingslashit( get_template_directory() ) );
 define( 'DDN_THEME_URI', trailingslashit( get_template_directory_uri() ) );
 

@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.62] — 2026-09-30
+
+### Cambiado
+- **La sesión de wp-admin ya no se cierra a los pocos días.** WordPress
+  cierra por defecto la sesión a los 2 días si no se marca «Recuérdame»
+  al entrar (14 si se marca) — quien puede editar contenido
+  (administradores, editores, autores…) ahora tiene sesión de al menos
+  30 días de todas formas, marque o no esa casilla. Las cuentas de
+  suscriptor (sin esa capacidad) no cambian.
+
 ## [0.1.61] — 2026-09-28
 
 ### Corregido

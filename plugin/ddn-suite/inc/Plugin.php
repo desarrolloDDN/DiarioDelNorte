@@ -15,6 +15,7 @@ use DiarioDelNorte\Suite\Activity\ActivityRepository;
 use DiarioDelNorte\Suite\Activity\AuthorReportRepository;
 use DiarioDelNorte\Suite\Activity\Install\CapabilityInstaller as ActivityCapabilityInstaller;
 use DiarioDelNorte\Suite\Admin\Menu;
+use DiarioDelNorte\Suite\Admin\SessionDuration;
 use DiarioDelNorte\Suite\Analytics\Admin\ReadershipPage;
 use DiarioDelNorte\Suite\Analytics\Install\CapabilityInstaller as StatsCapabilityInstaller;
 use DiarioDelNorte\Suite\Analytics\PageviewRecorder;
@@ -61,6 +62,12 @@ final class Plugin {
 		add_action( 'init', array( Installer::class, 'maybe_upgrade' ) );
 
 		( new GitHubUpdater( DDN_SUITE_VERSION ) )->register();
+
+		// La sesión de wp-admin no debe cerrarse a los pocos días por no
+		// haber marcado «Recuérdame»: hay que registrarlo ya (no dentro de
+		// is_admin(), más abajo), porque el filtro aplica también al
+		// iniciar sesión desde wp-login.php.
+		( new SessionDuration() )->register();
 
 		// Los módulos de Publicidad, Radio, Actividad y Estadísticas solo se abren al rol Administrador.
 		( new AdsCapabilityInstaller() )->ensure();
