@@ -1,0 +1,51 @@
+html.ddn-adblock-open { overflow: hidden; }
+
+#ddn-adblock-wall {
+	position: fixed;
+	inset: 0;
+	z-index: 2147483000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.25rem;
+	background: rgba( 255, 255, 255, 0.98 );
+}
+
+.ddn-adblock-wall__card {
+	max-width: 30rem;
+	padding: 2rem 1.75rem;
+	background: #f4f4f5;
+	border-top: 4px solid #bf0202;
+	text-align: center;
+	font-family: "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+	color: #1a1a1a;
+}
+
+.ddn-adblock-wall__card h2 {
+	margin: 0 0 0.9rem;
+	font-family: "Lora", Georgia, serif;
+	font-size: 1.5rem;
+	line-height: 1.25;
+	font-weight: 600;
+	color: #111;
+}
+
+.ddn-adblock-wall__card p {
+	margin: 0 0 1.5rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: #40403f;
+}
+
+.ddn-adblock-wall__card button {
+	padding: 0.8rem 1.4rem;
+	border: 0;
+	background: #bf0202;
+	color: #fff;
+	font: 700 0.9rem "Libre Franklin", Arial, sans-serif;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.ddn-adblock-wall__card button:hover { background: #8c0000; }

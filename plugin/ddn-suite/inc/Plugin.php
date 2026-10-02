@@ -22,6 +22,7 @@ use DiarioDelNorte\Suite\Analytics\PageviewRecorder;
 use DiarioDelNorte\Suite\Analytics\PageviewRepository;
 use DiarioDelNorte\Suite\Analytics\ReadershipRepository;
 use DiarioDelNorte\Suite\Ads\Admin\CampaignsPage;
+use DiarioDelNorte\Suite\Ads\AdblockWall;
 use DiarioDelNorte\Suite\Ads\AdRenderer;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
 use DiarioDelNorte\Suite\Ads\CampaignSelector;
@@ -85,6 +86,7 @@ final class Plugin {
 
 		( new ZoneController( $campaigns, $selector, $renderer, $stats ) )->register();
 		( new ClickController( $campaigns, $stats ) )->register();
+		( new AdblockWall() )->register();
 
 		( new PageviewRecorder() )->register();
 		( new PageviewRepository() )->register();

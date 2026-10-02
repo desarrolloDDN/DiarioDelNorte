@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace DiarioDelNorte\Suite\Ads\Admin;
 
+use DiarioDelNorte\Suite\Ads\AdblockWall;
 use DiarioDelNorte\Suite\Ads\AdZone;
 use DiarioDelNorte\Suite\Ads\Campaign;
 use DiarioDelNorte\Suite\Ads\CampaignRepository;
@@ -32,6 +33,7 @@ final class CampaignsPage {
 	public const ACTION          = 'ddn_suite_save_placement';
 	public const ACTION_TOGGLE   = 'ddn_suite_toggle_placement';
 	public const ACTION_EVIDENCE = 'ddn_suite_evidence_placement';
+	public const ACTION_ADBLOCK  = 'ddn_suite_adblock_wall';
 	private const NONCE          = 'ddn_suite_placement';
 
 	/** Pie del membrete de Sistema Cardenal S.A.S. para el informe. */
@@ -46,6 +48,7 @@ final class CampaignsPage {
 		add_action( 'admin_post_' . self::ACTION, array( $this, 'handle_save' ) );
 		add_action( 'admin_post_' . self::ACTION_TOGGLE, array( $this, 'handle_toggle' ) );
 		add_action( 'admin_post_' . self::ACTION_EVIDENCE, array( $this, 'handle_evidence' ) );
+		add_action( 'admin_post_' . self::ACTION_ADBLOCK, array( $this, 'handle_adblock' ) );
 	}
 
 	public function enqueue( string $hook ): void {
@@ -99,6 +102,15 @@ final class CampaignsPage {
 
 		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SLUG . '&evidence=' . $id . '&updated=1' ) );
 		exit;
+	}
+
+	public function handle_adblock(): void {
+		check_admin_referer( self::NONCE );
+		$this->guard();
+
+		update_option( AdblockWall::OPTION, empty( $_POST['adblock_wall'] ) ? '' : '1', false );
+
+		$this->redirect();
 	}
 
 	private function guard(): void {
@@ -224,6 +236,17 @@ final class CampaignsPage {
 					<?php endforeach; ?>
 				</tbody>
 			</table>
+
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="ddn-card ddn-card--adblock">
+				<?php wp_nonce_field( self::NONCE ); ?>
+				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_ADBLOCK ); ?>">
+				<label>
+					<input type="checkbox" name="adblock_wall" value="1" <?php checked( AdblockWall::enabled() ); ?>>
+					<strong><?php esc_html_e( 'Pedir que desactiven el bloqueador de anuncios', 'ddn-suite' ); ?></strong>
+				</label>
+				<p class="description"><?php esc_html_e( 'Quien navegue con un bloqueador verá un aviso a pantalla completa hasta desactivarlo. No lo ve el personal de redacción. Si el sitio usa caché, vacíala después de cambiar esta opción para que aplique a todos.', 'ddn-suite' ); ?></p>
+				<button type="submit" class="button"><?php esc_html_e( 'Guardar', 'ddn-suite' ); ?></button>
+			</form>
 
 			<div class="ddn-editor" id="ddn-form">
 				<?php $this->render_form( $editing ); ?>
@@ -548,6 +571,8 @@ final class CampaignsPage {
 		.ddn-editor{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:1.5rem;align-items:start}
 		.ddn-card{background:#fff;border:1px solid #dcdcde;border-radius:6px;padding:1.25rem 1.5rem}
 		.ddn-card h2{margin-top:0}
+		.ddn-card--adblock{margin:0 0 1.5rem}
+		.ddn-card--adblock .description{margin:.4rem 0 .75rem}
 		.ddn-field{display:block;margin:0 0 1rem}
 		.ddn-field>label,.ddn-zones legend{display:block;font-weight:600;margin-bottom:.35rem}
 		.ddn-field input[type=text],.ddn-field input:not([type]),.ddn-field input[type=url],.ddn-field input[type=number],.ddn-field input[type=datetime-local],.ddn-field select,.ddn-field textarea{width:100%;max-width:100%}

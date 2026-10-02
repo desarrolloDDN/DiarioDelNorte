@@ -5,6 +5,17 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.63] — 2026-10-02
+
+### Añadido
+- **Aviso para quienes usan bloqueador de anuncios** (DDN Suite →
+  Publicidad, casilla «Pedir que desactiven el bloqueador de anuncios»,
+  apagada por defecto). Con la opción activa, quien navegue con un
+  bloqueador ve un aviso a pantalla completa y no puede seguir leyendo
+  hasta desactivarlo y recargar. No lo ve el personal de redacción ni
+  los robots de búsqueda. La detección corre en el navegador (el sitio se
+  sirve desde caché): conviene vaciar el caché al activarla.
+
 ## [0.1.62] — 2026-09-30
 
 ### Cambiado
