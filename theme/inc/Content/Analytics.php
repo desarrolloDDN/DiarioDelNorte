@@ -1,8 +1,9 @@
 <?php
 /**
- * Etiqueta de Google Analytics (gtag.js). El ID de medición se edita en
+ * Etiqueta de Google Analytics (gtag.js) y código de verificación de la
+ * propiedad (meta google-site-verification). Ambos se editan en
  * Personalizar → Analítica (Google); en blanco, o con un formato que no
- * es el de Google (G-XXXXXXXXXX), no se encola nada.
+ * es el de Google, no se imprime nada.
  *
  * @package DiarioDelNorte
  */
@@ -19,6 +20,16 @@ final class Analytics {
 
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_action( 'wp_head', array( $this, 'print_verification' ), 1 );
+	}
+
+	public function print_verification(): void {
+		$token = (string) get_theme_mod( 'ddn_google_verification', '9xo9mrka0vqnvKKD1co9uRYPyJh1CM6H59FovDJh7YE' );
+		if ( ! preg_match( '/^[A-Za-z0-9_-]+$/', $token ) ) {
+			return;
+		}
+
+		printf( '<meta name="google-site-verification" content="%s" />' . "\n", esc_attr( $token ) );
 	}
 
 	public function enqueue(): void {

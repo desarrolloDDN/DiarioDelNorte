@@ -5,6 +5,14 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.64] — 2026-10-19
+
+### Añadido
+- **Verificación de la propiedad de Google**: el `<head>` incluye la
+  etiqueta `google-site-verification` con el código de Diario del Norte.
+  Editable en Personalizar → Analítica (Google) → «Código de verificación
+  del sitio»; en blanco no se imprime nada.
+
 ## [0.1.63] — 2026-10-02
 
 ### Añadido

@@ -128,6 +128,7 @@ final class SiteOptions {
 			)
 		);
 		$this->text( $wp_customize, 'ddn_ga_id', __( 'ID de medición', 'diario-del-norte' ), 'G-K5BYSDHR57', 'sanitize_text_field', 'ddn_analytics', __( 'Formato G-XXXXXXXXXX, de Google Analytics.', 'diario-del-norte' ) );
+		$this->text( $wp_customize, 'ddn_google_verification', __( 'Código de verificación del sitio', 'diario-del-norte' ), '9xo9mrka0vqnvKKD1co9uRYPyJh1CM6H59FovDJh7YE', 'sanitize_text_field', 'ddn_analytics', __( 'Solo el valor de content=\"…\" de la etiqueta google-site-verification. En blanco no se imprime nada.', 'diario-del-norte' ) );
 
 		// --- Autores -----------------------------------------------------
 		$wp_customize->add_section(
