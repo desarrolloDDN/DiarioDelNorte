@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.65] — 2026-10-22
+
+### Añadido
+- **Espacio de edictos en la nota.** Zona nueva «Edictos» en la plantilla
+  de la nota, bajo el texto y antes de los temas relacionados. Se
+  administra como una campaña en DDN Suite → Publicidad (elige la zona
+  «Edictos»): imagen o texto/HTML del edicto, fechas de inicio y fin,
+  categorías, historial, informe y evidencia. Se rotula «Edicto» en vez
+  de «Espacio publicitario». Sin campaña activa en la zona no ocupa lugar.
+
 ## [0.1.64] — 2026-10-19
 
 ### Añadido

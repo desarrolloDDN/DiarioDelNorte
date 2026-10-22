@@ -21,6 +21,7 @@ enum AdZone: string {
 	case InArticleTop    = 'in-article-top';
 	case InArticle       = 'in-article';
 	case InArticleBottom = 'in-article-bottom';
+	case Edictos         = 'edictos';
 
 	public function label(): string {
 		// phpcs:ignore PHPCompatibility.Variables.ForbiddenThisUseContexts.OutsideObjectContext -- falso positivo: un método de enum SÍ tiene contexto de objeto (PHP 8.1+).
@@ -30,7 +31,14 @@ enum AdZone: string {
 			self::InArticleTop    => __( 'Inicio de la nota — bajo la firma del autor', 'ddn-suite' ),
 			self::InArticle       => __( 'Dentro de la nota — tras el tercer párrafo', 'ddn-suite' ),
 			self::InArticleBottom => __( 'Al final de la nota — al terminar el texto', 'ddn-suite' ),
+			self::Edictos         => __( 'Edictos — espacio para avisos legales, al final de la nota bajo el texto', 'ddn-suite' ),
 		};
+	}
+
+	/** Rótulo que acompaña al espacio en la web (los edictos no son «publicidad»). */
+	public function caption(): string {
+		// phpcs:ignore PHPCompatibility.Variables.ForbiddenThisUseContexts.OutsideObjectContext -- falso positivo: un método de enum SÍ tiene contexto de objeto (PHP 8.1+).
+		return self::Edictos === $this ? __( 'Edicto', 'ddn-suite' ) : __( 'Espacio publicitario', 'ddn-suite' );
 	}
 
 	/** @return array<string,string> value => label */

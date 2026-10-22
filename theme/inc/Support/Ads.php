@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class Ads {
 
 	/** Zonas que el tema expone (deben coincidir con DDN Suite). */
-	public const ZONES = array( 'header', 'home', 'in-article-top', 'in-article', 'in-article-bottom' );
+	public const ZONES = array( 'header', 'home', 'in-article-top', 'in-article', 'in-article-bottom', 'edictos' );
 
 	public static function zone( string $zone ): void {
 		if ( ! in_array( $zone, self::ZONES, true ) ) {

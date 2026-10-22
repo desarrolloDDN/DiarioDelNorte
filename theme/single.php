@@ -109,6 +109,8 @@ while ( have_posts() ) :
 			<div class="<?php echo esc_attr( $ddn_metered ? 'ddn-metered-content' : '' ); ?>">
 				<?php Ads::zone( 'in-article-bottom' ); ?>
 
+				<?php Ads::zone( 'edictos' ); ?>
+
 				<?php if ( has_tag() ) : ?>
 					<div class="tags">
 						<span class="tags__label"><?php esc_html_e( 'Temas relacionados', 'diario-del-norte' ); ?></span>
