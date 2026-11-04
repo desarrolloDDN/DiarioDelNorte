@@ -30,6 +30,7 @@ require $root . 'Support/FormDispatch.php';
 require $root . 'Support/AdminAccessRule.php';
 require $root . 'AccountController.php';
 require dirname( __DIR__, 2 ) . '/plugin/ddn-suite/inc/Analytics/Support/DateRange.php';
+require dirname( __DIR__, 2 ) . '/plugin/ddn-suite/inc/Media/Support/ConversionRule.php';
 
 // Stubs mínimos de WordPress: solo lo que Admin\XlsxWriter necesita para
 // poder probar el escritor de verdad (produce un .xlsx real, no un CSV

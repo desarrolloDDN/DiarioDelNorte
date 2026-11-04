@@ -33,6 +33,7 @@ use DiarioDelNorte\Suite\Ads\ZoneController;
 use DiarioDelNorte\Suite\Calendar\Admin\CalendarPage;
 use DiarioDelNorte\Suite\Calendar\CalendarRepository;
 use DiarioDelNorte\Suite\Install\Installer;
+use DiarioDelNorte\Suite\Media\UploadConverter;
 use DiarioDelNorte\Suite\PrintEdition\EditionPostType;
 use DiarioDelNorte\Suite\PrintEdition\EditionRepository;
 use DiarioDelNorte\Suite\Radio\Admin\RadioPage;
@@ -69,6 +70,9 @@ final class Plugin {
 		// is_admin(), más abajo), porque el filtro aplica también al
 		// iniciar sesión desde wp-login.php.
 		( new SessionDuration() )->register();
+
+		// Imágenes HEIC/TIFF/BMP/WebP/AVIF: se convierten a JPG/PNG al subirlas.
+		( new UploadConverter() )->register();
 
 		// Los módulos de Publicidad, Radio, Actividad y Estadísticas solo se abren al rol Administrador.
 		( new AdsCapabilityInstaller() )->ensure();

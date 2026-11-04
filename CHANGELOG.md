@@ -5,6 +5,18 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.66] — 2026-11-03
+
+### Añadido
+- **Imágenes en otros formatos ya se ven.** Al subir a la biblioteca de
+  medios una imagen HEIC/HEIF (fotos de iPhone), TIFF, BMP, WebP o AVIF,
+  se convierte sola a JPG (o a PNG si trae transparencia) — así se ve en
+  cualquier navegador y WordPress genera sus tamaños. Se corrige además la
+  orientación de las fotos de celular. Si el servidor no logra leer el
+  archivo, la subida se rechaza con un mensaje claro en vez de guardar una
+  imagen que luego no se ve. JPG, PNG y GIF (por si es animado) no se
+  tocan; SVG no se admite por seguridad (puede llevar código).
+
 ## [0.1.65] — 2026-10-22
 
 ### Añadido
