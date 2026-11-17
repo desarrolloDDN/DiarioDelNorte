@@ -5,6 +5,15 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.67] — 2026-11-17
+
+### Cambiado
+- **«Edición Impresa» del menú ahora lleva a `/edicion-impresa/`** (el
+  archivo de ediciones del plugin) en vez de a una categoría con ese
+  nombre. Aplica a la barra de secciones, al panel de secciones de la
+  nota y al pie de página; en la barra se marca como activa al estar en
+  el archivo o dentro de una edición. Las demás secciones no cambian.
+
 ## [0.1.66] — 2026-11-03
 
 ### Añadido

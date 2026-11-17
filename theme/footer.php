@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use DiarioDelNorte\Content\ContactPageInstaller;
+use DiarioDelNorte\Nav\SectionMenu;
 use DiarioDelNorte\Sections\DefaultSectionsInstaller as Sections;
 use DiarioDelNorte\Support\Social;
 
@@ -139,9 +140,7 @@ $ddn_contact_bits = array_filter(
 					echo '<ul class="site-footer__menu">';
 					printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/' ) ), esc_html__( 'Inicio', 'diario-del-norte' ) );
 					foreach ( Sections::VISIBLE + Sections::MORE as $ddn_slug => $ddn_name ) {
-						$ddn_term = Sections::category( $ddn_slug );
-						$ddn_link = $ddn_term ? get_category_link( $ddn_term ) : home_url( '/' . $ddn_slug . '/' );
-						printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_link ), esc_html( $ddn_name ) );
+						printf( '<li><a href="%s">%s</a></li>', esc_url( SectionMenu::url( $ddn_slug ) ), esc_html( $ddn_name ) );
 					}
 					if ( '' !== $ddn_contact_href ) {
 						printf( '<li><a href="%s">%s</a></li>', esc_url( $ddn_contact_href ), esc_html__( 'Contacto', 'diario-del-norte' ) );

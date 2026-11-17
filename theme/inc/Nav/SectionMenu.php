@@ -21,6 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 final class SectionMenu {
 
+	/** Tipo de contenido de la edición impresa (lo registra el plugin DDN Suite). */
+	private const EDITION_TYPE = 'ddn_edition';
+
 	/** @param array<string,mixed> $args Argumentos de wp_nav_menu (no se usan). */
 	public static function render( array $args = array() ): void {
 		unset( $args );
@@ -60,8 +63,7 @@ final class SectionMenu {
 	public static function render_list(): void {
 		echo '<ul class="drawer-nav__list">';
 		foreach ( Sections::VISIBLE + Sections::MORE as $slug => $name ) {
-			$term    = Sections::category( $slug );
-			$url     = $term ? get_category_link( $term ) : home_url( '/' . $slug . '/' );
+			$url     = self::url( $slug );
 			$current = self::is_current( $slug );
 
 			printf(
@@ -75,8 +77,7 @@ final class SectionMenu {
 	}
 
 	private static function item( string $slug, string $name ): void {
-		$term    = Sections::category( $slug );
-		$url     = $term ? get_category_link( $term ) : home_url( '/' . $slug . '/' );
+		$url     = self::url( $slug );
 		$current = self::is_current( $slug );
 
 		printf(
@@ -88,7 +89,32 @@ final class SectionMenu {
 		);
 	}
 
+	/**
+	 * «Edición Impresa» no lleva a una categoría sino a su propio archivo
+	 * (/edicion-impresa/, el tipo de contenido del plugin DDN Suite); el
+	 * resto de secciones, a su categoría.
+	 */
+	public static function url( string $slug ): string {
+		if ( self::is_print_edition( $slug ) ) {
+			$archive = post_type_exists( self::EDITION_TYPE ) ? get_post_type_archive_link( self::EDITION_TYPE ) : false;
+
+			return is_string( $archive ) ? $archive : home_url( '/edicion-impresa/' );
+		}
+
+		$term = Sections::category( $slug );
+
+		return $term ? (string) get_category_link( $term ) : home_url( '/' . $slug . '/' );
+	}
+
+	private static function is_print_edition( string $slug ): bool {
+		return 'edicion-impresa' === $slug;
+	}
+
 	private static function is_current( string $slug ): bool {
+		if ( self::is_print_edition( $slug ) ) {
+			return is_post_type_archive( self::EDITION_TYPE ) || is_singular( self::EDITION_TYPE );
+		}
+
 		$term = Sections::category( $slug );
 
 		return $term instanceof \WP_Term && is_category( $term->term_id );
