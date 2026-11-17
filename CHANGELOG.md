@@ -5,6 +5,13 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.68] — 2026-11-17
+
+### Cambiado
+- **Edición impresa**: el titular de cada edición («Nuestra edición
+  impresa del…») es más grande — 1,32 rem en escritorio (antes 1,12) y
+  1,12 rem en móvil (antes 1).
+
 ## [0.1.67] — 2026-11-17
 
 ### Cambiado
