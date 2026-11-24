@@ -37,8 +37,15 @@ $ddn_email   = ContactForm::recipient();
 $ddn_lines = array_filter(
 	array(
 		__( 'Gerencia General', 'diario-del-norte' )       => (string) get_theme_mod( 'ddn_contact_phone_gerencia', '+57 320 542 0459' ),
-		__( 'Comercial Riohacha', 'diario-del-norte' )     => (string) get_theme_mod( 'ddn_contact_phone_comercial_rio', '+57 321 541 8146' ),
+		__( 'Gerente Comercial La Guajira', 'diario-del-norte' ) => (string) get_theme_mod( 'ddn_contact_phone_comercial_rio', '+57 321 541 8146' ),
 		__( 'Comercial Barranquilla', 'diario-del-norte' ) => (string) get_theme_mod( 'ddn_contact_phone_comercial_baq', '+57 320 565 9368' ),
+	)
+);
+
+// Correo propio de una dependencia, para las que lo tienen: etiqueta => correo.
+$ddn_line_emails = array_filter(
+	array(
+		__( 'Gerente Comercial La Guajira', 'diario-del-norte' ) => sanitize_email( (string) get_theme_mod( 'ddn_contact_email_comercial_rio', 'adminriohacha@gamezeditores.com' ) ),
 	)
 );
 ?>
@@ -118,6 +125,9 @@ $ddn_lines = array_filter(
 				<p class="contact-info__line">
 					<span class="contact-info__label"><?php echo esc_html( $ddn_label ); ?></span>
 					<a href="tel:<?php echo esc_attr( str_replace( ' ', '', $ddn_number ) ); ?>"><?php echo esc_html( $ddn_number ); ?></a>
+					<?php if ( isset( $ddn_line_emails[ $ddn_label ] ) ) : ?>
+						<br><a href="mailto:<?php echo esc_attr( $ddn_line_emails[ $ddn_label ] ); ?>"><?php echo esc_html( $ddn_line_emails[ $ddn_label ] ); ?></a>
+					<?php endif; ?>
 				</p>
 			<?php endforeach; ?>
 

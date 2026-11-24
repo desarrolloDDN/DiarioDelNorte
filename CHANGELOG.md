@@ -5,6 +5,16 @@ Versionado conjunto: el tema y `ddn-suite` comparten número de versión.
 
 ## [Sin publicar]
 
+## [0.1.69] — 2026-11-24
+
+### Cambiado
+- **Contacto**: «Comercial Riohacha» pasa a **«Gerente Comercial La Guajira»**,
+  con el teléfono +57 321 541 8146 y el correo
+  adminriohacha@gamezeditores.com bajo el teléfono. El desplegable
+  «Asunto» del formulario usa el cargo nuevo. El correo se edita en
+  Personalizar → Contacto. El formulario sigue llegando a
+  gerenciageneral@gamezeditores.com.
+
 ## [0.1.68] — 2026-11-17
 
 ### Cambiado
